@@ -5,19 +5,13 @@ import {
   Routes,
 } from "react-router-dom";
 
+import { AdminLayout } from "../layout/AdminLayout";
+
+import { DashboardPage } from "../../pages/dashboard/DashboardPage";
+import { LoginPage } from "../../pages/auth/LoginPage";
+import { PublicQuotePage } from "../../pages/public/PublicQuotePage";
+
 import { ROUTES } from "./routes"; 
-
-function LoginPage() {
-  return <div>Login Page</div>;
-}
-
-function DashboardPage() {
-  return <div>Dashboard Page</div>;
-}
-
-function PublicQuotePage() {
-  return <div>Public Quote Page</div>;
-}
 
 export function AppRouter() {
   return (
@@ -25,15 +19,17 @@ export function AppRouter() {
       <Routes>
         <Route path={ROUTES.login} element={<LoginPage />} />
 
-        <Route
-          path={ROUTES.manage}
-          element={<Navigate to={ROUTES.dashboard} replace />}
-        />
+        <Route path="/manage" element={<AdminLayout />}>
+          <Route
+            index
+            element={<Navigate to={ROUTES.dashboard} replace />}
+          />
 
-        <Route
-          path={ROUTES.dashboard}
-          element={<DashboardPage />}
-        />
+          <Route
+            path="dashboard"
+            element={<DashboardPage />}
+          />
+        </Route>
 
         <Route
           path={ROUTES.publicQuote}
