@@ -2,8 +2,9 @@
     height:60px;
     width:100%;
     border-bottom:1px solid #ccc;
+    padding: 0 20px;
 }
 
-.alram{
+.notification{
     width:100px;
 }

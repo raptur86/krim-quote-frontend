@@ -8,7 +8,7 @@ import {
 import { AdminLayout } from "../layout/AdminLayout";
 
 import { DashboardPage } from "../../pages/dashboard/DashboardPage";
-// import { LoginPage } from "../../pages/auth/LoginPage";
+import { LoginPage } from "../../pages/auth/LoginPage";
 import { PublicQuotePage } from "../../pages/public/PublicQuotePage";
 import { CustomersPage } from "../../pages/customers/CustomersPage";
 import { QuotesPage } from "../../pages/quotes/QuotesPage";
@@ -24,6 +24,7 @@ export function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to={ROUTES.login} replace />} />
+        <Route path={ROUTES.login} element={<LoginPage />} />
 
         <Route path="/manage" element={<AdminLayout />}>
           <Route
