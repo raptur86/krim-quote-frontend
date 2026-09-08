@@ -16,13 +16,13 @@ export function Sidebar(){
     ];
     return (
         
-            <div className="sidebar">
-                <div>로고</div>
-                <nav>
+            <div className="sidebar flex flex-column">
+                <div className="sidebar-top">로고</div>
+                <nav className="flex-1">
                     <ul>
                         {menuItems.map((menu)=>(
-                            <li>
-                                <NavLink to= {menu.path} className={( {isActive} ) => 
+                            <li key={menu.path}>
+                                <NavLink to={menu.path} className={( {isActive} ) => 
                                         isActive ? "sidebar-link active" : "sidebar-link"}>
                                     {menu.label}
                                 </NavLink>
@@ -30,6 +30,10 @@ export function Sidebar(){
                         ))}
                     </ul>
                 </nav>
+                <div className="sidebar-bottom">
+                    <p>관리자 정보</p>
+                    <p>로그아웃</p>
+                </div>
             </div>
         
     )

@@ -1,3 +1,8 @@
+.sidebar{
+  width:220px;
+  position:relative;
+}
+
 .sidebar-link{
   display : block;
   padding:10px 12px;
@@ -6,4 +11,14 @@
 
 .sidebar-link.active{
   font-weight:700;
+}
+
+.sidebar-top{
+    padding: 50px 10px 30px 10px;
+}
+
+.sidebar-bottom{
+    width:100%;
+    text-align: center;
+    padding: 0 0 15px 0;
 }
