@@ -3,6 +3,8 @@ export const ROUTES = {
 
   manage: "/manage",
   dashboard: "/manage/dashboard",
+  customers: "/manage/customers",
+  quotes: "/manage/quotes",
 
   publicQuote: "/q/:token",
 } as const;

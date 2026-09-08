@@ -3,14 +3,18 @@ import { Outlet } from "react-router-dom";
 import { Header } from "../../components/layout/Header";
 import { Sidebar } from "../../components/layout/Sidebar";
 
+import "../../styles/admin-layout.css"
+
 export function AdminLayout() {
   return (
-    <div>
-      <Header />
+    <div className="flex">
       <Sidebar />
-      <main>
-        <Outlet />
-      </main>
+      <div className="flex-column">
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

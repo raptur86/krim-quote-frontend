@@ -1,0 +1,11 @@
+/* AdminLayout css*/
+.flex{
+  display:flex;
+}
+.flex-column{
+  flex-direction: column;
+}
+.sidebar{
+  width:220px;
+  min-height:100vh;
+}
