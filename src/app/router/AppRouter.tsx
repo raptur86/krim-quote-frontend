@@ -8,10 +8,14 @@ import {
 import { AdminLayout } from "../layout/AdminLayout";
 
 import { DashboardPage } from "../../pages/dashboard/DashboardPage";
-import { LoginPage } from "../../pages/auth/LoginPage";
+// import { LoginPage } from "../../pages/auth/LoginPage";
 import { PublicQuotePage } from "../../pages/public/PublicQuotePage";
 import { CustomersPage } from "../../pages/customers/CustomersPage";
 import { QuotesPage } from "../../pages/quotes/QuotesPage";
+import { RatesPage } from "../../pages/rates/RatesPage";
+import { PlatformPage } from "../../pages/platforms/PlatformPage";
+import { SalesPage } from "../../pages/sales/SalesPage";
+import { SettingsPage } from "../../pages/settings/SettingsPage";
 
 import { ROUTES } from "./routes"; 
 
@@ -33,6 +37,10 @@ export function AppRouter() {
           />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="quotes" element={<QuotesPage />} />
+          <Route path="rates" element={<RatesPage />} />
+          <Route path="platforms" element={<PlatformPage />} />
+          <Route path="sales" element={<SalesPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
 
         <Route

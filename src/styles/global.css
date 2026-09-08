@@ -14,18 +14,7 @@ body {
   min-height: 100vh;
 }
 
+
+
+
 /*   ===========    해당 css 로 이동해야됨   */
-
-
-
-
-/* sidebar css */
-.sidebar-link{
-  display : block;
-  padding:10px 12px;
-  text-decoration: none;
-}
-
-.sidebar-link.active{
-  font-weight:700;
-}

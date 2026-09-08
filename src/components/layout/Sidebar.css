@@ -1,0 +1,9 @@
+.sidebar-link{
+  display : block;
+  padding:10px 12px;
+  text-decoration: none;
+}
+
+.sidebar-link.active{
+  font-weight:700;
+}

@@ -3,13 +3,13 @@ import { Outlet } from "react-router-dom";
 import { Header } from "../../components/layout/Header";
 import { Sidebar } from "../../components/layout/Sidebar";
 
-import "../../styles/admin-layout.css"
+import "./admin-layout.css"
 
 export function AdminLayout() {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-column">
+      <div className="flex flex-column flex-1">
         <Header />
         <main>
           <Outlet />
