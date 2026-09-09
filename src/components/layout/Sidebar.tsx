@@ -3,8 +3,10 @@ import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../app/router/routes";
 
 import "./Sidebar.css"
+import { useAuth } from "../../features/auth/useAuth";
 
 export function Sidebar(){
+    const { admin, logout } = useAuth();
     const menuItems = [
         {label:"대시보드", path: ROUTES.dashboard },
         {label:"고객관리", path: ROUTES.customers },
@@ -31,8 +33,9 @@ export function Sidebar(){
                     </ul>
                 </nav>
                 <div className="sidebar-bottom">
-                    <p>관리자 정보</p>
-                    <p>로그아웃</p>
+                    <p>{admin?.name}</p>
+                    <p className="sidebar-email">{admin?.email}</p>
+                    <button className="sidebar-logout" type="button" onClick={() => void logout()}>로그아웃</button>
                 </div>
             </div>
         

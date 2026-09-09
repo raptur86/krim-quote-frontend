@@ -18,6 +18,7 @@ import { SalesPage } from "../../pages/sales/SalesPage";
 import { SettingsPage } from "../../pages/settings/SettingsPage";
 
 import { ROUTES } from "./routes"; 
+import { ProtectedRoute } from "../../features/auth/ProtectedRoute";
 
 export function AppRouter() {
   return (
@@ -26,6 +27,7 @@ export function AppRouter() {
         <Route path="/" element={<Navigate to={ROUTES.login} replace />} />
         <Route path={ROUTES.login} element={<LoginPage />} />
 
+        <Route element={<ProtectedRoute />}>
         <Route path="/manage" element={<AdminLayout />}>
           <Route
             index
@@ -42,6 +44,7 @@ export function AppRouter() {
           <Route path="platforms" element={<PlatformPage />} />
           <Route path="sales" element={<SalesPage />} />
           <Route path="settings" element={<SettingsPage />} />
+        </Route>
         </Route>
 
         <Route
