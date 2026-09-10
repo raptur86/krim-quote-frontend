@@ -5,6 +5,8 @@ import { Navigate, useLocation } from "react-router-dom";
 import { loginSchema, type LoginFormData } from "../../features/auth/schemas/loginSchema";
 import { useAuth } from "../../features/auth/useAuth";
 import { apiErrorMessage } from "../../services/apiClient";
+
+import { ROUTES } from "../../app/router/routes";
 import "./LoginPage.css";
 export function LoginPage() {
   const { admin, loading, sessionError, login } = useAuth();
@@ -14,7 +16,7 @@ export function LoginPage() {
     resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "" },
   });
   const from: unknown = location.state?.from;
-  const destination = typeof from === "string" && (from === "/manage" || from.startsWith("/manage/")) ? from : "/manage/dashboard";
+  const destination = typeof from === "string" && from.startsWith("/") && !from.startsWith("//") && from !== ROUTES.login ? from : ROUTES.dashboard;
   async function onSubmit(data: LoginFormData) {
     if (isSubmitting) return;
     clearErrors("root");

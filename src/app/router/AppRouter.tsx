@@ -22,13 +22,13 @@ import { ProtectedRoute } from "../../features/auth/ProtectedRoute";
 
 export function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/quote">
       <Routes>
         <Route path="/" element={<Navigate to={ROUTES.login} replace />} />
         <Route path={ROUTES.login} element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-        <Route path="/manage" element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route
             index
             element={<Navigate to={ROUTES.dashboard} replace />}

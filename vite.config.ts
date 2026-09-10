@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: "/quote/",
   plugins: [react()],
   server: {
     port: 5173,
