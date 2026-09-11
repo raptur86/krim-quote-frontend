@@ -1,0 +1,53 @@
+.quote-item-table-wrapper {
+  overflow-x: auto;
+}
+
+.quote-item-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.quote-item-table th,
+.quote-item-table td {
+  padding: 12px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  text-align: left;
+  vertical-align: middle;
+}
+
+.quote-item-table th {
+  background: #f8fafc;
+}
+
+.quote-item-category {
+  margin-top: 4px;
+
+  color: #64748b;
+  font-size: 13px;
+}
+
+.quote-item-total {
+  font-weight: 700;
+}
+
+.quote-item-order,
+.quote-item-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.quote-item-empty {
+  padding: 32px;
+
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+
+  color: #64748b;
+
+  text-align: center;
+}

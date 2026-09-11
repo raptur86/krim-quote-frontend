@@ -1,0 +1,177 @@
+.quote-review {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.quote-review-document {
+  padding: 32px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  background: #ffffff;
+}
+
+.quote-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding-bottom: 24px;
+
+  border-bottom: 2px solid #0f172a;
+}
+
+.quote-review-brand {
+  font-size: 20px;
+}
+
+.quote-review-header h2 {
+  margin: 8px 0 0;
+
+  font-size: 28px;
+}
+
+.quote-review-number {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  text-align: right;
+}
+
+.quote-review-basic {
+  padding: 24px 0;
+}
+
+.quote-review-basic dl {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px 32px;
+
+  margin: 0;
+}
+
+.quote-review-basic dl div {
+  display: grid;
+
+  grid-template-columns:
+    100px
+    1fr;
+}
+
+.quote-review-basic dt {
+  color: #64748b;
+}
+
+.quote-review-basic dd {
+  margin: 0;
+
+  font-weight: 600;
+}
+
+.quote-review-items {
+  overflow-x: auto;
+}
+
+.quote-review-items table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.quote-review-items th,
+.quote-review-items td {
+  padding: 12px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  text-align: left;
+  vertical-align: top;
+}
+
+.quote-review-items th {
+  background: #f8fafc;
+}
+
+.quote-review-items p {
+  margin: 4px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.quote-review-adjustment {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 12px;
+
+  padding-top: 24px;
+}
+
+.quote-review-adjustment input {
+  width: 180px;
+
+  padding: 9px 10px;
+}
+
+.quote-review-summary {
+  width: 360px;
+
+  margin: 24px 0 0 auto;
+}
+
+.quote-review-summary > div {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 9px 0;
+}
+
+.quote-review-total {
+  margin-top: 8px;
+
+  padding-top: 16px !important;
+
+  border-top: 2px solid #0f172a;
+
+  font-size: 20px;
+}
+
+.quote-review-note {
+  margin-top: 32px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.quote-review-actions {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 20px;
+}
+
+.quote-review-save {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quote-review-save-error {
+  margin: 0;
+
+  color: #b91c1c;
+}

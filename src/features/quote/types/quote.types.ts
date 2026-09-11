@@ -19,6 +19,7 @@ export type QuoteItemRequest = {
    * 직접 입력 항목이면 null
    */
   standardRateId: number | null;
+  categoryName: string | null;
 
   featureName: string;
 
@@ -192,3 +193,8 @@ export type QuotePageResponse = {
 
   last: boolean;
 };
+
+export type QuoteDraftItem =
+  QuoteItemRequest & {
+    clientId: string;
+  };

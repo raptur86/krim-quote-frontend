@@ -5,11 +5,28 @@ import { useCustomers } from "../../features/customer/hooks/useCustomers";
 import { usePlatforms } from "../../features/platform/hooks/usePlatforms";
 
 import { QuoteBasicForm } from "../../features/quote/components/QuoteBasicForm";
-
+import {
+  QuoteReviewStep,
+} from "../../features/quote/components/QuoteReviewStep";
 import {
   quoteBasicSchema,
   type QuoteBasicFormValues,
 } from "../../features/quote/schemas/quoteBasicSchema";
+import type {
+  QuoteDraftItem,
+} from "../../features/quote/types/quote.types";
+
+import {
+  QuoteItemsStep,
+} from "../../features/quote/components/QuoteItemsStep";
+
+import {
+  useCreateQuote,
+} from "../../features/quote/hooks/useCreateQuote";
+
+import type {
+  QuoteCreateRequest,
+} from "../../features/quote/types/quote.types";
 
 import { ROUTES } from "../../app/router/routes";
 
@@ -60,6 +77,13 @@ export function QuoteCreatePage() {
       ),
     ) || 0;
 
+  const createQuote =
+    useCreateQuote();
+
+  const [
+    saveError,
+    setSaveError,
+  ] = useState("");
 
   const [step, setStep] =
     useState<QuoteStep>("BASIC");
@@ -87,8 +111,15 @@ export function QuoteCreatePage() {
 
       internalMemo: null,
     });
-
-
+  const [
+    quoteItems,
+    setQuoteItems,
+  ] =
+    useState<QuoteDraftItem[]>([]);
+  const [
+    adjustmentAmount,
+    setAdjustmentAmount,
+  ] = useState(0);
   /*
    * 신규 견적에서는 활성 고객만 조회
    */
@@ -148,7 +179,7 @@ export function QuoteCreatePage() {
       setErrorMessage(
         result.error.issues[0]
           ?.message ??
-          "기본정보를 확인해주세요.",
+        "기본정보를 확인해주세요.",
       );
 
       return;
@@ -165,7 +196,137 @@ export function QuoteCreatePage() {
       ROUTES.quotes,
     );
   }
+  async function handleCreateQuote() {
+    if (
+      quoteItems.length === 0
+    ) {
+      setSaveError(
+        "견적항목을 하나 이상 추가해주세요.",
+      );
 
+      setStep("ITEMS");
+
+      return;
+    }
+
+
+    const request:
+      QuoteCreateRequest = {
+      customerId:
+        basicValues.customerId,
+
+      inquiryPlatformId:
+        basicValues.inquiryPlatformId,
+
+      title:
+        basicValues.title.trim(),
+
+      writtenDate:
+        basicValues.writtenDate,
+
+      validUntil:
+        nullableText(
+          basicValues.validUntil,
+        ),
+
+      expectedDuration:
+        nullableText(
+          basicValues.expectedDuration,
+        ),
+
+      customerNote:
+        nullableText(
+          basicValues.customerNote,
+        ),
+
+      internalMemo:
+        nullableText(
+          basicValues.internalMemo,
+        ),
+
+      adjustmentAmount,
+
+      /*
+       * 아직 예상 정산액 입력 UI를
+       * 만들지 않았으므로 null.
+       */
+      expectedSettlementAmount:
+        null,
+
+      expectedSettlementMemo:
+        null,
+
+      items:
+        quoteItems.map(
+          (
+            {
+              clientId: _clientId,
+              ...item
+            },
+            index,
+          ) => ({
+            ...item,
+
+            categoryName:
+              nullableText(
+                item.categoryName,
+              ),
+
+            featureName:
+              item.featureName.trim(),
+
+            description:
+              nullableText(
+                item.description,
+              ),
+
+            unitName:
+              item.unitName.trim(),
+
+            adjustmentReason:
+              nullableText(
+                item.adjustmentReason,
+              ),
+
+            internalMemo:
+              nullableText(
+                item.internalMemo,
+              ),
+
+            sortOrder:
+              index + 1,
+          }),
+        ),
+
+      /*
+       * 직접비 UI는 이후 추가.
+       */
+      directCosts: [],
+    };
+
+
+    try {
+      setSaveError("");
+
+      const result =
+        await createQuote.mutateAsync(
+          request,
+        );
+
+      navigate(
+        `/quotes/${result.id}`,
+        {
+          replace: true,
+        },
+      );
+    } catch (error) {
+      setSaveError(
+        error instanceof Error
+          ? error.message
+          : "견적을 저장하지 못했습니다.",
+      );
+    }
+  }
 
   const loading =
     customersQuery.isLoading ||
@@ -298,25 +459,49 @@ export function QuoteCreatePage() {
 
 
       {step === "ITEMS" && (
-        <section className="quote-create-placeholder">
-          <h2>
-            견적항목
-          </h2>
-
-          <p>
-            다음 단계에서
-            구현합니다.
-          </p>
-
-          <button
-            type="button"
-            onClick={() =>
-              setStep("BASIC")
-            }
-          >
-            ← 이전
-          </button>
-        </section>
+        <QuoteItemsStep
+          items={quoteItems}
+          onChange={
+            setQuoteItems
+          }
+          onPrevious={() =>
+            setStep("BASIC")
+          }
+          onNext={() =>
+            setStep("REVIEW")
+          }
+        />
+      )}
+      {step === "REVIEW" && (
+        <QuoteReviewStep
+          basic={basicValues}
+          items={quoteItems}
+          customers={
+            customersQuery.data?.content ??
+            []
+          }
+          platforms={
+            platformsQuery.data ?? []
+          }
+          adjustmentAmount={
+            adjustmentAmount
+          }
+          onAdjustmentAmountChange={
+            setAdjustmentAmount
+          }
+          onPrevious={() =>
+            setStep("ITEMS")
+          }
+          onSave={() =>
+            void handleCreateQuote()
+          }
+          saving={
+            createQuote.isPending
+          }
+          saveError={
+            saveError
+          }
+        />
       )}
 
     </main>
@@ -365,4 +550,19 @@ function Step({
 
     </div>
   );
+}
+function nullableText(
+  value:
+    | string
+    | null
+    | undefined,
+): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const trimmed =
+    value.trim();
+
+  return trimmed || null;
 }
