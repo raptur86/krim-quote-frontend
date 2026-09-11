@@ -1,0 +1,355 @@
+.customer-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+/* =========================================================
+ * Header
+ * ========================================================= */
+
+.customer-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.customer-detail-header h1 {
+  margin: 8px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.customer-detail-header p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.customer-detail-back {
+  padding: 0;
+  color: #6b7280;
+  font: inherit;
+  font-size: 13px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.customer-detail-back:hover {
+  color: #2563eb;
+}
+
+.customer-detail-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+
+/* =========================================================
+ * Card
+ * ========================================================= */
+
+.customer-detail-card {
+  padding: 24px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.customer-detail-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.customer-detail-card-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customer-detail-card-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+
+/* =========================================================
+ * Customer Info
+ * ========================================================= */
+
+.customer-detail-info-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 24px 40px;
+}
+
+.customer-detail-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.customer-detail-info-label {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.customer-detail-info-value {
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.customer-detail-info-full {
+  grid-column: 1 / -1;
+}
+
+.customer-detail-pre {
+  white-space: pre-wrap;
+}
+
+
+/* =========================================================
+ * Customer Status
+ * ========================================================= */
+
+.customer-detail-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.customer-detail-status-active {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.customer-detail-status-inactive {
+  color: #6b7280;
+  background: #f3f4f6;
+}
+
+
+/* =========================================================
+ * Quote Count
+ * ========================================================= */
+
+.customer-detail-count {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+ * Quote Table
+ * ========================================================= */
+
+.customer-detail-table-wrapper {
+  overflow-x: auto;
+
+  border:
+    1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.customer-detail-table {
+  width: 100%;
+  min-width: 800px;
+
+  border-collapse: collapse;
+}
+
+.customer-detail-table th,
+.customer-detail-table td {
+  padding: 13px 14px;
+
+  border-bottom:
+    1px solid #eef0f3;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.customer-detail-table th {
+  color: #4b5563;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  background: #f9fafb;
+}
+
+.customer-detail-table tbody tr {
+  cursor: pointer;
+}
+
+.customer-detail-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.customer-detail-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.customer-detail-money {
+  font-weight: 600;
+}
+
+
+/* =========================================================
+ * Quote Status
+ * ========================================================= */
+
+.quote-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 58px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-status-draft {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.quote-status-issued {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.quote-status-cancelled {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+
+/* =========================================================
+ * State
+ * ========================================================= */
+
+.customer-detail-state,
+.customer-detail-quote-state {
+  display: flex;
+  min-height: 180px;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #6b7280;
+
+  text-align: center;
+}
+
+.customer-detail-state {
+  min-height: 300px;
+
+  padding: 32px;
+
+  background: #ffffff;
+
+  border:
+    1px solid #e5e7eb;
+
+  border-radius: 12px;
+}
+
+.customer-detail-quote-state p {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.customer-detail-error {
+  color: #b91c1c;
+}
+
+
+/* =========================================================
+ * Responsive
+ * ========================================================= */
+
+@media (max-width: 768px) {
+  .customer-detail-header {
+    flex-direction: column;
+  }
+
+  .customer-detail-header-actions {
+    width: 100%;
+  }
+
+  .customer-detail-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-detail-info-full {
+    grid-column: auto;
+  }
+}
+
+/* =========================================================
+ * Active / Inactive Action
+ * ========================================================= */
+
+.customer-detail-deactivate {
+  color: #b45309;
+  border-color: #f59e0b;
+}
+
+.customer-detail-deactivate:hover {
+  background: #fffbeb;
+}
+
+.customer-detail-activate {
+  color: #166534;
+  border-color: #22c55e;
+}
+
+.customer-detail-activate:hover {
+  background: #f0fdf4;
+}
+
+.customer-detail-status-error {
+  padding: 12px 14px;
+
+  color: #b91c1c;
+  font-size: 14px;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}

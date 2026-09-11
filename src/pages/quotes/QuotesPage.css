@@ -1,0 +1,343 @@
+.quotes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+/* =========================================================
+ * Header
+ * ========================================================= */
+
+.quotes-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.quotes-page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.quotes-page-header p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+ * Search
+ * ========================================================= */
+
+.quotes-search-card {
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.quotes-search-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.quotes-search-main {
+  display: grid;
+  flex: 1;
+
+  grid-template-columns:
+    minmax(280px, 2fr)
+    150px
+    170px
+    170px;
+
+  gap: 12px;
+}
+
+.quotes-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quotes-field label {
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.quotes-field input,
+.quotes-field select {
+  width: 100%;
+  min-height: 42px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  font: inherit;
+
+  background: #ffffff;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.quotes-field input:focus,
+.quotes-field select:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.15);
+  border-color: #2563eb;
+}
+
+.quotes-search-actions {
+  display: flex;
+  gap: 8px;
+}
+
+
+/* =========================================================
+ * Result
+ * ========================================================= */
+
+.quotes-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quotes-result-header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quotes-result-header strong {
+  font-size: 16px;
+}
+
+.quotes-result-header span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.quotes-refreshing {
+  color: #2563eb !important;
+}
+
+
+/* =========================================================
+ * Table
+ * ========================================================= */
+
+.quotes-table-wrapper {
+  overflow-x: auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.quotes-table {
+  width: 100%;
+  min-width: 1100px;
+
+  border-collapse: collapse;
+}
+
+.quotes-table th,
+.quotes-table td {
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #eef0f3;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.quotes-table th {
+  color: #4b5563;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  background: #f9fafb;
+}
+
+.quotes-table tbody tr {
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease;
+}
+
+.quotes-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.quotes-table tbody tr:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.quotes-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.quotes-number {
+  font-weight: 600;
+}
+
+.quotes-customer {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.quotes-customer span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.quotes-money {
+  font-weight: 600;
+}
+
+
+/* =========================================================
+ * Status
+ * ========================================================= */
+
+.quotes-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 58px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quotes-status-draft {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.quotes-status-issued {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.quotes-status-cancelled {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+
+/* =========================================================
+ * State
+ * ========================================================= */
+
+.quotes-state {
+  display: flex;
+
+  min-height: 220px;
+
+  padding: 32px;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #6b7280;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.quotes-state strong {
+  color: #111827;
+}
+
+.quotes-state p {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.quotes-error strong,
+.quotes-error p {
+  color: #b91c1c;
+}
+
+
+/* =========================================================
+ * Pagination
+ * ========================================================= */
+
+.quotes-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.quotes-pagination span {
+  min-width: 80px;
+
+  color: #4b5563;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* =========================================================
+ * Responsive
+ * ========================================================= */
+
+@media (max-width: 1100px) {
+  .quotes-search-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quotes-search-main {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .quotes-search-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 700px) {
+  .quotes-page-header {
+    flex-direction: column;
+  }
+
+  .quotes-search-main {
+    grid-template-columns: 1fr;
+  }
+}

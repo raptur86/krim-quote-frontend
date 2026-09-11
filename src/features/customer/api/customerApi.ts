@@ -2,12 +2,15 @@ import { apiClient } from "../../../services/apiClient";
 import type { ApiResponse } from "../../../types/api.types";
 
 import type {
+  CustomerActiveRequest,
+  CustomerActiveResponse,
   CustomerCreateRequest,
   CustomerDetail,
   CustomerListParams,
   CustomerPageResponse,
   CustomerUpdateRequest,
 } from "../types/customer.types";
+
 
 
 /* =========================================================
@@ -106,6 +109,34 @@ export async function updateCustomerApi(
 
   if (!data.success || !data.data) {
     throw new Error(data.message || "고객 정보 수정에 실패했습니다.");
+  }
+
+  return data.data;
+}
+
+/* =========================================================
+ * Customer Active
+ * ========================================================= */
+
+/**
+ * 고객 활성 / 비활성 변경
+ *
+ * PATCH /api/v1/customers/{customerId}/active
+ */
+export async function changeCustomerActiveApi(
+  customerId: number,
+  request: CustomerActiveRequest,
+): Promise<CustomerActiveResponse> {
+  const { data } =
+    await apiClient.patch<ApiResponse<CustomerActiveResponse>>(
+      `/customers/${customerId}/active`,
+      request,
+    );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message || "고객 상태 변경에 실패했습니다.",
+    );
   }
 
   return data.data;

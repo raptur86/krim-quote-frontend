@@ -110,3 +110,16 @@ export type CustomerPageResponse = {
   first: boolean;
   last: boolean;
 };
+
+/* =========================================================
+ * Active
+ * ========================================================= */
+
+export type CustomerActiveRequest = {
+  active: boolean;
+};
+
+export type CustomerActiveResponse = {
+  id: number;
+  active: boolean;
+};
