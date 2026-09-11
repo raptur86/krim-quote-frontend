@@ -353,3 +353,7 @@
   border: 1px solid #fecaca;
   border-radius: 8px;
 }
+.customer-detail-quote-status-expired {
+  color: #4b5563;
+  background: #e5e7eb;
+}

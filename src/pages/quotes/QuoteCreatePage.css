@@ -1,0 +1,76 @@
+.quote-create-page {
+  padding: 24px;
+}
+
+.quote-create-header {
+  margin-bottom: 24px;
+}
+
+.quote-create-header h1 {
+  margin: 0 0 6px;
+}
+
+.quote-create-header p {
+  margin: 0;
+  color: #64748b;
+}
+
+
+.quote-create-steps {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.quote-create-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  border: 1px solid #d7dce5;
+  border-radius: 8px;
+
+  color: #64748b;
+}
+
+.quote-create-step.active {
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.quote-create-step.completed {
+  color: #15803d;
+}
+
+.quote-create-step-number {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+
+.quote-create-state,
+.quote-create-error,
+.quote-create-placeholder {
+  padding: 20px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  background: #ffffff;
+}
+
+.quote-create-error {
+  margin-bottom: 16px;
+  color: #b91c1c;
+}

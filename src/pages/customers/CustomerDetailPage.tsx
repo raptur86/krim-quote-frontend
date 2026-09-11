@@ -537,6 +537,7 @@ function QuoteStatusBadge({
         Record<QuoteStatus, string> = {
         DRAFT: "작성중",
         ISSUED: "발행",
+         EXPIRED: "만료",
         CANCELLED: "취소",
     };
 

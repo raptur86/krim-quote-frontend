@@ -311,6 +311,11 @@
   text-align: center;
 }
 
+.quotes-status-expired {
+  color: #4b5563;
+  background: #e5e7eb;
+}
+
 
 /* =========================================================
  * Responsive

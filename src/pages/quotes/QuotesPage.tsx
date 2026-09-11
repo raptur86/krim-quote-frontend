@@ -178,6 +178,9 @@ export function QuotesPage() {
                 <option value="ISSUED">
                   발행
                 </option>
+                <option value="EXPIRED">
+                  만료
+                </option>
 
                 <option value="CANCELLED">
                   취소
@@ -540,6 +543,7 @@ function QuoteStatusBadge({
   > = {
     DRAFT: "작성중",
     ISSUED: "발행",
+    EXPIRED: "만료",
     CANCELLED: "취소",
   };
 
