@@ -7,6 +7,7 @@ import type {
   QuoteCreateResponse,
   QuoteListParams,
   QuotePageResponse,
+  QuoteDetailResponse,
 } from "../types/quote.types";
 
 
@@ -60,6 +61,25 @@ export async function createQuoteApi(
     throw new Error(
       data.message ||
         "견적 생성에 실패했습니다.",
+    );
+  }
+
+  return data.data;
+}
+export async function getQuoteApi(
+  quoteId: number,
+): Promise<QuoteDetailResponse> {
+  const { data } =
+    await apiClient.get<
+      ApiResponse<QuoteDetailResponse>
+    >(
+      `/quotes/${quoteId}`,
+    );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "견적 정보를 불러오지 못했습니다.",
     );
   }
 

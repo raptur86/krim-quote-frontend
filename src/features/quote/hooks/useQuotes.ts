@@ -6,6 +6,7 @@ import type {
   QuoteListParams,
 } from "../types/quote.types";
 
+
 export const quoteKeys = {
   all: ["quotes"] as const,
 
@@ -21,6 +22,7 @@ export const quoteKeys = {
   detail: (quoteId: number) =>
     [...quoteKeys.details(), quoteId] as const,
 };
+
 
 export function useQuotes(
   params?: QuoteListParams,

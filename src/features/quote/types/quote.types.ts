@@ -198,3 +198,128 @@ export type QuoteDraftItem =
   QuoteItemRequest & {
     clientId: string;
   };
+  export type QuoteDetailCustomer = {
+  id: number;
+  customerName: string;
+  companyName: string | null;
+};
+
+
+export type QuoteDetailPlatform = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+
+export type QuoteDetailItem = {
+  id: number;
+
+  standardRateId: number | null;
+
+  categoryName: string | null;
+
+  featureName: string;
+
+  description: string | null;
+
+  standardPriceSnapshot: number | null;
+
+  quoteUnitPrice: number;
+
+  quantity: number;
+
+  unitName: string;
+
+  difficultyCode: string;
+
+  difficultyRate: number;
+
+  adjustmentAmount: number;
+
+  adjustmentReason: string | null;
+
+  calculatedAmount: number;
+
+  finalAmount: number;
+
+  estimatedHours: number;
+
+  internalMemo: string | null;
+
+  sortOrder: number;
+};
+
+
+export type QuoteDirectCost = {
+  id: number;
+
+  costName: string;
+
+  amount: number;
+
+  memo: string | null;
+
+  sortOrder: number;
+};
+
+
+export type QuoteDetailResponse = {
+  id: number;
+
+  quoteNumber: string;
+
+  status: QuoteStatus;
+
+  customer: QuoteDetailCustomer;
+
+  inquiryPlatform:
+    | QuoteDetailPlatform
+    | null;
+
+  title: string;
+
+  writtenDate: string;
+
+  validUntil: string | null;
+
+  expectedDuration: string | null;
+
+  customerNote: string | null;
+
+  internalMemo: string | null;
+
+  items: QuoteDetailItem[];
+
+  directCosts: QuoteDirectCost[];
+
+  itemsAmount: number;
+
+  adjustmentAmount: number;
+
+  supplyAmount: number;
+
+  vatRate: number;
+
+  vatAmount: number;
+
+  totalAmount: number;
+
+  expectedSettlementAmount:
+    | number
+    | null;
+
+  expectedDeductionAmount:
+    | number
+    | null;
+
+  expectedSettlementMemo:
+    | string
+    | null;
+
+  estimatedHours: number;
+
+  createdAt: string;
+
+  updatedAt: string;
+};

@@ -1,0 +1,76 @@
+.quote-detail-page {
+  padding: 24px;
+}
+
+.quote-detail-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.quote-detail-number {
+  margin: 0 0 8px;
+}
+
+.quote-detail-header h1 {
+  margin: 0;
+}
+
+.quote-detail-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.quote-detail-section {
+  margin-top: 24px;
+}
+
+.quote-detail-info,
+.quote-detail-summary {
+  display: grid;
+  gap: 12px;
+}
+
+.quote-detail-info > div,
+.quote-detail-summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.quote-detail-info dt,
+.quote-detail-summary dt {
+  font-weight: 600;
+}
+
+.quote-detail-info dd,
+.quote-detail-summary dd {
+  margin: 0;
+}
+
+.quote-detail-table-wrap {
+  overflow-x: auto;
+}
+
+.quote-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.quote-detail-table th,
+.quote-detail-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.quote-detail-total {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.quote-detail-state,
+.quote-detail-error {
+  padding: 24px 0;
+}
