@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import { ROUTES } from "../../app/router/routes";
-import { useQuote } from "../../features/quote/hooks/useQuote"; 
+import { useQuote } from "../../features/quote/hooks/useQuote";
 
 import "./QuoteDetailPage.css";
 
@@ -80,6 +80,19 @@ export function QuoteDetailPage() {
         </div>
 
         <div className="quote-detail-header-actions">
+
+          {quote.status === "DRAFT" && (
+            <button
+              type="button"
+              onClick={() =>
+                navigate(
+                  `/quotes/${quote.id}/edit`,
+                )
+              }
+            >
+              수정
+            </button>
+          )}
 
           <button
             type="button"

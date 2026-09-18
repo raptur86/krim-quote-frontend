@@ -13,7 +13,7 @@ import { PublicQuotePage } from "../../pages/public/PublicQuotePage";
 import { CustomersPage } from "../../pages/customers/CustomersPage";
 import { QuotesPage } from "../../pages/quotes/QuotesPage";
 import { QuoteCreatePage } from "../../pages/quotes/QuoteCreatePage";
-import { QuoteDetailPage } from "../../pages/quotes/QuoteDetailPage"; 
+import { QuoteDetailPage } from "../../pages/quotes/QuoteDetailPage";
 import { RatesPage } from "../../pages/rates/RatesPage";
 import { PlatformPage } from "../../pages/platforms/PlatformPage";
 import { SalesPage } from "../../pages/sales/SalesPage";
@@ -21,6 +21,7 @@ import { SettingsPage } from "../../pages/settings/SettingsPage";
 import { CustomerCreatePage } from "../../pages/customers/CustomerCreatePage";
 import { CustomerEditPage } from "../../pages/customers/CustomerEditPage";
 import { CustomerDetailPage } from "../../pages/customers/CustomerDetailPage";
+import { QuoteEditPage } from "../../pages/quotes/QuoteEditPage";
 
 import { ROUTES } from "./routes";
 import { ProtectedRoute } from "../../features/auth/ProtectedRoute";
@@ -83,6 +84,10 @@ export function AppRouter() {
             <Route
               path={ROUTES.quoteDetail}
               element={<QuoteDetailPage />}
+            />
+            <Route
+              path={ROUTES.quoteEdit}
+              element={<QuoteEditPage />}
             />
 
             <Route

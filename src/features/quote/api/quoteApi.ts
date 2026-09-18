@@ -3,6 +3,7 @@ import { apiClient } from "../../../services/apiClient";
 import type { ApiResponse } from "../../../types/api.types";
 
 import type {
+  QuoteUpdateRequest,
   QuoteCreateRequest,
   QuoteCreateResponse,
   QuoteListParams,
@@ -80,6 +81,28 @@ export async function getQuoteApi(
     throw new Error(
       data.message ||
         "견적 정보를 불러오지 못했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+export async function updateQuoteApi(
+  quoteId: number,
+  request: QuoteUpdateRequest,
+): Promise<QuoteDetailResponse> {
+  const { data } =
+    await apiClient.put<
+      ApiResponse<QuoteDetailResponse>
+    >(
+      `/quotes/${quoteId}`,
+      request,
+    );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "견적 수정에 실패했습니다.",
     );
   }
 

@@ -13,8 +13,7 @@ export const ROUTES = {
   quotes: "/quotes",
   quoteCreate: "/quotes/new",
   quoteDetail: "/quotes/:quoteId",
-  quoteEdit:
-    "/quotes/:quoteId/edit",
+  quoteEdit:  "/quotes/:quoteId/edit",
 
   rates: "/rates",
 
