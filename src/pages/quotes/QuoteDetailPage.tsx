@@ -2,7 +2,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { ROUTES } from "../../app/router/routes";
 import { useQuote } from "../../features/quote/hooks/useQuote";
+import {
+  useState,
+} from "react";
 
+import {
+  useIssueQuote,
+} from "../../features/quote/hooks/useIssueQuote";
 import "./QuoteDetailPage.css";
 
 export function QuoteDetailPage() {
@@ -11,7 +17,49 @@ export function QuoteDetailPage() {
   const { quoteId } = useParams<{
     quoteId: string;
   }>();
+  const issueQuote =
+    useIssueQuote();
 
+  const [
+    issueError,
+    setIssueError,
+  ] = useState<string | null>(
+    null,
+  );
+
+  async function handleIssue() {
+    if (quote.status !== "DRAFT") {
+      return;
+    }
+
+    const confirmed =
+      window.confirm(
+        "이 견적을 발행하시겠습니까?\n\n발행 후에는 견적 내용을 수정할 수 없습니다.",
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIssueError(null);
+
+    try {
+      const result =
+        await issueQuote.mutateAsync(
+          quote.id,
+        );
+
+      window.alert(
+        `견적이 발행되었습니다.\n\n견적번호: ${result.quoteNumber}`,
+      );
+    } catch (error) {
+      setIssueError(
+        error instanceof Error
+          ? error.message
+          : "견적 발행에 실패했습니다.",
+      );
+    }
+  }
   const id = Number(quoteId);
 
   const quoteQuery = useQuote(id);
@@ -82,22 +130,43 @@ export function QuoteDetailPage() {
         <div className="quote-detail-header-actions">
 
           {quote.status === "DRAFT" && (
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  `/quotes/${quote.id}/edit`,
-                )
-              }
-            >
-              수정
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    `/quotes/${quote.id}/edit`,
+                  )
+                }
+                disabled={
+                  issueQuote.isPending
+                }
+              >
+                수정
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleIssue}
+                disabled={
+                  issueQuote.isPending
+                }
+              >
+                {issueQuote.isPending
+                  ? "발행 중..."
+                  : "견적 발행"}
+              </button>
+            </>
           )}
 
           <button
             type="button"
             onClick={() =>
               navigate(ROUTES.quotes)
+            }
+            disabled={
+              issueQuote.isPending
             }
           >
             목록

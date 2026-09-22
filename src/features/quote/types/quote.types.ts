@@ -323,3 +323,16 @@ export type QuoteDetailResponse = {
 
   updatedAt: string;
 };
+
+export type QuoteIssueResponse = {
+  id: number;
+  quoteNumber: string;
+  status: "ISSUED";
+
+  supplyAmount: number;
+  vatAmount: number;
+  totalAmount: number;
+
+  publicUrl: string;
+  issuedAt: string;
+};

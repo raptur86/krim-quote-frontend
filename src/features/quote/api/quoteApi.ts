@@ -9,6 +9,7 @@ import type {
   QuoteListParams,
   QuotePageResponse,
   QuoteDetailResponse,
+  QuoteIssueResponse,
 } from "../types/quote.types";
 
 
@@ -103,6 +104,26 @@ export async function updateQuoteApi(
     throw new Error(
       data.message ||
         "견적 수정에 실패했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+export async function issueQuoteApi(
+  quoteId: number,
+): Promise<QuoteIssueResponse> {
+  const { data } =
+    await apiClient.post<
+      ApiResponse<QuoteIssueResponse>
+    >(
+      `/quotes/${quoteId}/issue`,
+    );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "견적 발행에 실패했습니다.",
     );
   }
 

@@ -17,9 +17,9 @@ export const customerKeys = {
     [...customerKeys.details(), customerId] as const,
 };
 
-export function useCustomers(params?: CustomerListParams) {
+export function useCustomers(params?: CustomerListParams, enabled = true,) {
   return useQuery({
     queryKey: customerKeys.list(params),
-    queryFn: () => getCustomersApi(params),
+    queryFn: () => getCustomersApi(params),enabled,
   });
 }
