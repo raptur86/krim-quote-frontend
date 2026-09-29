@@ -1,0 +1,361 @@
+.cost-settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.cost-settings-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.cost-settings-header p {
+  margin: 8px 0 0;
+  color: #667085;
+}
+
+.cost-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cost-settings-section {
+  padding: 24px;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.cost-settings-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cost-settings-section-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.cost-settings-section-header p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.cost-settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.cost-settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cost-settings-field > span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cost-settings-field strong {
+  color: #d92d20;
+}
+
+.cost-settings-field input,
+.cost-settings-fixed-cost-row input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #ffffff;
+  font: inherit;
+}
+
+.cost-settings-field input:focus,
+.cost-settings-fixed-cost-row input:focus {
+  border-color: #667085;
+  outline: none;
+}
+
+.cost-settings-input-unit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cost-settings-input-unit input {
+  flex: 1;
+  min-width: 0;
+}
+
+.cost-settings-input-unit > span {
+  flex-shrink: 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.cost-settings-add-button,
+.cost-settings-remove-button,
+.cost-settings-save-button {
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cost-settings-add-button {
+  padding: 9px 14px;
+  background: #f2f4f7;
+}
+
+.cost-settings-remove-button {
+  padding: 9px 12px;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.cost-settings-fixed-costs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cost-settings-fixed-cost-header,
+.cost-settings-fixed-cost-row {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 1fr)
+    minmax(180px, 280px)
+    70px;
+  gap: 12px;
+  align-items: center;
+}
+
+.cost-settings-fixed-cost-header {
+  padding: 0 4px;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cost-settings-empty {
+  padding: 32px 20px;
+  border: 1px dashed #d0d5dd;
+  border-radius: 8px;
+  color: #667085;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.cost-settings-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.cost-settings-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cost-settings-summary span {
+  color: #667085;
+  font-size: 14px;
+}
+
+.cost-settings-summary strong {
+  font-size: 20px;
+}
+
+.cost-settings-summary p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.cost-settings-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cost-settings-save-button {
+  min-width: 160px;
+  padding: 11px 18px;
+  background: #1f4d3a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.cost-settings-save-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cost-settings-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.cost-settings-message.error {
+  border: 1px solid #fecdca;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.cost-settings-message.success {
+  border: 1px solid #abefc6;
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.cost-settings-history {
+  margin-bottom: 32px;
+}
+
+.cost-settings-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cost-settings-history-item {
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+}
+
+.cost-settings-history-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cost-settings-history-title h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+}
+
+.cost-settings-history-title div > span {
+  color: #667085;
+  font-size: 13px;
+}
+
+.cost-settings-status {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f2f4f7;
+  color: #475467;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cost-settings-status.active {
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.cost-settings-history-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cost-settings-history-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.cost-settings-history-summary span {
+  color: #667085;
+  font-size: 12px;
+}
+
+.cost-settings-history-summary strong {
+  font-size: 14px;
+}
+
+.cost-settings-history-costs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e4e7ec;
+}
+
+.cost-settings-history-costs > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .cost-settings-form-grid,
+  .cost-settings-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-settings-history-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cost-settings-summary p {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .cost-settings-section {
+    padding: 18px;
+  }
+
+  .cost-settings-section-header {
+    flex-direction: column;
+  }
+
+  .cost-settings-fixed-cost-header {
+    display: none;
+  }
+
+  .cost-settings-fixed-cost-row {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 8px;
+  }
+
+  .cost-settings-history-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-settings-actions {
+    display: block;
+  }
+
+  .cost-settings-save-button {
+    width: 100%;
+  }
+}

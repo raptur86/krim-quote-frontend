@@ -10,7 +10,7 @@ import { useChangeCustomerActive } from "../../features/customer/hooks/useChange
 import { apiErrorMessage } from "../../services/apiClient";
 import { useCustomer } from "../../features/customer/hooks/useCustomer";
 import { useQuotes } from "../../features/quote/hooks/useQuotes";
-
+import { ROUTES } from "../../app/router/routes";
 import type {
     QuoteStatus,
 } from "../../features/quote/types/quote.types";
@@ -54,7 +54,7 @@ export function CustomerDetailPage() {
     if (invalidCustomerId) {
         return (
             <Navigate
-                to="/customers"
+                to={ROUTES.customers}
                 replace
             />
         );
@@ -82,7 +82,7 @@ export function CustomerDetailPage() {
                     type="button"
                     className="btn"
                     onClick={() =>
-                        navigate("/customers")
+                        navigate(ROUTES.customers)
                     }
                 >
                     고객 목록으로
@@ -132,7 +132,7 @@ export function CustomerDetailPage() {
                         type="button"
                         className="customer-detail-back"
                         onClick={() =>
-                            navigate("/customers")
+                            navigate(ROUTES.customers)
                         }
                     >
                         ← 고객 목록
@@ -177,7 +177,7 @@ export function CustomerDetailPage() {
                         }
                         onClick={() =>
                             navigate(
-                                `/customers/${customerId}/edit`,
+                                `${ROUTES.customers}/${customerId}/edit`,
                             )
                         }
                     >
@@ -192,7 +192,7 @@ export function CustomerDetailPage() {
                         }
                         onClick={() =>
                             navigate(
-                                `/quotes/new?customerId=${customerId}`,
+                                `${ROUTES.quoteCreate}?customerId=${customerId}`,
                             )
                         }
                     >
@@ -323,7 +323,7 @@ export function CustomerDetailPage() {
                         className="btn btn-primary"
                         onClick={() =>
                             navigate(
-                                `/quotes/new?customerId=${customerId}`,
+                                `${ROUTES.quoteCreate}?customerId=${customerId}`,
                             )
                         }
                     >
@@ -371,7 +371,7 @@ export function CustomerDetailPage() {
                                 className="btn btn-primary"
                                 onClick={() =>
                                     navigate(
-                                        `/quotes/new?customerId=${customerId}`,
+                                        `${ROUTES.quoteCreate}?customerId=${customerId}`,
                                     )
                                 }
                             >
@@ -411,7 +411,7 @@ export function CustomerDetailPage() {
                                                 tabIndex={0}
                                                 onClick={() =>
                                                     navigate(
-                                                        `/quotes/${quote.id}`,
+                                                        `${ROUTES.quotes}/${quote.id}`,
                                                     )
                                                 }
                                                 onKeyDown={(event) => {
@@ -422,7 +422,7 @@ export function CustomerDetailPage() {
                                                         event.preventDefault();
 
                                                         navigate(
-                                                            `/quotes/${quote.id}`,
+                                                            `${ROUTES.quotes}/${quote.id}`,
                                                         );
                                                     }
                                                 }}

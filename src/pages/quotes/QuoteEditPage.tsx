@@ -258,7 +258,7 @@ export function QuoteEditPage() {
       setErrorMessage(
         result.error.issues[0]
           ?.message ??
-          "기본정보를 확인해주세요.",
+        "기본정보를 확인해주세요.",
       );
 
       return;
@@ -272,7 +272,7 @@ export function QuoteEditPage() {
 
   function handleCancel() {
     navigate(
-      `/quotes/${id}`,
+      `${ROUTES.quotes}/${id}`,
     );
   }
 
@@ -419,7 +419,7 @@ export function QuoteEditPage() {
       });
 
       navigate(
-        `/quotes/${id}`,
+        `${ROUTES.quotes}/${id}`,
         {
           replace: true,
         },

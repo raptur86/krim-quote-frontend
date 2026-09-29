@@ -314,7 +314,7 @@ export function QuoteCreatePage() {
         );
 
       navigate(
-        `/quotes/${result.id}`,
+        `${ROUTES.quotes}/${result.id}`,
         {
           replace: true,
         },

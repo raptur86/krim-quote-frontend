@@ -1,27 +1,28 @@
 export const ROUTES = {
-  login: "/login",
+  quoteRoot: "/quote",
 
-  dashboard: "/dashboard",
+  login: "/quote/login",
 
-  customers: "/customers",
-  customerCreate: "/customers/new",
-  customerDetail:
-    "/customers/:customerId",
-  customerEdit:
-    "/customers/:customerId/edit",
+  dashboard: "/quote/dashboard",
 
-  quotes: "/quotes",
-  quoteCreate: "/quotes/new",
-  quoteDetail: "/quotes/:quoteId",
-  quoteEdit:  "/quotes/:quoteId/edit",
+  customers: "/quote/customers",
+  customerCreate: "/quote/customers/new",
+  customerDetail: "/quote/customers/:customerId",
+  customerEdit: "/quote/customers/:customerId/edit",
 
-  rates: "/rates",
+  quotes: "/quote/quotes",
+  quoteCreate: "/quote/quotes/new",
+  quoteDetail: "/quote/quotes/:quoteId",
+  quoteEdit: "/quote/quotes/:quoteId/edit",
 
-  platforms: "/platforms",
+  rates: "/quote/rates",
 
-  sales: "/sales",
+  platforms: "/quote/platforms",
 
-  settings: "/settings",
+  sales: "/quote/sales",
+
+  settings: "/quote/settings",
+  costSettings: "/quote/settings/cost",
 
   publicQuote: "/q/:token",
 } as const;

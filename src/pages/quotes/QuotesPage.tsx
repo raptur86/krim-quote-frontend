@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useQuotes } from "../../features/quote/hooks/useQuotes";
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
-
+import { ROUTES } from "../../app/router/routes";
 import type {
   QuoteStatus,
 } from "../../features/quote/types/quote.types";
@@ -339,7 +339,7 @@ export function QuotesPage() {
           type="button"
           className="btn btn-primary"
           onClick={() =>
-            navigate("/quotes/new")
+            navigate(ROUTES.quoteCreate)
           }
         >
           + 새 견적 작성
@@ -771,7 +771,7 @@ export function QuotesPage() {
               type="button"
               className="btn btn-primary"
               onClick={() =>
-                navigate("/quotes/new")
+                navigate(ROUTES.quoteCreate)
               }
             >
               + 새 견적 작성
@@ -823,7 +823,7 @@ export function QuotesPage() {
                         tabIndex={0}
                         onClick={() =>
                           navigate(
-                            `/quotes/${quote.id}`,
+                            `${ROUTES.quotes}/${quote.id}`,
                           )
                         }
                         onKeyDown={(event) => {
@@ -834,7 +834,7 @@ export function QuotesPage() {
                             event.preventDefault();
 
                             navigate(
-                              `/quotes/${quote.id}`,
+                              `${ROUTES.quotes}/${quote.id}`,
                             );
                           }
                         }}

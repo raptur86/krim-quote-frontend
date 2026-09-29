@@ -20,8 +20,7 @@ export function QuoteDetailPage() {
   const issueQuote =
     useIssueQuote();
 
-  const [
-    issueError,
+  const [,
     setIssueError,
   ] = useState<string | null>(
     null,
@@ -135,7 +134,7 @@ export function QuoteDetailPage() {
                 type="button"
                 onClick={() =>
                   navigate(
-                    `/quotes/${quote.id}/edit`,
+                    `${ROUTES.quotes}/${quote.id}/edit`,
                   )
                 }
                 disabled={

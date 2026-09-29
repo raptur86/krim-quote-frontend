@@ -5,7 +5,7 @@ import { CustomerForm } from "../../features/customer/components/CustomerForm";
 import { useCreateCustomer } from "../../features/customer/hooks/useCreateCustomer";
 
 import type { CustomerCreateRequest } from "../../features/customer/types/customer.types";
-
+import { ROUTES } from "../../app/router/routes";
 import { apiErrorMessage } from "../../services/apiClient";
 
 import "./CustomerFormPage.css";
@@ -27,7 +27,7 @@ export function CustomerCreatePage() {
       const customer =
         await createCustomer.mutateAsync(request);
 
-      navigate(`/customers/${customer.id}`, {
+      navigate(`${ROUTES.customers}/${customer.id}`, {
         replace: true,
       });
     } catch (error) {
@@ -52,7 +52,7 @@ export function CustomerCreatePage() {
         submitLabel="고객 등록"
         serverError={serverError}
         onSubmit={handleSubmit}
-        onCancel={() => navigate("/customers")}
+        onCancel={() => navigate(ROUTES.customers)}
       />
     </div>
   );

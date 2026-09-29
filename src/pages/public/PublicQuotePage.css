@@ -1,0 +1,341 @@
+.public-quote-page,
+.public-quote-state-page {
+  min-height: 100vh;
+  background: #f4f1ea;
+}
+
+.public-quote-page {
+  padding: 48px 20px;
+}
+
+.public-quote-document {
+  width: min(100%, 1000px);
+  margin: 0 auto;
+  padding: 48px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.public-quote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 32px;
+  border-bottom: 2px solid #1f4d3a;
+}
+
+.public-quote-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.public-quote-logo {
+  max-width: 120px;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.public-quote-brand div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.public-quote-brand strong {
+  font-size: 22px;
+  color: #1f4d3a;
+}
+
+.public-quote-brand span {
+  color: #667085;
+  font-size: 13px;
+}
+
+.public-quote-title {
+  text-align: right;
+}
+
+.public-quote-title span {
+  color: #7fa387;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+.public-quote-title h1 {
+  margin: 5px 0 0;
+  color: #1b263b;
+  font-size: 34px;
+}
+
+.public-quote-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 28px;
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #e4e7ec;
+}
+
+.public-quote-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.public-quote-summary span,
+.public-quote-label {
+  color: #667085;
+  font-size: 12px;
+}
+
+.public-quote-summary strong {
+  font-size: 14px;
+}
+
+.public-quote-project {
+  padding: 36px 0;
+}
+
+.public-quote-project h2 {
+  margin: 7px 0 0;
+  color: #1b263b;
+  font-size: 26px;
+}
+
+.public-quote-parties {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.public-quote-parties > div {
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+}
+
+.public-quote-parties h3,
+.public-quote-items h3,
+.public-quote-note h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.public-quote-parties dl {
+  margin: 0;
+}
+
+.public-quote-parties dl > div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  padding: 7px 0;
+}
+
+.public-quote-parties dt {
+  color: #667085;
+  font-size: 13px;
+}
+
+.public-quote-parties dd {
+  margin: 0;
+  font-size: 14px;
+}
+
+.public-quote-items {
+  margin-top: 36px;
+}
+
+.public-quote-table-wrapper {
+  overflow-x: auto;
+}
+
+.public-quote-items table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.public-quote-items th {
+  padding: 12px;
+  border-bottom: 1px solid #d0d5dd;
+  background: #f9fafb;
+  color: #475467;
+  font-size: 13px;
+  text-align: left;
+}
+
+.public-quote-items td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #eaecf0;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.public-quote-money {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.public-quote-total-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.public-quote-total-box {
+  width: min(100%, 400px);
+}
+
+.public-quote-total-box > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.public-quote-total-box span {
+  color: #667085;
+}
+
+.public-quote-total-box strong {
+  color: #1b263b;
+}
+
+.public-quote-grand-total {
+  margin-top: 8px;
+  padding: 18px 0 !important;
+  border-top: 2px solid #1f4d3a;
+  border-bottom: 2px solid #1f4d3a;
+}
+
+.public-quote-grand-total span {
+  color: #1b263b;
+  font-weight: 700;
+}
+
+.public-quote-grand-total strong {
+  color: #1f4d3a;
+  font-size: 26px;
+}
+
+.public-quote-total-box p {
+  margin: 8px 0 0;
+  color: #667085;
+  font-size: 12px;
+  text-align: right;
+}
+
+.public-quote-note {
+  margin-top: 36px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.public-quote-note p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.public-quote-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #e4e7ec;
+}
+
+.public-quote-footer > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.public-quote-footer span,
+.public-quote-footer p {
+  color: #667085;
+  font-size: 12px;
+}
+
+.public-quote-footer p {
+  margin: 0;
+}
+
+.public-quote-state-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.public-quote-state-card {
+  width: min(100%, 480px);
+  padding: 40px;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.public-quote-state-card h1 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+.public-quote-state-card p {
+  margin: 0;
+  color: #667085;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .public-quote-page {
+    padding: 0;
+  }
+
+  .public-quote-document {
+    padding: 24px 18px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .public-quote-header {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .public-quote-title {
+    text-align: left;
+  }
+
+  .public-quote-summary,
+  .public-quote-parties {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .public-quote-footer {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .public-quote-summary,
+  .public-quote-parties {
+    grid-template-columns: 1fr;
+  }
+
+  .public-quote-project h2 {
+    font-size: 22px;
+  }
+
+  .public-quote-grand-total strong {
+    font-size: 22px;
+  }
+}

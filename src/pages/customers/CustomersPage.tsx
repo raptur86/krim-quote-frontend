@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
-
+import { ROUTES } from "../../app/router/routes";
 import "./CustomersPage.css";
 
 const PAGE_SIZE = 20;
@@ -62,11 +62,11 @@ export function CustomersPage() {
   }
 
   function handleCustomerClick(customerId: number) {
-    navigate(`/customers/${customerId}`);
+    navigate(`${ROUTES.customers}/${customerId}`);
   }
 
   function handleCreateCustomer() {
-    navigate("/customers/new");
+    navigate(ROUTES.customerCreate);
   }
 
   return (

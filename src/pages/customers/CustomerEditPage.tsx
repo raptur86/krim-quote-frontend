@@ -11,7 +11,7 @@ import { useCustomer } from "../../features/customer/hooks/useCustomer";
 import { useUpdateCustomer } from "../../features/customer/hooks/useUpdateCustomer";
 
 import type { CustomerUpdateRequest } from "../../features/customer/types/customer.types";
-
+import { ROUTES } from "../../app/router/routes";
 import { apiErrorMessage } from "../../services/apiClient";
 
 import "./CustomerFormPage.css";
@@ -33,7 +33,7 @@ export function CustomerEditPage() {
     !Number.isInteger(customerId) ||
     customerId <= 0
   ) {
-    return <Navigate to="/customers" replace />;
+    return <Navigate to={ROUTES.customers} replace />;
   }
 
   if (customerQuery.isLoading) {
@@ -57,7 +57,7 @@ export function CustomerEditPage() {
         <button
           type="button"
           className="btn"
-          onClick={() => navigate("/customers")}
+          onClick={() => navigate(ROUTES.customers)}
         >
           고객 목록
         </button>
@@ -77,7 +77,7 @@ export function CustomerEditPage() {
           request,
         });
 
-      navigate(`/customers/${customer.id}`, {
+      navigate(`${ROUTES.customers}/${customer.id}`, {
         replace: true,
       });
     } catch (error) {
@@ -104,7 +104,7 @@ export function CustomerEditPage() {
         serverError={serverError}
         onSubmit={handleSubmit}
         onCancel={() =>
-          navigate(`/customers/${customerId}`)
+          navigate(`${ROUTES.customers}/${customerId}`)
         }
       />
     </div>
