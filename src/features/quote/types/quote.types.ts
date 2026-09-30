@@ -318,6 +318,7 @@ export type QuoteDetailResponse = {
     | null;
 
   estimatedHours: number;
+  publicUrl: string | null;
 
   createdAt: string;
 

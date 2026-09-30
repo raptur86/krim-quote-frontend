@@ -158,7 +158,50 @@ export function QuoteDetailPage() {
               </button>
             </>
           )}
+          {quote.status === "ISSUED" &&
+            quote.publicUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.open(
+                      quote.publicUrl,
+                      "_blank",
+                      "noopener,noreferrer",
+                    );
+                  }}
+                >
+                  고객용 견적 보기
+                </button>
 
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const publicUrl =
+                      new URL(
+                        quote.publicUrl,
+                        window.location.origin,
+                      ).toString();
+
+                    try {
+                      await navigator.clipboard.writeText(
+                        publicUrl,
+                      );
+
+                      window.alert(
+                        "고객용 견적 링크를 복사했습니다.",
+                      );
+                    } catch {
+                      window.alert(
+                        "링크 복사에 실패했습니다.",
+                      );
+                    }
+                  }}
+                >
+                  링크 복사
+                </button>
+              </>
+            )}
           <button
             type="button"
             onClick={() =>
