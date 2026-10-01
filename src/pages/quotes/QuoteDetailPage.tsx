@@ -62,7 +62,18 @@ export function QuoteDetailPage() {
   const id = Number(quoteId);
 
   const quoteQuery = useQuote(id);
+  
+  const handleOpenPublicQuote = () => {
+    if (!quote.publicUrl) {
+      return;
+    }
 
+    window.open(
+      quote.publicUrl,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
   if (!Number.isFinite(id) || id <= 0) {
     return (
       <main className="quote-detail-page">
@@ -163,13 +174,7 @@ export function QuoteDetailPage() {
               <>
                 <button
                   type="button"
-                  onClick={() => {
-                    window.open(
-                      quote.publicUrl,
-                      "_blank",
-                      "noopener,noreferrer",
-                    );
-                  }}
+                  onClick={handleOpenPublicQuote}
                 >
                   고객용 견적 보기
                 </button>
@@ -177,11 +182,17 @@ export function QuoteDetailPage() {
                 <button
                   type="button"
                   onClick={async () => {
-                    const publicUrl =
-                      new URL(
-                        quote.publicUrl,
-                        window.location.origin,
-                      ).toString();
+                    if (!quote.publicUrl) {
+                      window.alert(
+                        "고객용 견적 링크가 없습니다.",
+                      );
+                      return;
+                    }
+
+                    const publicUrl = new URL(
+                      quote.publicUrl,
+                      window.location.origin,
+                    ).toString();
 
                     try {
                       await navigator.clipboard.writeText(

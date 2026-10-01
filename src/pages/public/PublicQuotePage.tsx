@@ -38,6 +38,7 @@ export function PublicQuotePage() {
       <main className="public-quote-state-page">
         <div className="public-quote-state-card">
           <h1>잘못된 견적 링크입니다.</h1>
+
           <p>
             전달받은 견적 링크를 다시 확인해주세요.
           </p>
@@ -73,8 +74,23 @@ export function PublicQuotePage() {
 
   const quote = quoteQuery.data;
 
+  function handlePrint() {
+    window.print();
+  }
+
   return (
     <main className="public-quote-page">
+
+      <div className="public-quote-actions">
+        <button
+          type="button"
+          className="public-quote-print-button"
+          onClick={handlePrint}
+        >
+          PDF로 저장
+        </button>
+      </div>
+
       <div className="public-quote-document">
 
         <header className="public-quote-header">

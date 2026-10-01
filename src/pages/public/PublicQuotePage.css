@@ -339,3 +339,132 @@
     font-size: 22px;
   }
 }
+
+/* =========================================================
+   Public Quote Actions
+========================================================= */
+
+.public-quote-actions {
+  width: min(100%, 1000px);
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.public-quote-print-button {
+  appearance: none;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 18px;
+  background: #1f4d3a;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.public-quote-print-button:hover {
+  opacity: 0.92;
+}
+
+.public-quote-print-button:focus-visible {
+  outline: 3px solid rgba(31, 77, 58, 0.25);
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   Print / PDF
+========================================================= */
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .public-quote-page {
+    min-height: auto;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .public-quote-actions {
+    display: none !important;
+  }
+
+  .public-quote-document {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .public-quote-header {
+    padding-bottom: 20px;
+  }
+
+  .public-quote-summary {
+    margin-top: 20px;
+  }
+
+  .public-quote-project {
+    padding: 24px 0;
+  }
+
+  .public-quote-items {
+    margin-top: 24px;
+  }
+
+  .public-quote-total-section {
+    margin-top: 24px;
+  }
+
+  .public-quote-note {
+    margin-top: 24px;
+  }
+
+  .public-quote-footer {
+    margin-top: 32px;
+  }
+
+  .public-quote-table-wrapper {
+    overflow: visible;
+  }
+
+  .public-quote-items table {
+    break-inside: auto;
+  }
+
+  .public-quote-items thead {
+    display: table-header-group;
+  }
+
+  .public-quote-items tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .public-quote-parties > div,
+  .public-quote-total-box,
+  .public-quote-note,
+  .public-quote-footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
