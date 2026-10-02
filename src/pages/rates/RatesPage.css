@@ -1,0 +1,662 @@
+.rates-page {
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.rates-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.rates-page-header h1 {
+  margin: 0;
+  color: #1b263b;
+  font-size: 28px;
+}
+
+.rates-page-header p {
+  margin: 8px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   Layout
+========================================================= */
+
+.rates-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+
+/* =========================================================
+   Category
+========================================================= */
+
+.rates-category {
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rates-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.rates-category-header h2 {
+  margin: 0;
+  color: #344054;
+  font-size: 15px;
+}
+
+.rates-category-header span {
+  display: block;
+  margin-top: 3px;
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.rates-category-add {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.rates-category-add:hover {
+  border-color: #1f4d3a;
+  color: #1f4d3a;
+}
+
+.rates-category-list {
+  padding: 8px;
+}
+
+.rates-category-item {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #475467;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rates-category-item:hover {
+  background: #f9fafb;
+}
+
+.rates-category-item.active {
+  background: #ecf7f0;
+  color: #1f4d3a;
+  font-weight: 700;
+}
+
+.rates-category-item small {
+  color: #98a2b3;
+  font-size: 10px;
+}
+
+.rates-category-state {
+  padding: 20px 14px;
+  color: #667085;
+  font-size: 12px;
+  text-align: center;
+}
+
+
+/* =========================================================
+   Content
+========================================================= */
+
+.rates-content {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   Search
+========================================================= */
+
+.rates-search {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.rates-search-field {
+  flex: 1;
+}
+
+.rates-status-field {
+  max-width: 150px;
+}
+
+.rates-search-field label {
+  display: block;
+  margin-bottom: 6px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rates-search-field input,
+.rates-search-field select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  outline: none;
+}
+
+.rates-search-field input:focus,
+.rates-search-field select:focus {
+  border-color: #1f4d3a;
+}
+
+.rates-search-actions {
+  display: flex;
+  gap: 8px;
+}
+
+
+/* =========================================================
+   Result
+========================================================= */
+
+.rates-result-header {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 20px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.rates-result-header strong {
+  color: #344054;
+  font-size: 14px;
+}
+
+.rates-result-header div > span {
+  margin-left: 8px;
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+.rates-refreshing {
+  color: #667085;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   Table
+========================================================= */
+
+.rates-table-wrap {
+  overflow-x: auto;
+}
+
+.rates-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rates-table th {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaecf0;
+  background: #f9fafb;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.rates-table td {
+  padding: 15px 16px;
+  border-bottom: 1px solid #f2f4f7;
+  color: #475467;
+  font-size: 13px;
+}
+
+.rates-table-row {
+  cursor: pointer;
+}
+
+.rates-table-row:hover {
+  background: #fcfcfd;
+}
+
+.rates-table-row strong {
+  color: #344054;
+}
+
+.rates-category-badge {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f2f4f7;
+  color: #475467;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.rates-money {
+  color: #1b263b !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rates-status {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f2f4f7;
+  color: #667085;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rates-status-active {
+  background: #ecf7f0;
+  color: #1f4d3a;
+}
+
+
+/* =========================================================
+   State
+========================================================= */
+
+.rates-state {
+  padding: 50px 20px;
+  color: #667085;
+  font-size: 13px;
+  text-align: center;
+}
+
+.rates-state p {
+  margin: 8px 0 0;
+}
+
+.rates-error {
+  color: #b42318;
+}
+
+
+/* =========================================================
+   Pagination
+========================================================= */
+
+.rates-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 18px;
+  border-top: 1px solid #eaecf0;
+}
+
+.rates-pagination span {
+  color: #667085;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media (max-width: 900px) {
+  .rates-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .rates-category-list {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  .rates-category-item {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 760px) {
+  .rates-page {
+    padding: 20px 16px;
+  }
+
+  .rates-page-header {
+    align-items: flex-start;
+  }
+
+  .rates-search {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .rates-status-field {
+    max-width: none;
+  }
+
+  .rates-search-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 520px) {
+  .rates-page-header {
+    flex-direction: column;
+  }
+
+  .rates-page-header > button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   Standard Rate Modal
+========================================================= */
+
+.rate-modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.rate-modal {
+  width: min(720px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 24px 48px
+    rgba(16, 24, 40, 0.18);
+}
+
+.rate-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 24px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.rate-modal-header h2 {
+  margin: 0;
+  color: #1b263b;
+  font-size: 20px;
+}
+
+.rate-modal-header p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 12px;
+}
+
+.rate-modal-close {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #667085;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.rate-form {
+  padding: 24px;
+}
+
+.rate-form-field {
+  margin-bottom: 18px;
+}
+
+.rate-form-field label {
+  display: block;
+  margin-bottom: 6px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rate-form-field input,
+.rate-form-field select,
+.rate-form-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  font: inherit;
+  outline: none;
+}
+
+.rate-form-field input,
+.rate-form-field select {
+  height: 42px;
+}
+
+.rate-form-field textarea {
+  resize: vertical;
+}
+
+.rate-form-field input:focus,
+.rate-form-field select:focus,
+.rate-form-field textarea:focus {
+  border-color: #1f4d3a;
+}
+
+.rate-form-field small {
+  display: block;
+  margin-top: 5px;
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.rate-form-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(100px, 1fr)
+    minmax(120px, 1fr);
+  gap: 14px;
+}
+
+.rate-input-suffix {
+  position: relative;
+}
+
+.rate-input-suffix input {
+  padding-right: 48px;
+}
+
+.rate-input-suffix span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: #667085;
+  font-size: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.rate-form-error {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #fecdca;
+  border-radius: 7px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 12px;
+}
+
+.rate-modal-state {
+  padding: 60px 24px;
+  color: #667085;
+  text-align: center;
+}
+
+.rate-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 24px -24px -24px;
+  padding: 18px 24px;
+  border-top: 1px solid #eaecf0;
+  background: #fcfcfd;
+}
+
+.rate-modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rate-disable-button {
+  color: #b42318;
+}
+
+@media (max-width: 600px) {
+  .rate-modal-backdrop {
+    padding: 12px;
+  }
+
+  .rate-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .rate-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .rate-modal-actions {
+    width: 100%;
+  }
+
+  .rate-modal-actions .btn {
+    flex: 1;
+  }
+}
+
+
+
+/* =========================================================
+   Rate Category Management
+========================================================= */
+
+.rates-category-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rates-category-row .rates-category-item {
+  min-width: 0;
+  flex: 1;
+}
+
+.rates-category-edit {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #98a2b3;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.rates-category-edit:hover {
+  background: #f2f4f7;
+  color: #344054;
+}
+
+.rate-category-modal {
+  width: min(480px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 24px 48px
+    rgba(16, 24, 40, 0.18);
+}
+
+.rate-category-current-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 4px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.rate-category-current-status > span {
+  color: #667085;
+  font-size: 12px;
+}
