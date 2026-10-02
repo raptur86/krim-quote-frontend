@@ -74,9 +74,16 @@ export function PublicQuotePage() {
 
   const quote = quoteQuery.data;
 
-  function handlePrint() {
-    window.print();
+const handlePdfDownload = () => {
+  if (!token) {
+    return;
   }
+
+  const pdfUrl =
+    `/api/v1/public/quotes/${encodeURIComponent(token)}/pdf`;
+
+  window.location.href = pdfUrl;
+};
 
   return (
     <main className="public-quote-page">
@@ -85,9 +92,9 @@ export function PublicQuotePage() {
         <button
           type="button"
           className="public-quote-print-button"
-          onClick={handlePrint}
+          onClick={handlePdfDownload}
         >
-          PDF로 저장
+          PDF 다운로드
         </button>
       </div>
 

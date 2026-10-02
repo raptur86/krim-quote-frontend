@@ -9,5 +9,18 @@ export type PlatformListItem = {
   name: string;
   platformType: PlatformType;
   automaticFeeSupported: boolean;
+
+  showPublicPhone: boolean;
+  showPublicEmail: boolean;
+  showPublicWebsite: boolean;
+  showPublicAddress: boolean;
+
   active: boolean;
+};
+
+export type UpdatePublicInfoPolicyRequest = {
+  showPublicPhone: boolean;
+  showPublicEmail: boolean;
+  showPublicWebsite: boolean;
+  showPublicAddress: boolean;
 };
