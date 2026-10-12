@@ -206,3 +206,25 @@
     padding: 18px;
   }
 }
+
+.platform-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.platform-edit-button {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .platform-page-header {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .platform-card-actions {
+    gap: 8px;
+  }
+}

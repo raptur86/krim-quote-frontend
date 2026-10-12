@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { PlatformFormModal } from "./PlatformFormModal";
 import {
   usePlatforms,
   useUpdatePublicInfoPolicy,
@@ -11,6 +13,10 @@ import type {
 import "./PlatformPage.css";
 
 export function PlatformPage() {
+  const [editingPlatform, setEditingPlatform] =
+    useState<PlatformListItem | null | undefined>(
+      undefined,
+    );
   const platformsQuery = usePlatforms();
   const updatePolicy =
     useUpdatePublicInfoPolicy();
@@ -67,10 +73,17 @@ export function PlatformPage() {
         <div>
           <h1>플랫폼 관리</h1>
           <p>
-            플랫폼별 공개 견적에 표시할
-            사업자 정보를 설정한다.
+            플랫폼 등록 및 수정과 공개 견적 정보 정책을 관리한다.
           </p>
         </div>
+
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setEditingPlatform(null)}
+        >
+          + 플랫폼 등록
+        </button>
       </header>
 
       <section className="platform-list">
@@ -86,17 +99,25 @@ export function PlatformPage() {
                   <span>{platform.code}</span>
                 </div>
 
-                <span
-                  className={
-                    platform.active
-                      ? "platform-status platform-status-active"
-                      : "platform-status"
-                  }
-                >
-                  {platform.active
-                    ? "사용"
-                    : "미사용"}
-                </span>
+                <div className="platform-card-actions">
+                  <span
+                    className={
+                      platform.active
+                        ? "platform-status platform-status-active"
+                        : "platform-status"
+                    }
+                  >
+                    {platform.active ? "사용" : "미사용"}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="btn platform-edit-button"
+                    onClick={() => setEditingPlatform(platform)}
+                  >
+                    수정
+                  </button>
+                </div>
               </div>
 
               <div className="platform-policy">
@@ -186,6 +207,13 @@ export function PlatformPage() {
           공개정보 정책을 저장하지
           못했습니다.
         </div>
+      )}
+      {editingPlatform !== undefined && (
+        <PlatformFormModal
+          key={editingPlatform?.id ?? "new"}
+          platform={editingPlatform}
+          onClose={() => setEditingPlatform(undefined)}
+        />
       )}
     </main>
   );

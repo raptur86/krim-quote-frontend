@@ -9,12 +9,22 @@ export type PlatformListItem = {
   name: string;
   platformType: PlatformType;
   automaticFeeSupported: boolean;
-
   showPublicPhone: boolean;
   showPublicEmail: boolean;
   showPublicWebsite: boolean;
   showPublicAddress: boolean;
+  active: boolean;
+  memo: string | null;
+};
 
+export type PlatformSaveRequest = {
+  code: string;
+  name: string;
+  platformType: PlatformType;
+  memo: string | null;
+};
+
+export type PlatformActiveRequest = {
   active: boolean;
 };
 
