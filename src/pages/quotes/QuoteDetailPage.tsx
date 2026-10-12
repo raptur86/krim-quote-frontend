@@ -10,6 +10,7 @@ import {
   useIssueQuote,
 } from "../../features/quote/hooks/useIssueQuote";
 import "./QuoteDetailPage.css";
+import { QuoteSalesSection } from "./QuoteSalesSection";
 
 export function QuoteDetailPage() {
   const navigate = useNavigate();
@@ -412,6 +413,8 @@ export function QuoteDetailPage() {
 
       </section>
 
+
+      <QuoteSalesSection quoteId={quote.id} canCreate={quote.status === "ISSUED"} />
 
       {quote.customerNote && (
         <section className="quote-detail-section">

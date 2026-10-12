@@ -1,0 +1,11 @@
+.quote-sales-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.quote-sales-header h2 { margin: 0 0 8px; }
+.quote-sales-header p { margin: 0; color: #64748b; font-size: 13px; }
+.quote-sales-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.quote-sales-summary > div { display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
+.quote-sales-summary span { color: #64748b; font-size: 12px; }
+.quote-sales-summary strong { font-size: 18px; }
+.quote-sales-message { padding: 20px 0; color: #64748b; }
+.quote-sales-table { min-width: 900px; }
+.quote-sales-table button { padding: 6px 12px; cursor: pointer; }
+@media (max-width: 640px) { .quote-sales-header { align-items: flex-start; flex-direction: column; } .quote-sales-summary { grid-template-columns: 1fr; } }
