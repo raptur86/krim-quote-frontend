@@ -1,6 +1,5 @@
-import { apiClient } from "../../../shared/api/apiClient";
-
-import type { ApiResponse } from "../../../shared/types/api.types";
+import { apiClient } from "../../../services/apiClient";
+import type { ApiResponse } from "../../../types/api.types";
 
 import type {
   SalesListItem,

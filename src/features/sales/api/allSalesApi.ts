@@ -1,5 +1,5 @@
-import { apiClient } from "../../../shared/api/apiClient";
-import type { ApiResponse } from "../../../shared/types/api.types";
+import { apiClient } from "../../../services/apiClient";
+import type { ApiResponse } from "../../../types/api.types";
 import type { SalesListItem } from "../types/sales.types";
 
 /** 전체 매출 목록의 추가 필드. 백엔드 응답 DTO와 반드시 일치시킨다. */
