@@ -21,6 +21,8 @@ export const ROUTES = {
 
   sales: "/quote/sales",
 
+  business: "/quote/business",
+
   settings: "/quote/settings",
   costSettings: "/quote/settings/cost",
 

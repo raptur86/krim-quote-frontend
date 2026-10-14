@@ -34,6 +34,10 @@ export function Sidebar() {
       path: ROUTES.sales,
     },
     {
+      label: "사업자 정보",
+      path: ROUTES.business,
+    },
+    {
       label: "설정",
       path: ROUTES.settings,
     },

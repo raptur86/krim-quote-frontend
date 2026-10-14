@@ -25,6 +25,7 @@ import { QuoteEditPage } from "../../pages/quotes/QuoteEditPage";
 import { RatesPage } from "../../pages/rates/RatesPage";
 import { PlatformPage } from "../../pages/platforms/PlatformPage";
 import { SalesPage } from "../../pages/sales/SalesPage";
+import { BusinessProfilePage } from "../../pages/business/BusinessProfilePage";
 
 import { SettingsPage } from "../../pages/settings/SettingsPage";
 import { CostSettingsPage } from "../../pages/settings/CostSettingsPage";
@@ -162,6 +163,13 @@ export function AppRouter() {
             <Route
               path={ROUTES.sales}
               element={<SalesPage />}
+            />
+
+            {/* 사업자 정보 */}
+
+            <Route
+              path={ROUTES.business}
+              element={<BusinessProfilePage />}
             />
 
             {/* 설정 */}
