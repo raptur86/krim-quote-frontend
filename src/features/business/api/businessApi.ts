@@ -15,18 +15,18 @@ import type {
  *
  * GET /api/v1/business-profile
  */
-export async function getBusinessProfileApi(): Promise<BusinessProfile> {
+export async function getBusinessProfileApi(): Promise<BusinessProfile | null> {
   const { data } = await apiClient.get<
-    ApiResponse<BusinessProfile>
+    ApiResponse<BusinessProfile | null>
   >("/business-profile");
 
-  if (!data.success || !data.data) {
+  if (!data.success) {
     throw new Error(
       data.message || "사업자 정보 조회에 실패했습니다.",
     );
   }
 
-  return data.data;
+  return data.data ?? null;
 }
 
 /**
