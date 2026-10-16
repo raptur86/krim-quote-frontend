@@ -1,17 +1,23 @@
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES } from "../../app/router/routes";
+import "./Header.css";
 
-import "./Header.css"
-
-
-export function Header(){
-    return (
-        <div className="flex items-center gap-1 header">
-            <div className="flex-1">통합검색</div>
-            <div>새견적</div>
-            <div className="notification">
-                <button>알림</button>
-                <span>3</span>
-            </div>
-        </div>
-        
-    )
+type HeaderProps = { onMenuClick?: () => void };
+const labels: Record<string, string> = {
+  [ROUTES.dashboard]: "대시보드", [ROUTES.customers]: "고객 관리", [ROUTES.quotes]: "견적 관리",
+  [ROUTES.rates]: "표준단가", [ROUTES.platforms]: "플랫폼", [ROUTES.sales]: "매출 관리",
+  [ROUTES.business]: "사업자 정보", [ROUTES.settings]: "설정", [ROUTES.costSettings]: "사업 원가 설정",
+};
+export function Header({ onMenuClick }: HeaderProps) {
+  const { pathname } = useLocation();
+  const title = labels[pathname] ?? (pathname.startsWith(ROUTES.quotes + "/") ? "견적 관리" : pathname.startsWith(ROUTES.customers + "/") ? "고객 관리" : "KRIM Quote");
+  return (
+    <header className="header">
+      <div className="header-leading">
+        <button type="button" className="header-menu-button" aria-label="메뉴 열기" onClick={onMenuClick}>☰</button>
+        <span className="header-page-title">{title}</span>
+      </div>
+      <Link className="header-new-quote" to={ROUTES.quoteCreate}>+ 새 견적</Link>
+    </header>
+  );
 }
