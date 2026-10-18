@@ -38,3 +38,95 @@
   .sidebar-mobile-close { display: block; margin-left: auto; color: white; background: none; border: 0; font-size: 26px; line-height: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .sidebar, .sidebar-link { transition: none; } }
+
+
+/* ========================================
+   KRIM Quote - Lucide Sidebar Icons
+======================================== */
+
+.sidebar-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.sidebar-symbol svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+}
+
+/* 메뉴 아이콘 및 텍스트 정렬 */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-link.active .sidebar-symbol {
+  color: #ffffff;
+}
+
+.sidebar-link:not(.active) .sidebar-symbol {
+  color: #c5ded0;
+}
+
+.sidebar-link:hover .sidebar-symbol {
+  color: #ffffff;
+}
+
+/* 로그아웃 버튼 */
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.sidebar-logout svg {
+  flex-shrink: 0;
+}
+
+/* 태블릿 : 아이콘형 사이드바 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .sidebar-symbol {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+  }
+
+  .sidebar-link {
+    justify-content: center;
+    gap: 0;
+  }
+
+  .sidebar-logout {
+    padding: 10px 0;
+    gap: 0;
+  }
+
+  .sidebar-logout-label {
+    display: none;
+  }
+}
+
+/* 모바일 : 전체 메뉴 표시 */
+@media (max-width: 767px) {
+  .sidebar-logout-label {
+    display: inline;
+  }
+
+  .sidebar-mobile-close {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .sidebar--mobile-open .sidebar-mobile-close {
+    display: inline-flex;
+  }
+}

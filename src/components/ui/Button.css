@@ -1,0 +1,160 @@
+
+/* =========================================
+   KRIM Quote - Common Button
+========================================= */
+
+.krim-button {
+  --button-bg: #1f4d3a;
+  --button-color: #ffffff;
+  --button-border: transparent;
+  --button-hover: #173b2d;
+
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: auto;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 16px;
+
+  background: var(--button-bg);
+  color: var(--button-color);
+  border: 1px solid var(--button-border);
+  border-radius: 8px;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.krim-button:hover:not(:disabled) {
+  background: var(--button-hover);
+}
+
+.krim-button:focus-visible {
+  outline: 3px solid rgba(31, 77, 58, 0.28);
+  outline-offset: 2px;
+}
+
+.krim-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.krim-button__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.krim-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.krim-button__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* -----------------------------------------
+   Variants
+----------------------------------------- */
+
+.krim-button--primary {
+  --button-bg: #1f4d3a;
+  --button-color: #ffffff;
+  --button-border: #1f4d3a;
+  --button-hover: #173b2d;
+}
+
+.krim-button--secondary {
+  --button-bg: #eaf4ed;
+  --button-color: #1f4d3a;
+  --button-border: #eaf4ed;
+  --button-hover: #dcece1;
+}
+
+.krim-button--outline {
+  --button-bg: #ffffff;
+  --button-color: #344054;
+  --button-border: #dce5df;
+  --button-hover: #f5f7f6;
+}
+
+.krim-button--danger {
+  --button-bg: #fdecec;
+  --button-color: #b42318;
+  --button-border: #f5c9c6;
+  --button-hover: #fbd9d7;
+}
+
+/* -----------------------------------------
+   Sizes
+----------------------------------------- */
+
+.krim-button--sm {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+  gap: 6px;
+}
+
+.krim-button--md {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.krim-button--lg {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.krim-button--full {
+  width: 100%;
+}
+
+/* -----------------------------------------
+   Loading
+----------------------------------------- */
+
+.krim-button__spinner {
+  flex-shrink: 0;
+  animation: krim-button-spin 0.8s linear infinite;
+}
+
+@keyframes krim-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .krim-button {
+    transition: none;
+  }
+
+  .krim-button__spinner {
+    animation-duration: 2s;
+  }
+}

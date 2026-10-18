@@ -1,5 +1,13 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AlertCircle,
+  Building2,
+  FileText,
+  Save,
+  UserRound,
+} from "lucide-react";
 
 import {
   customerSchema,
@@ -11,6 +19,8 @@ import type {
   CustomerDetail,
 } from "../types/customer.types";
 
+import { Button } from "../../../components/ui/Button";
+
 import "./CustomerForm.css";
 
 type CustomerFormProps = {
@@ -19,7 +29,10 @@ type CustomerFormProps = {
   submitLabel?: string;
   serverError?: string | null;
 
-  onSubmit: (request: CustomerCreateRequest) => void | Promise<void>;
+  onSubmit: (
+    request: CustomerCreateRequest
+  ) => void | Promise<void>;
+
   onCancel: () => void;
 };
 
@@ -54,12 +67,10 @@ export function CustomerForm({
   async function submit(form: CustomerFormData) {
     const request: CustomerCreateRequest = {
       customerName: form.customerName.trim(),
-
       companyName: toNullable(form.companyName),
       contactName: toNullable(form.contactName),
       phone: toNullable(form.phone),
       email: toNullable(form.email),
-
       businessNumber: toNullable(form.businessNumber),
       address: toNullable(form.address),
       initialSource: toNullable(form.initialSource),
@@ -75,97 +86,204 @@ export function CustomerForm({
       onSubmit={handleSubmit(submit)}
       noValidate
     >
-      <section className="customer-form-card">
+      {/* 기본 정보 */}
+      <section
+        className="customer-form-card"
+        aria-labelledby="customer-basic-title"
+      >
+        <div className="customer-form-section-header">
+          <div className="customer-form-section-icon">
+            <UserRound size={19} aria-hidden="true" />
+          </div>
+
+          <div>
+            <h2 id="customer-basic-title">
+              기본 정보
+            </h2>
+            <p>
+              고객 및 담당자의 기본 정보를 입력한다.
+            </p>
+          </div>
+        </div>
+
         <div className="customer-form-grid">
           <div className="customer-form-field">
             <label htmlFor="customerName">
-              고객명 <span>*</span>
+              고객명
+              <span className="customer-form-required">
+                *
+              </span>
             </label>
 
             <input
               id="customerName"
               type="text"
+              placeholder="고객명 입력"
+              aria-required="true"
+              aria-invalid={Boolean(errors.customerName)}
+              aria-describedby={
+                errors.customerName
+                  ? "customerName-error"
+                  : undefined
+              }
               {...register("customerName")}
               disabled={submitting}
             />
 
             {errors.customerName && (
-              <p className="customer-form-error">
+              <p
+                id="customerName-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.customerName.message}
               </p>
             )}
           </div>
 
           <div className="customer-form-field">
-            <label htmlFor="companyName">회사명</label>
+            <label htmlFor="companyName">
+              회사명
+            </label>
 
             <input
               id="companyName"
               type="text"
+              placeholder="회사명 입력"
+              aria-invalid={Boolean(errors.companyName)}
+              aria-describedby={
+                errors.companyName
+                  ? "companyName-error"
+                  : undefined
+              }
               {...register("companyName")}
               disabled={submitting}
             />
 
             {errors.companyName && (
-              <p className="customer-form-error">
+              <p
+                id="companyName-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.companyName.message}
               </p>
             )}
           </div>
 
           <div className="customer-form-field">
-            <label htmlFor="contactName">담당자명</label>
+            <label htmlFor="contactName">
+              담당자명
+            </label>
 
             <input
               id="contactName"
               type="text"
+              placeholder="담당자명 입력"
+              aria-invalid={Boolean(errors.contactName)}
+              aria-describedby={
+                errors.contactName
+                  ? "contactName-error"
+                  : undefined
+              }
               {...register("contactName")}
               disabled={submitting}
             />
 
             {errors.contactName && (
-              <p className="customer-form-error">
+              <p
+                id="contactName-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.contactName.message}
               </p>
             )}
           </div>
 
           <div className="customer-form-field">
-            <label htmlFor="phone">연락처</label>
+            <label htmlFor="phone">
+              연락처
+            </label>
 
             <input
               id="phone"
               type="text"
               placeholder="010-0000-0000"
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={
+                errors.phone
+                  ? "phone-error"
+                  : undefined
+              }
               {...register("phone")}
               disabled={submitting}
             />
 
             {errors.phone && (
-              <p className="customer-form-error">
+              <p
+                id="phone-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.phone.message}
               </p>
             )}
           </div>
 
           <div className="customer-form-field">
-            <label htmlFor="email">이메일</label>
+            <label htmlFor="email">
+              이메일
+            </label>
 
             <input
               id="email"
               type="email"
               placeholder="example@company.com"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={
+                errors.email
+                  ? "email-error"
+                  : undefined
+              }
               {...register("email")}
               disabled={submitting}
             />
 
             {errors.email && (
-              <p className="customer-form-error">
+              <p
+                id="email-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.email.message}
               </p>
             )}
           </div>
+        </div>
+      </section>
 
+      {/* 사업자 및 유입 정보 */}
+      <section
+        className="customer-form-card"
+        aria-labelledby="customer-business-title"
+      >
+        <div className="customer-form-section-header">
+          <div className="customer-form-section-icon">
+            <Building2 size={19} aria-hidden="true" />
+          </div>
+
+          <div>
+            <h2 id="customer-business-title">
+              사업자 및 유입 정보
+            </h2>
+            <p>
+              사업자 정보와 고객 유입경로를 관리한다.
+            </p>
+          </div>
+        </div>
+
+        <div className="customer-form-grid">
           <div className="customer-form-field">
             <label htmlFor="businessNumber">
               사업자등록번호
@@ -175,30 +293,23 @@ export function CustomerForm({
               id="businessNumber"
               type="text"
               placeholder="123-45-67890"
+              aria-invalid={Boolean(errors.businessNumber)}
+              aria-describedby={
+                errors.businessNumber
+                  ? "businessNumber-error"
+                  : undefined
+              }
               {...register("businessNumber")}
               disabled={submitting}
             />
 
             {errors.businessNumber && (
-              <p className="customer-form-error">
+              <p
+                id="businessNumber-error"
+                className="customer-form-error"
+                role="alert"
+              >
                 {errors.businessNumber.message}
-              </p>
-            )}
-          </div>
-
-          <div className="customer-form-field customer-form-full">
-            <label htmlFor="address">주소</label>
-
-            <input
-              id="address"
-              type="text"
-              {...register("address")}
-              disabled={submitting}
-            />
-
-            {errors.address && (
-              <p className="customer-form-error">
-                {errors.address.message}
               </p>
             )}
           </div>
@@ -222,41 +333,122 @@ export function CustomerForm({
           </div>
 
           <div className="customer-form-field customer-form-full">
-            <label htmlFor="memo">메모</label>
+            <label htmlFor="address">
+              주소
+            </label>
 
-            <textarea
-              id="memo"
-              rows={5}
-              {...register("memo")}
+            <input
+              id="address"
+              type="text"
+              placeholder="주소 입력"
+              aria-invalid={Boolean(errors.address)}
+              aria-describedby={
+                errors.address
+                  ? "address-error"
+                  : undefined
+              }
+              {...register("address")}
               disabled={submitting}
             />
+
+            {errors.address && (
+              <p
+                id="address-error"
+                className="customer-form-error"
+                role="alert"
+              >
+                {errors.address.message}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 메모 */}
+      <section
+        className="customer-form-card"
+        aria-labelledby="customer-memo-title"
+      >
+        <div className="customer-form-section-header">
+          <div className="customer-form-section-icon">
+            <FileText size={19} aria-hidden="true" />
+          </div>
+
+          <div>
+            <h2 id="customer-memo-title">
+              메모
+            </h2>
+            <p>
+              고객과 관련된 추가 정보를 기록한다.
+            </p>
           </div>
         </div>
 
-        {serverError && (
-          <div className="customer-form-server-error" role="alert">
-            {serverError}
-          </div>
-        )}
+        <div className="customer-form-field">
+          <label htmlFor="memo">
+            고객 메모
+          </label>
+
+          <textarea
+            id="memo"
+            rows={5}
+            placeholder="고객 관련 메모를 입력한다."
+            aria-invalid={Boolean(errors.memo)}
+            aria-describedby={
+              errors.memo
+                ? "memo-error"
+                : undefined
+            }
+            {...register("memo")}
+            disabled={submitting}
+          />
+
+          {errors.memo && (
+            <p
+              id="memo-error"
+              className="customer-form-error"
+              role="alert"
+            >
+              {errors.memo.message}
+            </p>
+          )}
+        </div>
       </section>
 
+      {/* 서버 오류 */}
+      {serverError && (
+        <div
+          className="customer-form-server-error"
+          role="alert"
+        >
+          <AlertCircle
+            size={18}
+            aria-hidden="true"
+          />
+          <span>{serverError}</span>
+        </div>
+      )}
+
+      {/* 하단 버튼 */}
       <div className="customer-form-actions">
-        <button
+        <Button
           type="button"
-          className="btn"
+          variant="outline"
           disabled={submitting}
           onClick={onCancel}
         >
           취소
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="submit"
-          className="btn btn-primary"
+          variant="primary"
           disabled={submitting}
+          loading={submitting}
         >
+          <Save size={17} aria-hidden="true" />
           {submitting ? "저장 중..." : submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -264,6 +456,5 @@ export function CustomerForm({
 
 function toNullable(value: string): string | null {
   const trimmed = value.trim();
-
   return trimmed === "" ? null : trimmed;
 }

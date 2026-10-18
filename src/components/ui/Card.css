@@ -1,0 +1,231 @@
+
+/* =========================================
+   KRIM Quote - Common Card
+========================================= */
+
+.krim-card {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Variants */
+
+.krim-card--default {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+.krim-card--flat {
+  box-shadow: none;
+}
+
+.krim-card--elevated {
+  box-shadow:
+    0 4px 16px rgba(16, 24, 40, 0.06),
+    0 1px 3px rgba(16, 24, 40, 0.03);
+}
+
+.krim-card--hoverable {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.krim-card--hoverable:hover {
+  border-color: #b6d1bf;
+  box-shadow: 0 6px 20px rgba(31, 77, 58, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Padding */
+
+.krim-card--padding-none {
+  padding: 0;
+}
+
+.krim-card--padding-sm {
+  padding: 12px;
+}
+
+.krim-card--padding-md {
+  padding: 20px;
+}
+
+.krim-card--padding-lg {
+  padding: 28px;
+}
+
+/* -----------------------------------------
+   Header
+----------------------------------------- */
+
+.krim-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e7ece9;
+}
+
+.krim-card__header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.krim-card__title {
+  margin: 0;
+  color: #1d2933;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.krim-card__description {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.krim-card__action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/* -----------------------------------------
+   Body
+----------------------------------------- */
+
+.krim-card__body {
+  padding: 20px;
+  min-width: 0;
+}
+
+/* -----------------------------------------
+   Footer
+----------------------------------------- */
+
+.krim-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid #e7ece9;
+  background: #ffffff;
+}
+
+/* -----------------------------------------
+   Stat Card
+----------------------------------------- */
+
+.krim-stat-card {
+  --krim-stat-accent: #1f4d3a;
+}
+
+.krim-stat-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.krim-stat-card__title {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.krim-stat-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #eaf4ed;
+  color: var(--krim-stat-accent);
+}
+
+.krim-stat-card__icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.krim-stat-card__value {
+  margin-top: 10px;
+  color: #1d2933;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.krim-stat-card__bottom {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 10px;
+}
+
+.krim-stat-card__trend {
+  color: var(--krim-stat-accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.krim-stat-card__description {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* -----------------------------------------
+   Responsive
+----------------------------------------- */
+
+@media (max-width: 767px) {
+  .krim-card--padding-md {
+    padding: 16px;
+  }
+
+  .krim-card--padding-lg {
+    padding: 20px;
+  }
+
+  .krim-card__header {
+    padding: 16px;
+  }
+
+  .krim-card__body {
+    padding: 16px;
+  }
+
+  .krim-card__footer {
+    padding: 12px 16px;
+  }
+
+  .krim-stat-card__value {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .krim-card--hoverable {
+    transition: none;
+  }
+
+  .krim-card--hoverable:hover {
+    transform: none;
+  }
+}

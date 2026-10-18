@@ -1,0 +1,150 @@
+
+/* =========================================
+   KRIM Quote - Common Form Fields
+========================================= */
+
+.krim-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.krim-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.krim-field__required {
+  color: #c63838;
+  font-size: 13px;
+}
+
+.krim-field__control {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid #dce5df;
+  border-radius: 8px;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.krim-field__control:hover:not(
+  .krim-field__control--disabled
+) {
+  border-color: #a7bdb0;
+}
+
+.krim-field__control:focus-within {
+  border-color: #1f4d3a;
+  box-shadow: 0 0 0 3px rgba(31, 77, 58, 0.12);
+}
+
+.krim-field__control--error {
+  border-color: #c63838;
+}
+
+.krim-field__control--error:focus-within {
+  border-color: #c63838;
+  box-shadow: 0 0 0 3px rgba(198, 56, 56, 0.12);
+}
+
+.krim-field__control--disabled {
+  background: #f1f3f2;
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.krim-field__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 9px 12px;
+
+  background: transparent;
+  border: 0;
+  outline: 0;
+
+  color: #1d2933;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.krim-field__input::placeholder,
+.krim-field__textarea::placeholder {
+  color: #98a2b3;
+}
+
+.krim-field__input:disabled,
+.krim-field__textarea:disabled {
+  cursor: not-allowed;
+}
+
+.krim-field__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 38px;
+  color: #64748b;
+}
+
+.krim-field__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.krim-field__control--textarea {
+  align-items: stretch;
+}
+
+.krim-field__textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 104px;
+  padding: 11px 12px;
+
+  background: transparent;
+  border: 0;
+  outline: 0;
+  resize: vertical;
+
+  color: #1d2933;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.krim-field__message {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.krim-field__message--error {
+  color: #c63838;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .krim-field__control {
+    transition: none;
+  }
+}

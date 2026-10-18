@@ -1,0 +1,95 @@
+
+/* =========================================
+   KRIM Quote - Common Select
+========================================= */
+
+.krim-select-control {
+  position: relative;
+  min-height: 40px;
+}
+
+.krim-select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+
+  padding: 8px 38px 8px 12px;
+
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  outline: none;
+
+  color: #1d2933;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+
+  cursor: pointer;
+}
+
+.krim-select:disabled {
+  cursor: not-allowed;
+  color: #98a2b3;
+}
+
+.krim-select__arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #64748b;
+}
+
+/* Small */
+.krim-select-control--sm {
+  min-height: 32px;
+}
+
+.krim-select-control--sm .krim-select {
+  min-height: 30px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 12px;
+}
+
+/* Medium */
+.krim-select-control--md {
+  min-height: 40px;
+}
+
+/* Large */
+.krim-select-control--lg {
+  min-height: 48px;
+}
+
+.krim-select-control--lg .krim-select {
+  min-height: 46px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 15px;
+}
+
+/* 오류 및 비활성화 */
+.krim-select-control.krim-field__control--error {
+  border-color: #c63838;
+}
+
+.krim-select-control.krim-field__control--disabled {
+  background: #f1f3f2;
+}
+
+.krim-select-control--sm .krim-select__arrow {
+  width: 15px;
+  height: 15px;
+}
+
+.krim-select-control--lg .krim-select__arrow {
+  width: 19px;
+  height: 19px;
+}

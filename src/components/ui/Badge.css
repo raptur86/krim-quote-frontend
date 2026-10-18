@@ -1,0 +1,110 @@
+
+/* =========================================
+   KRIM Quote - Common Badge
+========================================= */
+
+.krim-badge {
+  --badge-bg: #f1f3f5;
+  --badge-color: #475467;
+  --badge-border: #e4e7ec;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  width: fit-content;
+  max-width: 100%;
+  min-height: 24px;
+  padding: 3px 9px;
+
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  border: 1px solid var(--badge-border);
+  border-radius: 999px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.krim-badge__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.krim-badge__dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+
+/* -----------------------------------------
+   Variants - Solid Colors
+----------------------------------------- */
+
+.krim-badge--neutral {
+  --badge-bg: #475467;
+  --badge-color: #ffffff;
+  --badge-border: #475467;
+}
+
+.krim-badge--primary {
+  --badge-bg: #1f4d3a;
+  --badge-color: #ffffff;
+  --badge-border: #1f4d3a;
+}
+
+.krim-badge--success {
+  --badge-bg: #16803d;
+  --badge-color: #ffffff;
+  --badge-border: #16803d;
+}
+
+.krim-badge--info {
+  --badge-bg: #2563eb;
+  --badge-color: #ffffff;
+  --badge-border: #2563eb;
+}
+
+.krim-badge--warning {
+  --badge-bg: #b45309;
+  --badge-color: #ffffff;
+  --badge-border: #b45309;
+}
+
+.krim-badge--danger {
+  --badge-bg: #c63838;
+  --badge-color: #ffffff;
+  --badge-border: #c63838;
+}
+
+
+/* -----------------------------------------
+   Sizes
+----------------------------------------- */
+
+.krim-badge--sm {
+  min-height: 20px;
+  padding: 2px 7px;
+  font-size: 11px;
+  gap: 5px;
+}
+
+.krim-badge--sm .krim-badge__dot {
+  width: 5px;
+  height: 5px;
+  flex-basis: 5px;
+}
+
+.krim-badge--md {
+  min-height: 24px;
+  padding: 3px 9px;
+  font-size: 12px;
+}

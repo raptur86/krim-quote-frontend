@@ -1,15 +1,72 @@
+
+/* =========================================
+   KRIM Quote - Customer Form
+========================================= */
+
 .customer-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
+  min-width: 0;
 }
 
+/* -----------------------------------------
+   Section Card
+----------------------------------------- */
+
 .customer-form-card {
+  min-width: 0;
   padding: 24px;
+
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dce5df;
   border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
 }
+
+.customer-form-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e7ece9;
+}
+
+.customer-form-section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.customer-form-section-header h2 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.customer-form-section-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* -----------------------------------------
+   Grid
+----------------------------------------- */
 
 .customer-form-grid {
   display: grid;
@@ -17,34 +74,53 @@
   gap: 20px;
 }
 
+.customer-form-full {
+  grid-column: 1 / -1;
+}
+
+/* -----------------------------------------
+   Field
+----------------------------------------- */
+
 .customer-form-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .customer-form-field label {
-  color: #374151;
-  font-size: 14px;
+  color: #344054;
+  font-size: 13px;
   font-weight: 600;
 }
 
-.customer-form-field label span {
-  color: #dc2626;
+.customer-form-required {
+  margin-left: 4px;
+  color: #c63838;
 }
 
 .customer-form-field input,
 .customer-form-field select,
 .customer-form-field textarea {
+  display: block;
   width: 100%;
   box-sizing: border-box;
+
   padding: 10px 12px;
 
-  font: inherit;
-
+  color: #344054;
   background: #ffffff;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d0d9d3;
   border-radius: 8px;
+
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .customer-form-field input,
@@ -53,57 +129,127 @@
 }
 
 .customer-form-field textarea {
+  min-height: 120px;
   resize: vertical;
+}
+
+.customer-form-field input::placeholder,
+.customer-form-field textarea::placeholder {
+  color: #98a2b3;
 }
 
 .customer-form-field input:focus,
 .customer-form-field select:focus,
 .customer-form-field textarea:focus {
-  outline: 2px solid rgba(37, 99, 235, 0.15);
-  border-color: #2563eb;
+  outline: none;
+  border-color: #1f4d3a;
+  box-shadow: 0 0 0 3px rgba(31, 77, 58, 0.12);
+}
+
+.customer-form-field input[aria-invalid="true"],
+.customer-form-field textarea[aria-invalid="true"] {
+  border-color: #c63838;
+}
+
+.customer-form-field input[aria-invalid="true"]:focus,
+.customer-form-field textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(198, 56, 56, 0.12);
 }
 
 .customer-form-field input:disabled,
 .customer-form-field select:disabled,
 .customer-form-field textarea:disabled {
-  background: #f9fafb;
+  background: #f5f7f6;
+  color: #98a2b3;
   cursor: not-allowed;
 }
 
-.customer-form-full {
-  grid-column: 1 / -1;
-}
+/* -----------------------------------------
+   Validation / Server Error
+----------------------------------------- */
 
 .customer-form-error {
   margin: 0;
-  color: #dc2626;
+  color: #c63838;
   font-size: 12px;
+  line-height: 1.5;
 }
 
 .customer-form-server-error {
-  margin-top: 20px;
-  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 
-  color: #b91c1c;
-  font-size: 14px;
+  padding: 14px 16px;
 
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 10px;
+
+  font-size: 13px;
+  line-height: 1.6;
 }
+
+.customer-form-server-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* -----------------------------------------
+   Actions
+----------------------------------------- */
 
 .customer-form-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 10px;
+
+  padding: 18px 0 8px;
 }
 
+/* -----------------------------------------
+   Responsive
+----------------------------------------- */
+
 @media (max-width: 768px) {
+  .customer-form {
+    gap: 16px;
+  }
+
+  .customer-form-card {
+    padding: 18px;
+  }
+
   .customer-form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
   }
 
   .customer-form-full {
     grid-column: auto;
+  }
+
+  .customer-form-section-header {
+    margin-bottom: 20px;
+  }
+
+  .customer-form-actions {
+    padding-top: 8px;
+  }
+}
+
+@media (max-width: 440px) {
+  .customer-form-actions > * {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-form-field input,
+  .customer-form-field select,
+  .customer-form-field textarea {
+    transition: none;
   }
 }

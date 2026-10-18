@@ -1,0 +1,131 @@
+
+/* =========================================
+   KRIM Quote - Common Table
+========================================= */
+
+.krim-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.krim-table-scroll:focus-visible {
+  outline: 3px solid rgba(31, 77, 58, 0.25);
+  outline-offset: 2px;
+}
+
+.krim-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: #ffffff;
+  color: #1d2933;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.krim-table__head {
+  background: #f5f7f6;
+}
+
+.krim-table__th {
+  padding: 13px 16px;
+  border-bottom: 1px solid #dce5df;
+  color: #475467;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.krim-table__td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e7ece9;
+  font-size: 13px;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+.krim-table__cell--left {
+  text-align: left;
+}
+
+.krim-table__cell--center {
+  text-align: center;
+}
+
+.krim-table__cell--right {
+  text-align: right;
+}
+
+.krim-table__body .krim-table__row:hover {
+  background: #f1f7f3;
+}
+
+.krim-table__body .krim-table__row:last-child .krim-table__td {
+  border-bottom: 0;
+}
+
+.krim-table__row--clickable {
+  cursor: pointer;
+}
+
+.krim-table__row--clickable:focus-visible {
+  outline: 2px solid #1f4d3a;
+  outline-offset: -2px;
+}
+
+.krim-table__empty,
+.krim-table__loading {
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.krim-table__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.krim-table__state strong {
+  color: #344054;
+  font-size: 14px;
+}
+
+.krim-table__state p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.krim-table__spinner {
+  color: #1f4d3a;
+  animation: krim-table-spin 0.8s linear infinite;
+}
+
+@keyframes krim-table-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .krim-table__th,
+  .krim-table__td {
+    padding: 12px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .krim-table__spinner {
+    animation-duration: 2s;
+  }
+}

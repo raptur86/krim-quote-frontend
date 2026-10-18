@@ -6,3 +6,47 @@
 .header-menu-button { display: none; width: 38px; height: 38px; border: 1px solid var(--krim-border); border-radius: 8px; background: white; color: var(--krim-text); font-size: 19px; }
 @media (max-width: 1199px) { .header { padding: 0 22px; } }
 @media (max-width: 767px) { .header { padding: 0 14px; } .header-menu-button { display: inline-flex; align-items: center; justify-content: center; } .header-new-quote { height: 36px; padding: 0 11px; font-size: 12px; } }
+
+
+/* ========================================
+   KRIM Quote - Lucide Header Icons
+======================================== */
+
+.header-new-quote {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.header-new-quote svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.header-menu-button {
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.header-menu-button svg {
+  display: block;
+}
+
+.header-menu-button:hover {
+  background: var(--krim-primary-soft, #eaf4ed);
+  color: var(--krim-primary, #1f4d3a);
+}
+
+/* 모바일 */
+@media (max-width: 767px) {
+  .header-new-quote {
+    gap: 4px;
+  }
+
+  .header-new-quote svg {
+    width: 16px;
+    height: 16px;
+  }
+}

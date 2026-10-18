@@ -1,5 +1,7 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft, UserRoundPlus } from "lucide-react";
 
 import { CustomerForm } from "../../features/customer/components/CustomerForm";
 import { useCreateCustomer } from "../../features/customer/hooks/useCreateCustomer";
@@ -12,7 +14,6 @@ import "./CustomerFormPage.css";
 
 export function CustomerCreatePage() {
   const navigate = useNavigate();
-
   const createCustomer = useCreateCustomer();
 
   const [serverError, setServerError] =
@@ -36,16 +37,35 @@ export function CustomerCreatePage() {
   }
 
   return (
-    <div className="customer-form-page">
-      <div className="customer-form-page-header">
-        <div>
-          <h1>고객 등록</h1>
+    <main className="customer-form-page">
+      <header className="customer-form-page-header">
+        <button
+          type="button"
+          className="customer-form-page-back"
+          onClick={() => navigate(ROUTES.customers)}
+          aria-label="고객 목록으로 이동"
+        >
+          <ArrowLeft size={19} aria-hidden="true" />
+        </button>
 
-          <p>
-            새로운 고객 또는 업체 정보를 등록합니다.
-          </p>
+        <div className="customer-form-page-header-content">
+          <div className="customer-form-page-heading">
+            <div className="customer-form-page-heading-icon">
+              <UserRoundPlus
+                size={21}
+                aria-hidden="true"
+              />
+            </div>
+
+            <div>
+              <h1>고객 등록</h1>
+              <p>
+                새로운 고객 또는 업체 정보를 등록한다.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
       <CustomerForm
         submitting={createCustomer.isPending}
@@ -54,6 +74,6 @@ export function CustomerCreatePage() {
         onSubmit={handleSubmit}
         onCancel={() => navigate(ROUTES.customers)}
       />
-    </div>
+    </main>
   );
 }

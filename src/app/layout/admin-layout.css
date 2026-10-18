@@ -1,6 +1,14 @@
 .krim-admin-shell { display: flex; min-height: 100vh; min-height: 100dvh; background: var(--krim-canvas); }
 .krim-admin-workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.krim-admin-main { width: 100%; flex: 1; min-width: 0; padding: 28px 32px 48px; }
+.krim-admin-main {
+  width: 100%;
+  max-width: 1504px; /* 콘텐츠 1440px + 좌우 여백 64px */
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 48px;
+}
 .krim-sidebar-backdrop { display: none; }
 @media (max-width: 1199px) { .krim-admin-main { padding: 24px 22px 40px; } }
 @media (max-width: 767px) {
