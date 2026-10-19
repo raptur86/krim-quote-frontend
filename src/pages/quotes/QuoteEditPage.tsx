@@ -1,19 +1,23 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
 
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  CheckCircle2,
+  ClipboardList,
+  FilePenLine,
+  FileText,
+  LoaderCircle,
+  Pencil,
+  ReceiptText,
+} from "lucide-react";
 
 import { ROUTES } from "../../app/router/routes";
 
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
 import { usePlatforms } from "../../features/platform/hooks/usePlatforms";
-
 import { useQuote } from "../../features/quote/hooks/useQuote";
 import { useUpdateQuote } from "../../features/quote/hooks/UseUpdateQuote";
 
@@ -31,384 +35,283 @@ import type {
   QuoteUpdateRequest,
 } from "../../features/quote/types/quote.types";
 
+import { Button } from "../../components/ui/Button";
+
 import "../quotes/QuoteCreatePage.css";
 
+type QuoteStep = "BASIC" | "ITEMS" | "REVIEW";
 
-type QuoteStep =
-  | "BASIC"
-  | "ITEMS"
-  | "REVIEW";
-
+const steps: {
+  key: QuoteStep;
+  number: number;
+  label: string;
+  description: string;
+}[] = [
+  {
+    key: "BASIC",
+    number: 1,
+    label: "기본정보",
+    description: "고객 및 견적정보",
+  },
+  {
+    key: "ITEMS",
+    number: 2,
+    label: "견적항목",
+    description: "기능 및 산정금액",
+  },
+  {
+    key: "REVIEW",
+    number: 3,
+    label: "최종 검토",
+    description: "금액 확인 및 저장",
+  },
+];
 
 export function QuoteEditPage() {
   const navigate = useNavigate();
-
-  const { quoteId } = useParams<{
-    quoteId: string;
-  }>();
+  const { quoteId } = useParams<{ quoteId: string }>();
 
   const id = Number(quoteId);
 
   const quoteQuery = useQuote(id);
-
   const updateQuote = useUpdateQuote();
 
-  const customersQuery =
-    useCustomers({
-      active: true,
-      page: 0,
-      size: 100,
-      sort: "customerName,asc",
-    });
+  const customersQuery = useCustomers({
+    active: true,
+    page: 0,
+    size: 100,
+    sort: "customerName,asc",
+  });
 
-  const platformsQuery =
-    usePlatforms(true);
+  const platformsQuery = usePlatforms(true);
 
+  const [initialized, setInitialized] = useState(false);
+  const [step, setStep] = useState<QuoteStep>("BASIC");
 
-  const [initialized, setInitialized] =
-    useState(false);
+  const [basicValues, setBasicValues] =
+    useState<QuoteBasicFormValues | null>(null);
 
-  const [step, setStep] =
-    useState<QuoteStep>("BASIC");
-
-  const [
-    basicValues,
-    setBasicValues,
-  ] =
-    useState<QuoteBasicFormValues | null>(
-      null,
-    );
-
-  const [
-    quoteItems,
-    setQuoteItems,
-  ] =
+  const [quoteItems, setQuoteItems] =
     useState<QuoteDraftItem[]>([]);
 
-  const [
-    adjustmentAmount,
-    setAdjustmentAmount,
-  ] =
+  const [adjustmentAmount, setAdjustmentAmount] =
     useState(0);
 
-  const [
-    errorMessage,
-    setErrorMessage,
-  ] =
-    useState("");
-
-  const [
-    saveError,
-    setSaveError,
-  ] =
-    useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [saveError, setSaveError] = useState("");
 
   /*
-   * 상세 조회 결과를 편집 State로
-   * 최초 한 번만 변환한다.
+   * 상세 조회 데이터를 최초 한 번만 편집 상태로 변환한다.
+   * 이후에는 사용자가 수정 중인 값을 유지한다.
    */
   useEffect(() => {
     const quote = quoteQuery.data;
 
-    if (!quote || initialized) {
+    if (!quote || initialized || quote.status !== "DRAFT") {
       return;
     }
 
     setBasicValues({
-      customerId:
-        quote.customer.id,
-
-      inquiryPlatformId:
-        quote.inquiryPlatform?.id ??
-        null,
-
-      title:
-        quote.title,
-
-      writtenDate:
-        quote.writtenDate,
-
-      validUntil:
-        quote.validUntil,
-
-      expectedDuration:
-        quote.expectedDuration,
-
-      customerNote:
-        quote.customerNote,
-
-      internalMemo:
-        quote.internalMemo,
+      customerId: quote.customer.id,
+      inquiryPlatformId: quote.inquiryPlatform?.id ?? null,
+      title: quote.title,
+      writtenDate: quote.writtenDate,
+      validUntil: quote.validUntil,
+      expectedDuration: quote.expectedDuration,
+      customerNote: quote.customerNote,
+      internalMemo: quote.internalMemo,
     });
 
     setQuoteItems(
       quote.items
         .slice()
-        .sort(
-          (a, b) =>
-            a.sortOrder -
-            b.sortOrder,
-        )
+        .sort((a, b) => a.sortOrder - b.sortOrder)
         .map((item) => ({
-          clientId:
-            `quote-item-${item.id}`,
-
-          standardRateId:
-            item.standardRateId,
-
-          categoryName:
-            item.categoryName,
-
-          featureName:
-            item.featureName,
-
-          description:
-            item.description,
-
-          quoteUnitPrice:
-            item.quoteUnitPrice,
-
-          quantity:
-            item.quantity,
-
-          unitName:
-            item.unitName,
-
-          difficultyCode:
-            item.difficultyCode,
-
-          difficultyRate:
-            item.difficultyRate,
-
-          adjustmentAmount:
-            item.adjustmentAmount,
-
-          adjustmentReason:
-            item.adjustmentReason,
-
-          estimatedHours:
-            item.estimatedHours,
-
-          internalMemo:
-            item.internalMemo,
-
-          sortOrder:
-            item.sortOrder,
-        })),
+          clientId: `quote-item-${item.id}`,
+          standardRateId: item.standardRateId,
+          categoryName: item.categoryName,
+          featureName: item.featureName,
+          description: item.description,
+          quoteUnitPrice: item.quoteUnitPrice,
+          quantity: item.quantity,
+          unitName: item.unitName,
+          difficultyCode: item.difficultyCode,
+          difficultyRate: item.difficultyRate,
+          adjustmentAmount: item.adjustmentAmount,
+          adjustmentReason: item.adjustmentReason,
+          estimatedHours: item.estimatedHours,
+          internalMemo: item.internalMemo,
+          sortOrder: item.sortOrder,
+        }))
     );
 
-    setAdjustmentAmount(
-      quote.adjustmentAmount,
-    );
-
+    setAdjustmentAmount(quote.adjustmentAmount);
     setInitialized(true);
-  }, [
-    quoteQuery.data,
-    initialized,
-  ]);
+  }, [quoteQuery.data, initialized]);
 
+  const customers = useMemo(
+    () => customersQuery.data?.content ?? [],
+    [customersQuery.data]
+  );
 
-  const customers =
-    useMemo(
-      () =>
-        customersQuery.data
-          ?.content ?? [],
-      [customersQuery.data],
-    );
+  const platforms = platformsQuery.data ?? [];
 
-  const platforms =
-    platformsQuery.data ?? [];
+  const currentStepIndex = steps.findIndex(
+    (item) => item.key === step
+  );
 
+  const progressPercent =
+    ((currentStepIndex + 1) / steps.length) * 100;
 
   function handleBasicChange<
     K extends keyof QuoteBasicFormValues,
   >(
     field: K,
-    value: QuoteBasicFormValues[K],
+    value: QuoteBasicFormValues[K]
   ) {
-    setBasicValues(
-      (previous) => {
-        if (!previous) {
-          return previous;
-        }
+    setBasicValues((previous) => {
+      if (!previous) {
+        return previous;
+      }
 
-        return {
-          ...previous,
-          [field]: value,
-        };
-      },
-    );
+      return {
+        ...previous,
+        [field]: value,
+      };
+    });
 
     setErrorMessage("");
+    setSaveError("");
   }
-
 
   function handleBasicNext() {
     if (!basicValues) {
       return;
     }
 
-    const result =
-      quoteBasicSchema.safeParse(
-        basicValues,
-      );
+    const result = quoteBasicSchema.safeParse(
+      basicValues
+    );
 
     if (!result.success) {
       setErrorMessage(
-        result.error.issues[0]
-          ?.message ??
-        "기본정보를 확인해주세요.",
+        result.error.issues[0]?.message ??
+          "기본정보를 확인해주세요."
       );
-
       return;
     }
 
     setErrorMessage("");
-
     setStep("ITEMS");
   }
 
-
-  function handleCancel() {
-    navigate(
-      `${ROUTES.quotes}/${id}`,
-    );
+  function handleItemsNext() {
+    setSaveError("");
+    setStep("REVIEW");
   }
 
+  function handleCancel() {
+    navigate(`${ROUTES.quotes}/${id}`);
+  }
 
   async function handleUpdateQuote() {
-    if (!basicValues) {
+    if (!basicValues || updateQuote.isPending) {
+      return;
+    }
+
+    const basicResult = quoteBasicSchema.safeParse(
+      basicValues
+    );
+
+    if (!basicResult.success) {
+      setErrorMessage(
+        basicResult.error.issues[0]?.message ??
+          "기본정보를 확인해주세요."
+      );
+      setStep("BASIC");
       return;
     }
 
     if (quoteItems.length === 0) {
       setSaveError(
-        "견적항목을 하나 이상 추가해주세요.",
+        "견적항목을 하나 이상 추가해주세요."
       );
-
       setStep("ITEMS");
-
       return;
     }
 
-    const request:
-      QuoteUpdateRequest = {
-
-      customerId:
-        basicValues.customerId,
-
+    const request: QuoteUpdateRequest = {
+      customerId: basicValues.customerId,
       inquiryPlatformId:
         basicValues.inquiryPlatformId,
-
-      title:
-        basicValues.title.trim(),
-
-      writtenDate:
-        basicValues.writtenDate,
-
-      validUntil:
-        nullableText(
-          basicValues.validUntil,
-        ),
-
-      expectedDuration:
-        nullableText(
-          basicValues.expectedDuration,
-        ),
-
-      customerNote:
-        nullableText(
-          basicValues.customerNote,
-        ),
-
-      internalMemo:
-        nullableText(
-          basicValues.internalMemo,
-        ),
-
+      title: basicValues.title.trim(),
+      writtenDate: basicValues.writtenDate,
+      validUntil: nullableText(
+        basicValues.validUntil
+      ),
+      expectedDuration: nullableText(
+        basicValues.expectedDuration
+      ),
+      customerNote: nullableText(
+        basicValues.customerNote
+      ),
+      internalMemo: nullableText(
+        basicValues.internalMemo
+      ),
       adjustmentAmount,
 
       /*
-       * 현재 작성 UI와 동일하게 유지.
-       * 정산 입력 UI 추가 시 별도 처리.
+       * 정산정보 입력 UI는 현재 단계에서 변경하지 않는다.
+       * 기존 상세 데이터의 값을 그대로 보존한다.
        */
       expectedSettlementAmount:
-        quoteQuery.data
-          ?.expectedSettlementAmount ??
+        quoteQuery.data?.expectedSettlementAmount ??
         null,
 
       expectedSettlementMemo:
-        quoteQuery.data
-          ?.expectedSettlementMemo ??
+        quoteQuery.data?.expectedSettlementMemo ??
         null,
 
-      items:
-        quoteItems.map(
-          (
-            {
-              clientId: _clientId,
-              ...item
-            },
-            index,
-          ) => ({
-            ...item,
+      items: quoteItems.map((draftItem, index) => {
+        const { clientId, ...item } = draftItem;
 
-            categoryName:
-              nullableText(
-                item.categoryName,
-              ),
+        // clientId는 프론트엔드 전용 식별자이다.
+        void clientId;
 
-            featureName:
-              item.featureName.trim(),
-
-            description:
-              nullableText(
-                item.description,
-              ),
-
-            unitName:
-              item.unitName.trim(),
-
-            adjustmentReason:
-              nullableText(
-                item.adjustmentReason,
-              ),
-
-            internalMemo:
-              nullableText(
-                item.internalMemo,
-              ),
-
-            sortOrder:
-              index + 1,
-          }),
-        ),
+        return {
+          ...item,
+          categoryName: nullableText(
+            item.categoryName
+          ),
+          featureName: item.featureName.trim(),
+          description: nullableText(
+            item.description
+          ),
+          unitName: item.unitName.trim(),
+          adjustmentReason: nullableText(
+            item.adjustmentReason
+          ),
+          internalMemo: nullableText(
+            item.internalMemo
+          ),
+          sortOrder: index + 1,
+        };
+      }),
 
       /*
-       * 상세에서 읽어온 직접비는
+       * 기존 직접비는 편집 UI에 없으므로
        * 수정 요청에서도 보존한다.
        */
       directCosts:
         quoteQuery.data?.directCosts.map(
           (cost, index) => ({
-            costName:
-              cost.costName,
-
-            amount:
-              cost.amount,
-
-            memo:
-              nullableText(
-                cost.memo,
-              ),
-
-            sortOrder:
-              index + 1,
-          }),
+            costName: cost.costName,
+            amount: cost.amount,
+            memo: nullableText(cost.memo),
+            sortOrder: index + 1,
+          })
         ) ?? [],
     };
-
 
     try {
       setSaveError("");
@@ -420,283 +323,408 @@ export function QuoteEditPage() {
 
       navigate(
         `${ROUTES.quotes}/${id}`,
-        {
-          replace: true,
-        },
+        { replace: true }
       );
     } catch (error) {
       setSaveError(
         error instanceof Error
           ? error.message
-          : "견적을 수정하지 못했습니다.",
+          : "견적을 수정하지 못했습니다."
       );
     }
   }
 
-
   if (
-    !Number.isFinite(id) ||
+    !quoteId ||
+    !Number.isSafeInteger(id) ||
     id <= 0
   ) {
     return (
-      <main className="quote-create-page">
-        <section className="quote-create-error">
-          잘못된 견적 번호입니다.
-        </section>
-      </main>
+      <EditState
+        type="error"
+        title="잘못된 견적 번호입니다."
+        description="견적 번호를 확인한 후 다시 접근해주세요."
+        onBack={() => navigate(ROUTES.quotes)}
+        backLabel="견적 목록으로"
+      />
     );
   }
-
 
   const loading =
     quoteQuery.isLoading ||
     customersQuery.isLoading ||
     platformsQuery.isLoading;
 
-
   if (loading) {
     return (
-      <main className="quote-create-page">
-        <section className="quote-create-state">
-          견적 정보를 불러오고 있습니다.
-        </section>
-      </main>
+      <EditState
+        type="loading"
+        title="견적 정보를 불러오는 중"
+        description="기존 견적과 관련 정보를 준비하고 있습니다."
+      />
     );
   }
-
 
   const loadError =
     quoteQuery.isError ||
     customersQuery.isError ||
     platformsQuery.isError;
 
-
-  if (
-    loadError ||
-    !quoteQuery.data ||
-    !basicValues
-  ) {
+  if (loadError || !quoteQuery.data) {
     return (
-      <main className="quote-create-page">
-        <section
-          className="quote-create-error"
-          role="alert"
-        >
-          견적 수정에 필요한 정보를
-          불러오지 못했습니다.
-        </section>
-      </main>
+      <EditState
+        type="error"
+        title="견적 정보를 불러오지 못했습니다."
+        description="견적 수정에 필요한 데이터를 조회할 수 없습니다."
+        onBack={handleCancel}
+        backLabel="견적 상세로"
+      />
     );
   }
 
-
-  /*
-   * DRAFT만 수정 가능
-   */
-  if (
-    quoteQuery.data.status !== "DRAFT"
-  ) {
+  if (quoteQuery.data.status !== "DRAFT") {
     return (
-      <main className="quote-create-page">
-        <section className="quote-create-error">
-          작성중인 견적만 수정할 수 있습니다.
-        </section>
-
-        <button
-          type="button"
-          onClick={handleCancel}
-        >
-          견적 상세로
-        </button>
-      </main>
+      <EditState
+        type="error"
+        title="수정할 수 없는 견적입니다."
+        description="작성 중(DRAFT) 상태인 견적만 수정할 수 있습니다."
+        onBack={handleCancel}
+        backLabel="견적 상세로"
+      />
     );
   }
 
+  if (!basicValues) {
+    return (
+      <EditState
+        type="loading"
+        title="편집 정보를 준비하는 중"
+        description="기존 견적항목을 편집 화면으로 변환하고 있습니다."
+      />
+    );
+  }
 
   return (
     <main className="quote-create-page">
-
       <header className="quote-create-header">
-        <div>
-          <h1>
-            견적 수정
-          </h1>
+        <div className="quote-create-header-info">
+          <div className="quote-create-header-meta">
+            <span className="quote-create-header-icon">
+              <FilePenLine
+                size={18}
+                aria-hidden="true"
+              />
+            </span>
+
+            <span className="quote-create-header-label">
+              KRIM QUOTE
+            </span>
+
+            <span className="quote-create-header-badge">
+              견적 수정
+            </span>
+          </div>
+
+          <h1>견적 수정</h1>
 
           <p>
-            {quoteQuery.data.quoteNumber}
+            기존 견적의 기본정보와 항목을 수정하고
+            최종 금액을 검토한다.
           </p>
+
+          <div className="quote-create-header-details">
+            <span>
+              <FileText
+                size={15}
+                aria-hidden="true"
+              />
+              {quoteQuery.data.quoteNumber ||
+                "견적번호 미발행"}
+            </span>
+
+            <span>
+              <Pencil
+                size={15}
+                aria-hidden="true"
+              />
+              작성 중 견적
+            </span>
+          </div>
+        </div>
+
+        <div className="quote-create-header-actions">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={updateQuote.isPending}
+            onClick={handleCancel}
+          >
+            <ArrowLeft
+              size={16}
+              aria-hidden="true"
+            />
+            견적 상세로
+          </Button>
         </div>
       </header>
 
+      <section
+        className="quote-create-progress"
+        aria-label="견적 수정 진행률"
+      >
+        <div className="quote-create-progress-top">
+          <div>
+            <span className="quote-create-progress-eyebrow">
+              QUOTE EDIT PROGRESS
+            </span>
+
+            <strong>
+              {steps[currentStepIndex].label}
+            </strong>
+          </div>
+
+          <span className="quote-create-progress-count">
+            {currentStepIndex + 1} / {steps.length}
+          </span>
+        </div>
+
+        <div
+          className="quote-create-progress-track"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={steps.length}
+          aria-valuenow={currentStepIndex + 1}
+          aria-label="견적 수정 진행 단계"
+        >
+          <div
+            className="quote-create-progress-fill"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      </section>
 
       <nav
         className="quote-create-steps"
         aria-label="견적 수정 단계"
       >
-        <Step
-          number={1}
-          label="기본정보"
-          active={
-            step === "BASIC"
-          }
-          completed={
-            step !== "BASIC"
-          }
-        />
+        {steps.map((item, index) => (
+          <div
+            key={item.key}
+            className={[
+              "quote-create-step",
+              step === item.key ? "active" : "",
+              index < currentStepIndex
+                ? "completed"
+                : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            aria-current={
+              step === item.key ? "step" : undefined
+            }
+          >
+            <span className="quote-create-step-number">
+              {index < currentStepIndex ? (
+                <Check
+                  size={15}
+                  aria-hidden="true"
+                />
+              ) : (
+                item.number
+              )}
+            </span>
 
-        <Step
-          number={2}
-          label="견적항목"
-          active={
-            step === "ITEMS"
-          }
-          completed={
-            step === "REVIEW"
-          }
-        />
-
-        <Step
-          number={3}
-          label="검토"
-          active={
-            step === "REVIEW"
-          }
-          completed={false}
-        />
+            <span className="quote-create-step-content">
+              <strong>{item.label}</strong>
+              <small>{item.description}</small>
+            </span>
+          </div>
+        ))}
       </nav>
 
+      <section className="quote-create-content">
+        <div className="quote-create-section-heading">
+          <div className="quote-create-section-heading-icon">
+            {step === "BASIC" ? (
+              <ClipboardList
+                size={20}
+                aria-hidden="true"
+              />
+            ) : step === "ITEMS" ? (
+              <ReceiptText
+                size={20}
+                aria-hidden="true"
+              />
+            ) : (
+              <CheckCircle2
+                size={20}
+                aria-hidden="true"
+              />
+            )}
+          </div>
 
-      {step === "BASIC" && (
-        <>
-          {errorMessage && (
-            <div
-              className="quote-create-error"
-              role="alert"
-            >
-              {errorMessage}
-            </div>
-          )}
+          <div>
+            <h2>
+              {step === "BASIC"
+                ? "견적 기본정보 수정"
+                : step === "ITEMS"
+                  ? "견적항목 수정"
+                  : "수정 내용 최종 검토"}
+            </h2>
 
-          <QuoteBasicForm
-            values={basicValues}
+            <p>
+              {step === "BASIC"
+                ? "고객, 작성일, 예상 기간 및 메모를 확인한다."
+                : step === "ITEMS"
+                  ? "기능별 견적항목과 단가, 수량 및 난이도를 수정한다."
+                  : "수정된 견적금액을 확인한 후 저장한다."}
+            </p>
+          </div>
+        </div>
+
+        {step === "BASIC" && (
+          <>
+            {errorMessage && (
+              <div
+                className="quote-create-error"
+                role="alert"
+              >
+                <AlertCircle
+                  size={18}
+                  aria-hidden="true"
+                />
+                {errorMessage}
+              </div>
+            )}
+
+            <QuoteBasicForm
+              values={basicValues}
+              customers={customers}
+              platforms={platforms}
+              onChange={handleBasicChange}
+              onNext={handleBasicNext}
+              onCancel={handleCancel}
+            />
+          </>
+        )}
+
+        {step === "ITEMS" && (
+          <>
+            {saveError && (
+              <div
+                className="quote-create-error"
+                role="alert"
+              >
+                <AlertCircle
+                  size={18}
+                  aria-hidden="true"
+                />
+                {saveError}
+              </div>
+            )}
+
+            <QuoteItemsStep
+              items={quoteItems}
+              onChange={(items) => {
+                setQuoteItems(items);
+                setSaveError("");
+              }}
+              onPrevious={() => setStep("BASIC")}
+              onNext={handleItemsNext}
+            />
+          </>
+        )}
+
+        {step === "REVIEW" && (
+          <QuoteReviewStep
+            basic={basicValues}
+            items={quoteItems}
             customers={customers}
             platforms={platforms}
-            onChange={
-              handleBasicChange
+            adjustmentAmount={adjustmentAmount}
+            onAdjustmentAmountChange={
+              setAdjustmentAmount
             }
-            onNext={
-              handleBasicNext
-            }
-            onCancel={
-              handleCancel
-            }
+            onPrevious={() => setStep("ITEMS")}
+            onSave={() => {
+              void handleUpdateQuote();
+            }}
+            saving={updateQuote.isPending}
+            saveError={saveError}
           />
-        </>
-      )}
-
-
-      {step === "ITEMS" && (
-        <QuoteItemsStep
-          items={quoteItems}
-          onChange={
-            setQuoteItems
-          }
-          onPrevious={() =>
-            setStep("BASIC")
-          }
-          onNext={() =>
-            setStep("REVIEW")
-          }
-        />
-      )}
-
-
-      {step === "REVIEW" && (
-        <QuoteReviewStep
-          basic={basicValues}
-          items={quoteItems}
-          customers={customers}
-          platforms={platforms}
-          adjustmentAmount={
-            adjustmentAmount
-          }
-          onAdjustmentAmountChange={
-            setAdjustmentAmount
-          }
-          onPrevious={() =>
-            setStep("ITEMS")
-          }
-          onSave={() =>
-            void handleUpdateQuote()
-          }
-          saving={
-            updateQuote.isPending
-          }
-          saveError={
-            saveError
-          }
-        />
-      )}
-
+        )}
+      </section>
     </main>
   );
 }
 
-
-type StepProps = {
-  number: number;
-  label: string;
-  active: boolean;
-  completed: boolean;
+type EditStateProps = {
+  type: "loading" | "error";
+  title: string;
+  description: string;
+  onBack?: () => void;
+  backLabel?: string;
 };
 
-
-function Step({
-  number,
-  label,
-  active,
-  completed,
-}: StepProps) {
-  const className = [
-    "quote-create-step",
-
-    active
-      ? "active"
-      : "",
-
-    completed
-      ? "completed"
-      : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
+function EditState({
+  type,
+  title,
+  description,
+  onBack,
+  backLabel = "돌아가기",
+}: EditStateProps) {
   return (
-    <div className={className}>
-      <span className="quote-create-step-number">
-        {number}
-      </span>
+    <main className="quote-create-page">
+      <section
+        className={
+          type === "error"
+            ? "quote-create-error"
+            : "quote-create-state"
+        }
+        role={type === "error" ? "alert" : "status"}
+      >
+        {type === "loading" ? (
+          <LoaderCircle
+            size={25}
+            aria-hidden="true"
+          />
+        ) : (
+          <AlertCircle
+            size={25}
+            aria-hidden="true"
+          />
+        )}
 
-      <span>
-        {label}
-      </span>
-    </div>
+        <div>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+
+        {onBack && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onBack}
+          >
+            <ArrowLeft
+              size={16}
+              aria-hidden="true"
+            />
+            {backLabel}
+          </Button>
+        )}
+      </section>
+    </main>
   );
 }
 
-
 function nullableText(
-  value:
-    | string
-    | null
-    | undefined,
+  value: string | null | undefined
 ): string | null {
   if (!value) {
     return null;
   }
 
-  const trimmed =
-    value.trim();
-
+  const trimmed = value.trim();
   return trimmed || null;
 }

@@ -1,497 +1,456 @@
-import type {
-    CustomerListItem,
-} from "../../customer/types/customer.types";
-
-import type {
-    PlatformListItem,
-} from "../../platform/types/platform.types";
-
-import type {
-    QuoteBasicFormValues,
-} from "../schemas/quoteBasicSchema";
-
-import type {
-    QuoteDraftItem,
-} from "../types/quote.types";
 
 import {
-    calculateQuoteItemAmount,
-    calculateQuoteItemsAmount,
+  AlertCircle,
+  ArrowLeft,
+  CalendarDays,
+  CheckCircle2,
+  ClipboardList,
+  FileText,
+  Info,
+  LoaderCircle,
+  ReceiptText,
+  Save,
+  SlidersHorizontal,
+} from "lucide-react";
+
+import type { CustomerListItem } from "../../customer/types/customer.types";
+import type { PlatformListItem } from "../../platform/types/platform.types";
+import type { QuoteBasicFormValues } from "../schemas/quoteBasicSchema";
+import type { QuoteDraftItem } from "../types/quote.types";
+
+import {
+  calculateQuoteItemAmount,
+  calculateQuoteItemsAmount,
 } from "../utils/quoteCalculation";
+
+import { Button } from "../../../components/ui/Button";
 
 import "./QuoteReviewStep.css";
 
-
 type Props = {
-    basic: QuoteBasicFormValues;
-
-    items: QuoteDraftItem[];
-
-    customers: CustomerListItem[];
-
-    platforms: PlatformListItem[];
-
-    adjustmentAmount: number;
-
-    onAdjustmentAmountChange:
-    (value: number) => void;
-
-    onPrevious: () => void;
-
-    onSave: () => void;
-
-    saving: boolean;
-
-    saveError: string;
+  basic: QuoteBasicFormValues;
+  items: QuoteDraftItem[];
+  customers: CustomerListItem[];
+  platforms: PlatformListItem[];
+  adjustmentAmount: number;
+  onAdjustmentAmountChange: (value: number) => void;
+  onPrevious: () => void;
+  onSave: () => void;
+  saving: boolean;
+  saveError: string;
 };
 
-
 export function QuoteReviewStep({
-    basic,
-    items,
-    customers,
-    platforms,
-    adjustmentAmount,
-    onAdjustmentAmountChange,
-    onPrevious,
-    onSave,
-    saving,
-    saveError,
+  basic,
+  items,
+  customers,
+  platforms,
+  adjustmentAmount,
+  onAdjustmentAmountChange,
+  onPrevious,
+  onSave,
+  saving,
+  saveError,
 }: Props) {
-    const customer =
-        customers.find(
-            (item) =>
-                item.id ===
-                basic.customerId,
-        );
-
-    const platform =
-        basic.inquiryPlatformId
-            ? platforms.find(
-                (item) =>
-                    item.id ===
-                    basic.inquiryPlatformId,
-            )
-            : null;
-
-
-    const itemsAmount =
-        calculateQuoteItemsAmount(
-            items,
-        );
-
-
-    const totalAmount =
-        Math.round(
-            itemsAmount +
-            adjustmentAmount,
-        );
-
-
-    const supplyAmount =
-        Math.round(
-            totalAmount / 1.1,
-        );
-
-
-    const vatAmount =
-        totalAmount -
-        supplyAmount;
-
-
-    return (
-        <section className="quote-review">
-
-            <div className="quote-review-document">
-
-                <header className="quote-review-header">
-
-                    <div>
-                        <strong className="quote-review-brand">
-                            KRIM
-                        </strong>
-
-                        <h2>
-                            견 적 서
-                        </h2>
-                    </div>
-
-                    <div className="quote-review-number">
-                        견적번호
-                        <strong>
-                            발행 시 자동 생성
-                        </strong>
-                    </div>
-
-                </header>
-
-
-                <section className="quote-review-basic">
-
-                    <dl>
-                        <div>
-                            <dt>
-                                고객
-                            </dt>
-
-                            <dd>
-                                {customer
-                                    ? formatCustomer(
-                                        customer,
-                                    )
-                                    : "-"}
-                            </dd>
-                        </div>
-
-
-                        <div>
-                            <dt>
-                                프로젝트
-                            </dt>
-
-                            <dd>
-                                {basic.title}
-                            </dd>
-                        </div>
-
-
-                        <div>
-                            <dt>
-                                작성일
-                            </dt>
-
-                            <dd>
-                                {basic.writtenDate}
-                            </dd>
-                        </div>
-
-
-                        <div>
-                            <dt>
-                                유효기간
-                            </dt>
-
-                            <dd>
-                                {basic.validUntil ||
-                                    "-"}
-                            </dd>
-                        </div>
-
-
-                        <div>
-                            <dt>
-                                개발기간
-                            </dt>
-
-                            <dd>
-                                {basic.expectedDuration ||
-                                    "-"}
-                            </dd>
-                        </div>
-
-
-                        <div>
-                            <dt>
-                                의뢰 플랫폼
-                            </dt>
-
-                            <dd>
-                                {platform?.name ??
-                                    "-"}
-                            </dd>
-                        </div>
-
-                    </dl>
-
-                </section>
-
-
-                <section className="quote-review-items">
-
-                    <table>
-
-                        <thead>
-                            <tr>
-                                <th>
-                                    구분
-                                </th>
-
-                                <th>
-                                    기능
-                                </th>
-
-                                <th>
-                                    단가
-                                </th>
-
-                                <th>
-                                    수량
-                                </th>
-
-                                <th>
-                                    난이도
-                                </th>
-
-                                <th>
-                                    금액
-                                </th>
-                            </tr>
-                        </thead>
-
-
-                        <tbody>
-
-                            {items.map(
-                                (item) => (
-                                    <tr
-                                        key={
-                                            item.clientId
-                                        }
-                                    >
-
-                                        <td>
-                                            {item.categoryName ||
-                                                "-"}
-                                        </td>
-
-                                        <td>
-                                            <strong>
-                                                {
-                                                    item.featureName
-                                                }
-                                            </strong>
-
-                                            {item.description && (
-                                                <p>
-                                                    {
-                                                        item.description
-                                                    }
-                                                </p>
-                                            )}
-                                        </td>
-
-                                        <td>
-                                            {formatMoney(
-                                                item.quoteUnitPrice,
-                                            )}
-                                        </td>
-
-                                        <td>
-                                            {item.quantity}
-                                            {" "}
-                                            {item.unitName}
-                                        </td>
-
-                                        <td>
-                                            {
-                                                item.difficultyRate
-                                            }
-                                        </td>
-
-                                        <td>
-                                            {formatMoney(
-                                                calculateQuoteItemAmount(
-                                                    item,
-                                                ),
-                                            )}
-                                        </td>
-
-                                    </tr>
-                                ),
-                            )}
-
-                        </tbody>
-
-                    </table>
-
-                </section>
-
-
-                <section className="quote-review-adjustment">
-
-                    <label htmlFor="quote-adjustment-amount">
-                        견적 전체 조정금액
-                    </label>
-
-                    <input
-                        id="quote-adjustment-amount"
-                        type="number"
-                        step={1000}
-                        value={
-                            adjustmentAmount
-                        }
-                        onChange={(event) =>
-                            onAdjustmentAmountChange(
-                                Number(
-                                    event.target.value,
-                                ),
-                            )
-                        }
-                    />
-
-                </section>
-
-
-                <section className="quote-review-summary">
-
-                    <div>
-                        <span>
-                            항목 합계
-                        </span>
-
-                        <strong>
-                            {formatMoney(
-                                itemsAmount,
-                            )}
-                        </strong>
-                    </div>
-
-
-                    <div>
-                        <span>
-                            전체 조정
-                        </span>
-
-                        <strong>
-                            {formatSignedMoney(
-                                adjustmentAmount,
-                            )}
-                        </strong>
-                    </div>
-
-
-                    <div>
-                        <span>
-                            공급가액
-                        </span>
-
-                        <strong>
-                            {formatMoney(
-                                supplyAmount,
-                            )}
-                        </strong>
-                    </div>
-
-
-                    <div>
-                        <span>
-                            VAT 10%
-                        </span>
-
-                        <strong>
-                            {formatMoney(
-                                vatAmount,
-                            )}
-                        </strong>
-                    </div>
-
-
-                    <div className="quote-review-total">
-                        <span>
-                            총 견적금액
-                        </span>
-
-                        <strong>
-                            {formatMoney(
-                                totalAmount,
-                            )}
-                        </strong>
-                    </div>
-
-                </section>
-
-
-                {basic.customerNote && (
-                    <section className="quote-review-note">
-
-                        <h3>
-                            비고
-                        </h3>
-
-                        <p>
-                            {basic.customerNote}
-                        </p>
-
-                    </section>
-                )}
-
+  const customer = customers.find(
+    (entry) => entry.id === basic.customerId
+  );
+
+  const platform =
+    basic.inquiryPlatformId != null
+      ? platforms.find(
+          (entry) =>
+            entry.id === basic.inquiryPlatformId
+        )
+      : null;
+
+  const itemsAmount = calculateQuoteItemsAmount(items);
+
+  // KRIM Quote 정책 : 최종 견적금액은 VAT 포함이다.
+  const totalAmount = Math.round(
+    itemsAmount + adjustmentAmount
+  );
+
+  const supplyAmount = Math.round(totalAmount / 1.1);
+  const vatAmount = totalAmount - supplyAmount;
+
+  return (
+    <section className="quote-review">
+      <div className="quote-review-topbar">
+        <div className="quote-review-topbar-title">
+          <span className="quote-review-topbar-icon">
+            <FileText size={19} aria-hidden="true" />
+          </span>
+
+          <div>
+            <h3>견적서 최종 검토</h3>
+            <p>
+              저장하기 전에 견적 내용과 금액을
+              최종 확인한다.
+            </p>
+          </div>
+        </div>
+
+        <span className="quote-review-draft-badge">
+          <ClipboardList size={14} aria-hidden="true" />
+          DRAFT
+        </span>
+      </div>
+
+      <div className="quote-review-document">
+        <header className="quote-review-header">
+          <div className="quote-review-document-heading">
+            <strong className="quote-review-brand">
+              KRIM
+            </strong>
+            <h2>견 적 서</h2>
+            <p>PROJECT QUOTATION</p>
+          </div>
+
+          <div className="quote-review-number">
+            <span>견적번호</span>
+            <strong>저장 시 자동 생성</strong>
+            <small>저장 전 검토용 문서</small>
+          </div>
+        </header>
+
+        <section className="quote-review-basic">
+          <div className="quote-review-section-heading">
+            <ClipboardList
+              size={17}
+              aria-hidden="true"
+            />
+            <h3>견적 기본정보</h3>
+          </div>
+
+          <dl>
+            <div>
+              <dt>고객</dt>
+              <dd>
+                {customer
+                  ? formatCustomer(customer)
+                  : "-"}
+              </dd>
             </div>
 
+            <div>
+              <dt>프로젝트</dt>
+              <dd>{basic.title || "-"}</dd>
+            </div>
 
-            <footer className="quote-review-actions">
+            <div>
+              <dt>작성일</dt>
+              <dd>{basic.writtenDate || "-"}</dd>
+            </div>
 
-                <button
-                    type="button"
-                    onClick={
-                        onPrevious
-                    }
-                >
-                    ← 수정하기
-                </button>
-                {saveError && (
-                    <p
-                        className="quote-review-save-error"
-                        role="alert"
-                    >
-                        {saveError}
-                    </p>
-                )}
-                <button
-                    type="button"
-                    disabled={saving}
-                    onClick={
-                        onSave
-                    }
-                >
-                    {saving
-                        ? "저장 중..."
-                        : "DRAFT 저장"}
-                </button>
+            <div>
+              <dt>유효기간</dt>
+              <dd>{basic.validUntil || "-"}</dd>
+            </div>
 
-            </footer>
+            <div>
+              <dt>개발기간</dt>
+              <dd>{basic.expectedDuration || "-"}</dd>
+            </div>
 
+            <div>
+              <dt>의뢰 플랫폼</dt>
+              <dd>{platform?.name ?? "-"}</dd>
+            </div>
+          </dl>
         </section>
-    );
-}
 
+        <section className="quote-review-items">
+          <div className="quote-review-section-heading">
+            <ReceiptText
+              size={17}
+              aria-hidden="true"
+            />
+            <h3>견적 세부내역</h3>
+
+            <span className="quote-review-items-count">
+              {items.length}개 항목
+            </span>
+          </div>
+
+          <div className="quote-review-table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">구분</th>
+                  <th scope="col">기능</th>
+                  <th
+                    scope="col"
+                    className="quote-review-align-right"
+                  >
+                    단가
+                  </th>
+                  <th
+                    scope="col"
+                    className="quote-review-align-right"
+                  >
+                    수량
+                  </th>
+                  <th
+                    scope="col"
+                    className="quote-review-align-center"
+                  >
+                    난이도
+                  </th>
+                  <th
+                    scope="col"
+                    className="quote-review-align-right"
+                  >
+                    금액
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.clientId}>
+                    <td className="quote-review-category">
+                      {item.categoryName || "-"}
+                    </td>
+
+                    <td>
+                      <div className="quote-review-feature">
+                        <strong>{item.featureName}</strong>
+
+                        {item.description && (
+                          <p>{item.description}</p>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="quote-review-align-right quote-review-number-cell">
+                      {formatMoney(item.quoteUnitPrice)}
+                    </td>
+
+                    <td className="quote-review-align-right quote-review-number-cell">
+                      {item.quantity} {item.unitName}
+                    </td>
+
+                    <td className="quote-review-align-center">
+                      <span className="quote-review-difficulty">
+                        ×{item.difficultyRate}
+                      </span>
+                    </td>
+
+                    <td className="quote-review-align-right quote-review-item-amount">
+                      {formatMoney(
+                        calculateQuoteItemAmount(item)
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="quote-review-calculation">
+          <div className="quote-review-adjustment">
+            <div className="quote-review-section-heading">
+              <SlidersHorizontal
+                size={17}
+                aria-hidden="true"
+              />
+              <h3>견적 전체 조정</h3>
+            </div>
+
+            <label htmlFor="quote-adjustment-amount">
+              전체 조정금액
+            </label>
+
+            <div className="quote-review-adjustment-input">
+              <input
+                id="quote-adjustment-amount"
+                type="number"
+                step={1000}
+                value={adjustmentAmount}
+                disabled={saving}
+                onChange={(event) =>
+                  onAdjustmentAmountChange(
+                    Number(event.target.value)
+                  )
+                }
+              />
+              <span>원</span>
+            </div>
+
+            <p>
+              음수는 할인, 양수는 추가금액으로 반영한다.
+            </p>
+
+            <div className="quote-review-adjustment-preview">
+              <span>현재 적용 조정금액</span>
+              <strong
+                className={
+                  adjustmentAmount < 0
+                    ? "quote-review-negative"
+                    : adjustmentAmount > 0
+                      ? "quote-review-positive"
+                      : ""
+                }
+              >
+                {formatSignedMoney(adjustmentAmount)}
+              </strong>
+            </div>
+          </div>
+
+          <div className="quote-review-summary">
+            <div className="quote-review-summary-heading">
+              <h3>견적 금액 요약</h3>
+              <span>VAT 포함 기준</span>
+            </div>
+
+            <div className="quote-review-summary-row">
+              <span>항목 합계</span>
+              <strong>{formatMoney(itemsAmount)}</strong>
+            </div>
+
+            <div className="quote-review-summary-row">
+              <span>전체 조정</span>
+              <strong
+                className={
+                  adjustmentAmount < 0
+                    ? "quote-review-negative"
+                    : adjustmentAmount > 0
+                      ? "quote-review-positive"
+                      : ""
+                }
+              >
+                {formatSignedMoney(adjustmentAmount)}
+              </strong>
+            </div>
+
+            <div className="quote-review-summary-divider" />
+
+            <div className="quote-review-summary-row">
+              <span>공급가액</span>
+              <strong>{formatMoney(supplyAmount)}</strong>
+            </div>
+
+            <div className="quote-review-summary-row">
+              <span>VAT (10%)</span>
+              <strong>{formatMoney(vatAmount)}</strong>
+            </div>
+
+            <div className="quote-review-total">
+              <div>
+                <span>총 견적금액</span>
+                <small>부가세 포함 최종 금액</small>
+              </div>
+
+              <strong>{formatMoney(totalAmount)}</strong>
+            </div>
+
+            <div className="quote-review-vat-note">
+              <CheckCircle2
+                size={15}
+                aria-hidden="true"
+              />
+              최종 견적금액에는 부가세 10%가 포함되어 있다.
+            </div>
+          </div>
+        </section>
+
+        {basic.customerNote && (
+          <section className="quote-review-note">
+            <div className="quote-review-section-heading">
+              <Info size={17} aria-hidden="true" />
+              <h3>비고</h3>
+            </div>
+
+            <p>{basic.customerNote}</p>
+          </section>
+        )}
+
+        <div className="quote-review-document-bottom">
+          <CalendarDays
+            size={15}
+            aria-hidden="true"
+          />
+          본 견적서는 저장 전 검토용 초안이다.
+        </div>
+      </div>
+
+      <footer className="quote-review-actions">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={saving}
+          onClick={onPrevious}
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          이전 단계
+        </Button>
+
+        <div className="quote-review-save">
+          {saveError && (
+            <p
+              className="quote-review-save-error"
+              role="alert"
+            >
+              <AlertCircle
+                size={16}
+                aria-hidden="true"
+              />
+              {saveError}
+            </p>
+          )}
+
+          <Button
+            type="button"
+            variant="primary"
+            disabled={saving}
+            onClick={onSave}
+          >
+            {saving ? (
+              <>
+                <LoaderCircle
+                  size={16}
+                  className="quote-review-saving-icon"
+                  aria-hidden="true"
+                />
+                저장 중...
+              </>
+            ) : (
+              <>
+                <Save size={16} aria-hidden="true" />
+                DRAFT 저장
+              </>
+            )}
+          </Button>
+        </div>
+      </footer>
+    </section>
+  );
+}
 
 function formatCustomer(
-    customer: CustomerListItem,
+  customer: CustomerListItem
 ): string {
-    if (
-        customer.companyName
-    ) {
-        return `${customer.companyName} / ${customer.customerName}`;
-    }
+  if (customer.companyName) {
+    return `${customer.companyName} / ${customer.customerName}`;
+  }
 
-    return customer.customerName;
+  return customer.customerName;
 }
 
-
-function formatMoney(
-    value: number,
-): string {
-    return `${Math.round(
-        value,
-    ).toLocaleString("ko-KR")}원`;
+function formatMoney(value: number): string {
+  return `${Math.round(value).toLocaleString("ko-KR")}원`;
 }
 
+function formatSignedMoney(value: number): string {
+  if (value === 0) {
+    return "0원";
+  }
 
-function formatSignedMoney(
-    value: number,
-): string {
-    if (value === 0) {
-        return "0원";
-    }
+  const sign = value > 0 ? "+" : "-";
 
-    const sign =
-        value > 0
-            ? "+"
-            : "-";
-
-    return `${sign}${Math.abs(
-        value,
-    ).toLocaleString(
-        "ko-KR",
-    )}원`;
+  return `${sign}${Math.abs(value).toLocaleString(
+    "ko-KR"
+  )}원`;
 }

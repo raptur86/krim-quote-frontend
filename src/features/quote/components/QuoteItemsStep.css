@@ -1,119 +1,316 @@
+
+/* =========================================
+   KRIM Quote - Quote Items Step
+========================================= */
+
 .quote-items-step {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    280px;
-
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  align-items: start;
+  gap: 20px;
+  min-width: 0;
 }
 
 .quote-items-main {
   display: flex;
   flex-direction: column;
-
   gap: 20px;
+  min-width: 0;
 }
 
+/* Panels */
+
+.quote-items-selector-panel,
 .quote-items-added {
-  padding: 20px;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-
-  background: #ffffff;
+  min-width: 0;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
 }
+
+.quote-items-panel-heading,
+.quote-items-added-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.quote-items-panel-heading {
+  margin-bottom: 18px;
+}
+
+.quote-items-panel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.quote-items-panel-heading h3,
+.quote-items-added-header h3 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.quote-items-panel-heading p,
+.quote-items-added-header p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Added Items */
 
 .quote-items-added-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  flex-wrap: wrap;
   gap: 16px;
-
   margin-bottom: 18px;
 }
 
-.quote-items-added-header h3 {
-  margin: 0 0 5px;
-}
-
-.quote-items-added-header p {
-  margin: 0;
-
+.quote-items-added-count {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
   color: #64748b;
+  font-size: 12px;
 }
+
+.quote-items-added-count strong {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.quote-items-table-container {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+/* Summary */
 
 .quote-items-summary {
   position: sticky;
   top: 24px;
-
   align-self: start;
-
-  padding: 20px;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-
-  background: #ffffff;
+  min-width: 0;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
 }
 
-.quote-items-summary h3 {
-  margin-top: 0;
+.quote-items-summary-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 20px;
+}
+
+.quote-items-summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.quote-items-summary-heading h3 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.quote-items-summary-heading p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 11px;
 }
 
 .quote-items-summary-row {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid #edf1ee;
+  border-bottom: 1px solid #edf1ee;
+}
 
-  gap: 20px;
+.quote-items-summary-row span {
+  color: #64748b;
+  font-size: 12px;
+}
 
-  padding: 12px 0;
+.quote-items-summary-row strong {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 700;
+}
 
-  border-bottom: 1px solid #e2e8f0;
+.quote-items-summary-total {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 0;
+}
+
+.quote-items-summary-total > span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-items-summary-total > strong {
+  color: #1f4d3a;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.quote-items-summary-total small {
+  margin-left: 4px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .quote-items-summary-note {
-  margin: 16px 0 0;
-
-  color: #64748b;
-
-  font-size: 13px;
-  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 4px;
+  padding: 13px;
+  color: #537663;
+  background: #f0f7f2;
+  border: 1px solid #d5e8db;
+  border-radius: 9px;
 }
+
+.quote-items-summary-note > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.quote-items-summary-note p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Footer */
 
 .quote-items-footer {
   grid-column: 1 / -1;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
 }
 
 .quote-items-footer-actions {
   display: flex;
-
+  align-items: center;
   gap: 10px;
-
   margin-left: auto;
 }
 
 .quote-items-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
-
-  color: #b91c1c;
+  color: #b42318;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-@media (
-  max-width: 1000px
-) {
+.quote-items-error svg {
+  flex-shrink: 0;
+}
+
+/* Responsive */
+
+@media (max-width: 1150px) {
   .quote-items-step {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .quote-items-summary {
     position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-items-step {
+    gap: 16px;
+  }
+
+  .quote-items-selector-panel,
+  .quote-items-added,
+  .quote-items-summary {
+    padding: 18px;
+  }
+
+  .quote-items-added-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quote-items-added-header > button {
+    align-self: flex-start;
+  }
+
+  .quote-items-summary-total > strong {
+    font-size: 25px;
+  }
+
+  .quote-items-footer {
+    padding: 16px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-items-added-header > button {
+    width: 100%;
+  }
+
+  .quote-items-footer-actions {
+    width: 100%;
+  }
+
+  .quote-items-footer-actions > button {
+    flex: 1;
   }
 }

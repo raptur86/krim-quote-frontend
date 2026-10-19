@@ -1,298 +1,733 @@
+
+/* =========================================
+   KRIM Quote - Public Quotation
+========================================= */
+
 .public-quote-page,
 .public-quote-state-page {
   min-height: 100vh;
-  background: #f4f1ea;
+  box-sizing: border-box;
+  background: #f5f7f6;
+  color: #344054;
 }
 
 .public-quote-page {
-  padding: 48px 20px;
+  padding: 36px 24px 48px;
 }
 
-.public-quote-document {
-  width: min(100%, 1000px);
-  margin: 0 auto;
-  padding: 48px;
+.public-quote-page *,
+.public-quote-state-page * {
   box-sizing: border-box;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
+
+.public-quote-container {
+  width: min(100%, 1060px);
+  margin: 0 auto;
+}
+
+/* Actions */
+
+.public-quote-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.public-quote-actions-label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.public-quote-actions-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border: 1px solid #dbe9df;
+  border-radius: 10px;
+}
+
+.public-quote-actions-label > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.public-quote-actions-label strong {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.public-quote-actions-label span:not(
+  .public-quote-actions-icon
+) {
+  color: #7b8982;
+  font-size: 12px;
+}
+
+.public-quote-print-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 43px;
+  padding: 11px 18px;
+  color: #fff;
+  background: #1f4d3a;
+  border: 1px solid #1f4d3a;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.public-quote-print-button:hover {
+  background: #173b2d;
+  transform: translateY(-1px);
+}
+
+.public-quote-print-button:focus-visible {
+  outline: 3px solid rgba(31, 77, 58, 0.22);
+  outline-offset: 3px;
+}
+
+/* Document */
+
+.public-quote-document {
+  width: 100%;
+  padding: 48px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(16, 44, 28, 0.055);
+}
+
+/* Header */
 
 .public-quote-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  padding-bottom: 32px;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 34px;
   border-bottom: 2px solid #1f4d3a;
 }
 
 .public-quote-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 15px;
+  min-width: 0;
 }
 
 .public-quote-logo {
+  display: block;
+  flex-shrink: 0;
   max-width: 120px;
-  max-height: 60px;
+  max-height: 64px;
   object-fit: contain;
 }
 
-.public-quote-brand div {
+.public-quote-brand > div {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
+  min-width: 0;
 }
 
 .public-quote-brand strong {
-  font-size: 22px;
   color: #1f4d3a;
+  font-size: 23px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .public-quote-brand span {
-  color: #667085;
-  font-size: 13px;
+  color: #64748b;
+  font-size: 12px;
 }
 
 .public-quote-title {
+  flex-shrink: 0;
   text-align: right;
 }
 
-.public-quote-title span {
-  color: #7fa387;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+.public-quote-title > span {
+  color: #618671;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
 }
 
 .public-quote-title h1 {
-  margin: 5px 0 0;
-  color: #1b263b;
-  font-size: 34px;
+  margin: 9px 0 5px;
+  color: #1d2933;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
 }
+
+.public-quote-title small {
+  color: #98a2b3;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+/* Summary */
 
 .public-quote-summary {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   margin-top: 28px;
   overflow: hidden;
-  border: 1px solid #e4e7ec;
+  background: #e2e9e4;
+  border: 1px solid #e2e9e4;
   border-radius: 10px;
-  background: #e4e7ec;
 }
 
 .public-quote-summary > div {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding: 16px;
-  background: #ffffff;
+  gap: 10px;
+  min-width: 0;
+  padding: 17px 16px;
+  background: #f8faf9;
 }
 
-.public-quote-summary span,
-.public-quote-label {
-  color: #667085;
-  font-size: 12px;
+.public-quote-summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.public-quote-summary span svg {
+  color: #648675;
 }
 
 .public-quote-summary strong {
-  font-size: 14px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
+/* Project */
+
 .public-quote-project {
-  padding: 36px 0;
+  padding: 35px 0 30px;
+}
+
+.public-quote-label {
+  color: #618671;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
 }
 
 .public-quote-project h2 {
-  margin: 7px 0 0;
-  color: #1b263b;
-  font-size: 26px;
+  margin: 10px 0 8px;
+  color: #1d2933;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
+
+.public-quote-project p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* Parties */
 
 .public-quote-parties {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.public-quote-parties > div {
-  padding: 20px;
-  border: 1px solid #e4e7ec;
+.public-quote-party-card {
+  min-width: 0;
+  padding: 21px;
+  background: #fff;
+  border: 1px solid #e0e8e2;
   border-radius: 10px;
 }
 
-.public-quote-parties h3,
-.public-quote-items h3,
-.public-quote-note h3 {
-  margin: 0 0 16px;
-  font-size: 16px;
+.public-quote-party-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 19px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.public-quote-party-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 39px;
+  height: 39px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 9px;
+}
+
+.public-quote-party-heading small {
+  color: #82938a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.public-quote-party-heading h3 {
+  margin: 4px 0 0;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .public-quote-parties dl {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin: 0;
 }
 
 .public-quote-parties dl > div {
   display: grid;
-  grid-template-columns: 90px 1fr;
-  padding: 7px 0;
+  grid-template-columns: 95px minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
 }
 
 .public-quote-parties dt {
-  color: #667085;
-  font-size: 13px;
+  color: #64748b;
+  font-size: 12px;
 }
 
 .public-quote-parties dd {
+  min-width: 0;
   margin: 0;
-  font-size: 14px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
+/* Items */
+
 .public-quote-items {
-  margin-top: 36px;
+  margin-top: 38px;
+}
+
+.public-quote-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.public-quote-section-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.public-quote-section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 8px;
+}
+
+.public-quote-section-heading h3 {
+  margin: 0;
+  color: #344054;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.public-quote-item-count {
+  padding: 6px 10px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .public-quote-table-wrapper {
+  width: 100%;
   overflow-x: auto;
+  border: 1px solid #e0e8e2;
+  border-radius: 9px;
+  scrollbar-width: thin;
 }
 
 .public-quote-items table {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
 }
 
-.public-quote-items th {
-  padding: 12px;
-  border-bottom: 1px solid #d0d5dd;
-  background: #f9fafb;
-  color: #475467;
-  font-size: 13px;
-  text-align: left;
-}
-
+.public-quote-items th,
 .public-quote-items td {
-  padding: 15px 12px;
-  border-bottom: 1px solid #eaecf0;
-  font-size: 14px;
+  padding: 15px 13px;
+  text-align: left;
   vertical-align: top;
 }
 
-.public-quote-money {
+.public-quote-items th {
+  color: #64748b;
+  background: #f5f7f6;
+  border-bottom: 1px solid #dfe8e1;
+  font-size: 11px;
+  font-weight: 800;
   white-space: nowrap;
-  text-align: right;
 }
+
+.public-quote-items td {
+  color: #344054;
+  border-bottom: 1px solid #edf1ee;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.public-quote-items tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.public-quote-items tbody tr:hover {
+  background: #f8fbf9;
+}
+
+.public-quote-category {
+  color: #64748b !important;
+}
+
+.public-quote-feature strong {
+  color: #344054;
+  font-weight: 800;
+}
+
+.public-quote-description {
+  max-width: 300px;
+  color: #667085 !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.public-quote-items .public-quote-align-center {
+  text-align: center;
+}
+
+.public-quote-quantity {
+  white-space: nowrap;
+}
+
+.public-quote-items .public-quote-money {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.public-quote-item-money {
+  color: #1f4d3a !important;
+  font-weight: 800;
+}
+
+/* Total */
 
 .public-quote-total-section {
   display: flex;
   justify-content: flex-end;
-  margin-top: 32px;
+  margin-top: 30px;
 }
 
 .public-quote-total-box {
-  width: min(100%, 400px);
+  width: min(100%, 420px);
+  padding: 23px;
+  background: #f8faf9;
+  border: 1px solid #e0e8e2;
+  border-radius: 10px;
 }
 
-.public-quote-total-box > div {
+.public-quote-total-heading {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 8px 0;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
-.public-quote-total-box span {
-  color: #667085;
+.public-quote-total-heading h3 {
+  margin: 0;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.public-quote-total-box strong {
-  color: #1b263b;
+.public-quote-total-heading > span {
+  padding: 5px 9px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.public-quote-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 11px 0;
+}
+
+.public-quote-total-row span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.public-quote-total-row strong {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .public-quote-grand-total {
-  margin-top: 8px;
-  padding: 18px 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 13px;
+  padding: 19px 0 8px;
   border-top: 2px solid #1f4d3a;
-  border-bottom: 2px solid #1f4d3a;
 }
 
 .public-quote-grand-total span {
-  color: #1b263b;
-  font-weight: 700;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .public-quote-grand-total strong {
   color: #1f4d3a;
-  font-size: 26px;
+  font-size: 23px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.public-quote-total-box p {
-  margin: 8px 0 0;
-  color: #667085;
-  font-size: 12px;
-  text-align: right;
+.public-quote-vat-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 11px;
+  color: #37634c;
+  background: #eaf4ed;
+  border-radius: 7px;
+  font-size: 11px;
+  line-height: 1.6;
 }
+
+.public-quote-vat-note svg {
+  flex-shrink: 0;
+}
+
+/* Notes */
 
 .public-quote-note {
-  margin-top: 36px;
-  padding: 20px;
+  margin-top: 35px;
+  padding: 21px;
+  background: #f8faf9;
+  border: 1px solid #e7ece9;
   border-radius: 10px;
-  background: #f9fafb;
 }
 
-.public-quote-note p {
-  margin: 0;
-  white-space: pre-wrap;
-  line-height: 1.7;
+.public-quote-note .public-quote-section-heading {
+  margin-bottom: 15px;
 }
+
+.public-quote-note > p {
+  margin: 0;
+  color: #475467;
+  font-size: 12px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Footer */
 
 .public-quote-footer {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
-  margin-top: 48px;
+  gap: 30px;
+  margin-top: 42px;
   padding-top: 24px;
-  border-top: 1px solid #e4e7ec;
+  border-top: 1px solid #e0e8e2;
 }
 
-.public-quote-footer > div {
+.public-quote-footer-business {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 7px;
+  min-width: 0;
 }
 
-.public-quote-footer span,
-.public-quote-footer p {
-  color: #667085;
-  font-size: 12px;
+.public-quote-footer-business strong {
+  color: #1f4d3a;
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.public-quote-footer p {
+.public-quote-footer-business span {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.public-quote-footer-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #618671;
+}
+
+.public-quote-footer-message svg {
+  flex-shrink: 0;
+}
+
+.public-quote-footer-message p {
+  max-width: 250px;
   margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.7;
 }
+
+.public-quote-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 22px;
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+/* States */
 
 .public-quote-state-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .public-quote-state-card {
-  width: min(100%, 480px);
-  padding: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: min(100%, 460px);
+  padding: 46px 32px;
+  background: #fff;
+  border: 1px solid #dce5df;
   border-radius: 14px;
-  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(16, 44, 28, 0.045);
   text-align: center;
+}
+
+.public-quote-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 21px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 16px;
+}
+
+.public-quote-state-icon.is-error {
+  color: #b42318;
+  background: #fef3f2;
+}
+
+.public-quote-state-brand {
+  margin-bottom: 12px;
+  color: #618671;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
 }
 
 .public-quote-state-card h1 {
   margin: 0 0 12px;
-  font-size: 22px;
+  color: #344054;
+  font-size: 20px;
+  font-weight: 800;
 }
 
 .public-quote-state-card p {
   margin: 0;
-  color: #667085;
-  line-height: 1.6;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.public-quote-spin {
+  animation: public-quote-spin 1s linear infinite;
+}
+
+@keyframes public-quote-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .public-quote-document {
+    padding: 32px;
+  }
+
+  .public-quote-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -300,75 +735,167 @@
     padding: 0;
   }
 
+  .public-quote-actions {
+    padding: 16px 18px;
+    margin-bottom: 0;
+    background: #fff;
+    border-bottom: 1px solid #e0e8e2;
+  }
+
   .public-quote-document {
-    padding: 24px 18px;
+    padding: 28px 20px;
+    border: 0;
     border-radius: 0;
     box-shadow: none;
   }
 
   .public-quote-header {
+    gap: 20px;
+  }
+
+  .public-quote-parties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .public-quote-bottom {
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .public-quote-actions-label > div {
+    display: none;
+  }
+
+  .public-quote-print-button {
+    flex: 1;
+  }
+
+  .public-quote-header {
     flex-direction: column;
-    gap: 24px;
   }
 
   .public-quote-title {
     text-align: left;
   }
 
-  .public-quote-summary,
-  .public-quote-parties {
-    grid-template-columns: 1fr 1fr;
+  .public-quote-title h1 {
+    font-size: 27px;
   }
 
-  .public-quote-footer {
-    flex-direction: column;
+  .public-quote-brand strong {
+    font-size: 20px;
   }
-}
 
-@media (max-width: 520px) {
-  .public-quote-summary,
-  .public-quote-parties {
-    grid-template-columns: 1fr;
+  .public-quote-summary > div {
+    padding: 14px;
   }
 
   .public-quote-project h2 {
-    font-size: 22px;
+    font-size: 21px;
+  }
+
+  .public-quote-total-box {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .public-quote-grand-total {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .public-quote-grand-total strong {
     font-size: 22px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .public-quote-footer {
+    flex-direction: column;
+    gap: 18px;
   }
 }
 
-/* =========================================================
-   Public Quote Actions
-========================================================= */
+/* Print */
 
-.public-quote-actions {
-  width: min(100%, 1000px);
-  margin: 0 auto 16px;
-  display: flex;
-  justify-content: flex-end;
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  .public-quote-page {
+    min-height: auto;
+    padding: 0;
+    background: #fff;
+  }
+
+  .public-quote-actions,
+  .public-quote-bottom {
+    display: none !important;
+  }
+
+  .public-quote-container {
+    width: 100%;
+  }
+
+  .public-quote-document {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .public-quote-header,
+  .public-quote-summary,
+  .public-quote-party-card,
+  .public-quote-items tr,
+  .public-quote-total-box,
+  .public-quote-note {
+    break-inside: avoid;
+  }
+
+  .public-quote-table-wrapper {
+    overflow: visible;
+  }
+
+  .public-quote-items table {
+    min-width: 0;
+  }
+
+  .public-quote-items th,
+  .public-quote-items td {
+    padding: 9px 7px;
+    font-size: 10px;
+  }
+
+  .public-quote-summary,
+  .public-quote-parties {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-quote-total-box {
+    width: 400px;
+    max-width: 100%;
+  }
+
+  .public-quote-footer {
+    margin-top: 28px;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
 
-.public-quote-print-button {
-  appearance: none;
-  border: 0;
-  border-radius: 8px;
-  padding: 11px 18px;
-  background: #1f4d3a;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
+@media (prefers-reduced-motion: reduce) {
+  .public-quote-spin {
+    animation: none;
+  }
 
-.public-quote-print-button:hover {
-  opacity: 0.92;
+  .public-quote-print-button {
+    transition: none;
+  }
 }
-
-.public-quote-print-button:focus-visible {
-  outline: 3px solid rgba(31, 77, 58, 0.25);
-  outline-offset: 2px;
-}
-

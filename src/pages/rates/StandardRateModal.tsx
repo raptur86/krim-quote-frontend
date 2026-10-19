@@ -1,7 +1,15 @@
+
+import { useEffect, useState } from "react";
+import type { FormEvent, MouseEvent } from "react";
 import {
-  useEffect,
-  useState,
-} from "react";
+  AlertCircle,
+  CircleDollarSign,
+  LoaderCircle,
+  Power,
+  PowerOff,
+  Save,
+  X,
+} from "lucide-react";
 
 import {
   useChangeStandardRateActive,
@@ -14,6 +22,9 @@ import type {
   RateCategory,
   StandardRateSaveRequest,
 } from "../../features/rate/types/rate.types";
+
+import { Button } from "../../components/ui/Button";
+import { Badge } from "../../components/ui/Badge";
 
 type StandardRateModalProps = {
   rateId: number | null;
@@ -28,50 +39,36 @@ export function StandardRateModal({
 }: StandardRateModalProps) {
   const isEdit = rateId !== null;
 
-  const rateQuery =
-    useStandardRate(rateId ?? 0);
+  const rateQuery = useStandardRate(rateId ?? 0);
+  const createRate = useCreateStandardRate();
+  const updateRate = useUpdateStandardRate();
+  const changeActive = useChangeStandardRateActive();
 
-  const createRate =
-    useCreateStandardRate();
-
-  const updateRate =
-    useUpdateStandardRate();
-
-  const changeActive =
-    useChangeStandardRateActive();
-
-  const [categoryId, setCategoryId] =
-    useState<number>(
-      categories.find(
-        (category) => category.active,
-      )?.id ?? 0,
-    );
-
-  const [featureName, setFeatureName] =
-    useState("");
-
-  const [description, setDescription] =
-    useState("");
-
-  const [standardPrice, setStandardPrice] =
-    useState("");
-
-  const [defaultUnit, setDefaultUnit] =
-    useState("건");
-
-  const [defaultHours, setDefaultHours] =
-    useState("");
-
-  const [internalMemo, setInternalMemo] =
-    useState("");
-
+  const [categoryId, setCategoryId] = useState<number>(
+    categories.find((category) => category.active)?.id ?? 0
+  );
+  const [featureName, setFeatureName] = useState("");
+  const [description, setDescription] = useState("");
+  const [standardPrice, setStandardPrice] = useState("");
+  const [defaultUnit, setDefaultUnit] = useState("건");
+  const [defaultHours, setDefaultHours] = useState("");
+  const [internalMemo, setInternalMemo] = useState("");
   const [errorMessage, setErrorMessage] =
     useState<string | null>(null);
 
+  useEffect(() => {
+    if (isEdit || categoryId !== 0) {
+      return;
+    }
 
-  /* =========================================================
-     Edit Data
-  ========================================================= */
+    const firstActive = categories.find(
+      (category) => category.active
+    );
+
+    if (firstActive) {
+      setCategoryId(firstActive.id);
+    }
+  }, [categories, categoryId, isEdit]);
 
   useEffect(() => {
     if (!isEdit || !rateQuery.data) {
@@ -82,125 +79,86 @@ export function StandardRateModal({
 
     setCategoryId(rate.category.id);
     setFeatureName(rate.featureName);
-    setDescription(
-      rate.description ?? "",
-    );
-
-    setStandardPrice(
-      String(rate.standardPrice),
-    );
-
-    setDefaultUnit(
-      rate.defaultUnit ?? "",
-    );
-
+    setDescription(rate.description ?? "");
+    setStandardPrice(String(rate.standardPrice));
+    setDefaultUnit(rate.defaultUnit ?? "");
     setDefaultHours(
       rate.defaultHours == null
         ? ""
-        : String(rate.defaultHours),
+        : String(rate.defaultHours)
     );
+    setInternalMemo(rate.internalMemo ?? "");
+  }, [isEdit, rateQuery.data]);
 
-    setInternalMemo(
-      rate.internalMemo ?? "",
-    );
-  }, [
-    isEdit,
-    rateQuery.data,
-  ]);
+  const isSaving =
+    createRate.isPending ||
+    updateRate.isPending ||
+    changeActive.isPending;
 
-
-  /* =========================================================
-     Save
-  ========================================================= */
+  function handleBackdropMouseDown(
+    event: MouseEvent<HTMLDivElement>
+  ) {
+    if (
+      event.target === event.currentTarget &&
+      !isSaving
+    ) {
+      onClose();
+    }
+  }
 
   async function handleSubmit(
-    event: React.FormEvent,
+    event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-
     setErrorMessage(null);
 
-    const price =
-      Number(standardPrice);
-
+    const price = Number(standardPrice);
     const hours =
       defaultHours.trim() === ""
         ? null
         : Number(defaultHours);
 
-
     if (!categoryId) {
-      setErrorMessage(
-        "카테고리를 선택해주세요.",
-      );
+      setErrorMessage("카테고리를 선택해주세요.");
       return;
     }
-
 
     if (!featureName.trim()) {
-      setErrorMessage(
-        "기능명을 입력해주세요.",
-      );
+      setErrorMessage("기능명을 입력해주세요.");
       return;
     }
-
 
     if (
       standardPrice.trim() === "" ||
       !Number.isFinite(price) ||
       price < 0
     ) {
-      setErrorMessage(
-        "표준단가를 올바르게 입력해주세요.",
-      );
+      setErrorMessage("표준단가를 올바르게 입력해주세요.");
       return;
     }
-
 
     if (
       hours !== null &&
-      (
-        !Number.isFinite(hours) ||
-        hours < 0
-      )
+      (!Number.isFinite(hours) || hours < 0)
     ) {
-      setErrorMessage(
-        "예상시간을 올바르게 입력해주세요.",
-      );
+      setErrorMessage("예상시간을 올바르게 입력해주세요.");
       return;
     }
-
 
     if (!defaultUnit.trim()) {
-      setErrorMessage(
-        "기본 단위를 입력해주세요.",
-      );
+      setErrorMessage("기본 단위를 입력해주세요.");
       return;
     }
 
-
-    const request:
-      StandardRateSaveRequest = {
-        categoryId,
-        featureName:
-          featureName.trim(),
-
-        description:
-          description.trim() ||
-          null,
-
-        standardPrice: price,
-
-        defaultUnit:
-          defaultUnit.trim(),
-
-        defaultHours: hours,
-
-        internalMemo:
-          internalMemo.trim() ||
-          null,
-      };
-
+    const request: StandardRateSaveRequest = {
+      categoryId,
+      featureName: featureName.trim(),
+      description: description.trim() || null,
+      standardPrice: price,
+      defaultUnit: defaultUnit.trim(),
+      defaultHours: hours,
+      internalMemo: internalMemo.trim() || null,
+    };
 
     try {
       if (rateId !== null) {
@@ -209,9 +167,7 @@ export function StandardRateModal({
           request,
         });
       } else {
-        await createRate.mutateAsync(
-          request,
-        );
+        await createRate.mutateAsync(request);
       }
 
       onClose();
@@ -219,33 +175,25 @@ export function StandardRateModal({
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "표준단가를 저장하지 못했습니다.",
+          : "표준단가를 저장하지 못했습니다."
       );
     }
   }
 
-
-  /* =========================================================
-     Active
-  ========================================================= */
-
   async function handleChangeActive() {
-    if (
-      rateId === null ||
-      !rateQuery.data
-    ) {
+    if (rateId === null || !rateQuery.data) {
       return;
     }
 
-    const nextActive =
-      !rateQuery.data.active;
+    const nextActive = !rateQuery.data.active;
 
-    const message =
+    const confirmed = window.confirm(
       nextActive
         ? "이 표준단가를 다시 사용 상태로 변경할까요?"
-        : "이 표준단가를 미사용 상태로 변경할까요?";
+        : "이 표준단가를 미사용 상태로 변경할까요?"
+    );
 
-    if (!window.confirm(message)) {
+    if (!confirmed) {
       return;
     }
 
@@ -260,29 +208,15 @@ export function StandardRateModal({
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "상태를 변경하지 못했습니다.",
+          : "상태를 변경하지 못했습니다."
       );
     }
   }
 
-
-  const isSaving =
-    createRate.isPending ||
-    updateRate.isPending ||
-    changeActive.isPending;
-
-
   return (
     <div
       className="rate-modal-backdrop"
-      onMouseDown={(event) => {
-        if (
-          event.target ===
-          event.currentTarget
-        ) {
-          onClose();
-        }
-      }}
+      onMouseDown={handleBackdropMouseDown}
     >
       <div
         className="rate-modal"
@@ -290,19 +224,25 @@ export function StandardRateModal({
         aria-modal="true"
         aria-labelledby="rate-modal-title"
       >
-
         <header className="rate-modal-header">
-          <div>
-            <h2 id="rate-modal-title">
-              {isEdit
-                ? "표준단가 수정"
-                : "표준단가 등록"}
-            </h2>
+          <div className="rate-modal-heading">
+            <span className="rate-modal-heading-icon">
+              <CircleDollarSign
+                size={22}
+                aria-hidden="true"
+              />
+            </span>
 
-            <p>
-              견적 작성 시 사용할
-              기준 단가를 설정한다.
-            </p>
+            <div>
+              <h2 id="rate-modal-title">
+                {isEdit
+                  ? "표준단가 수정"
+                  : "표준단가 등록"}
+              </h2>
+              <p>
+                견적 작성 시 사용할 기준 단가를 설정한다.
+              </p>
+            </div>
           </div>
 
           <button
@@ -312,129 +252,117 @@ export function StandardRateModal({
             disabled={isSaving}
             aria-label="닫기"
           >
-            ×
+            <X size={20} aria-hidden="true" />
           </button>
         </header>
 
+        {isEdit && rateQuery.isLoading && (
+          <div className="rate-modal-state" role="status">
+            <LoaderCircle
+              size={28}
+              className="rates-spin"
+              aria-hidden="true"
+            />
+            <strong>표준단가 정보를 불러오는 중</strong>
+          </div>
+        )}
 
-        {isEdit &&
-          rateQuery.isLoading && (
-            <div className="rate-modal-state">
-              표준단가 정보를
-              불러오고 있습니다.
-            </div>
-          )}
+        {isEdit && rateQuery.isError && (
+          <div
+            className="rate-modal-state rate-modal-state-error"
+            role="alert"
+          >
+            <AlertCircle size={28} aria-hidden="true" />
+            <strong>
+              표준단가 정보를 불러오지 못했습니다.
+            </strong>
+            <Button
+              variant="outline"
+              onClick={onClose}
+            >
+              닫기
+            </Button>
+          </div>
+        )}
 
-
-        {isEdit &&
-          rateQuery.isError && (
-            <div className="rate-modal-state rates-error">
-              표준단가 정보를
-              불러오지 못했습니다.
-            </div>
-          )}
-
-
-        {(!isEdit ||
-          rateQuery.data) && (
+        {(!isEdit || rateQuery.data) && (
           <form
             className="rate-form"
             onSubmit={handleSubmit}
           >
-
             {errorMessage && (
               <div
                 className="rate-form-error"
                 role="alert"
               >
-                {errorMessage}
+                <AlertCircle
+                  size={17}
+                  aria-hidden="true"
+                />
+                <span>{errorMessage}</span>
               </div>
             )}
 
-
             <div className="rate-form-field">
               <label htmlFor="rate-category">
-                카테고리 *
+                카테고리 <em>*</em>
               </label>
-
               <select
                 id="rate-category"
                 value={categoryId}
                 onChange={(event) =>
-                  setCategoryId(
-                    Number(
-                      event.target.value,
-                    ),
-                  )
+                  setCategoryId(Number(event.target.value))
                 }
               >
-                <option value={0}>
-                  카테고리 선택
-                </option>
-
-                {categories.map(
-                  (category) => (
-                    <option
-                      key={category.id}
-                      value={category.id}
-                    >
-                      {category.name}
-                      {!category.active
-                        ? " (미사용)"
-                        : ""}
-                    </option>
-                  ),
-                )}
+                <option value={0}>카테고리 선택</option>
+                {categories.map((category) => (
+                  <option
+                    key={category.id}
+                    value={category.id}
+                  >
+                    {category.name}
+                    {!category.active ? " (미사용)" : ""}
+                  </option>
+                ))}
               </select>
             </div>
 
-
             <div className="rate-form-field">
               <label htmlFor="rate-feature-name">
-                기능명 *
+                기능명 <em>*</em>
               </label>
-
               <input
                 id="rate-feature-name"
                 type="text"
                 maxLength={200}
                 value={featureName}
                 onChange={(event) =>
-                  setFeatureName(
-                    event.target.value,
-                  )
+                  setFeatureName(event.target.value)
                 }
-                placeholder="예: 이메일 회원가입"
+                placeholder="예 : 이메일 회원가입"
               />
             </div>
-
 
             <div className="rate-form-field">
               <label htmlFor="rate-description">
                 기능 설명
               </label>
-
               <textarea
                 id="rate-description"
+                rows={3}
                 value={description}
                 onChange={(event) =>
-                  setDescription(
-                    event.target.value,
-                  )
+                  setDescription(event.target.value)
                 }
                 placeholder="기능의 기본 작업 범위를 입력한다."
-                rows={3}
               />
             </div>
 
-
             <div className="rate-form-grid">
-
               <div className="rate-form-field">
                 <label htmlFor="rate-price">
-                  표준단가 *
+                  표준단가 <em>*</em>
                 </label>
-
                 <div className="rate-input-suffix">
                   <input
                     id="rate-price"
@@ -443,48 +371,34 @@ export function StandardRateModal({
                     step="1"
                     value={standardPrice}
                     onChange={(event) =>
-                      setStandardPrice(
-                        event.target.value,
-                      )
+                      setStandardPrice(event.target.value)
                     }
                   />
-
-                  <span>
-                    원
-                  </span>
+                  <span>원</span>
                 </div>
-
-                <small>
-                  VAT 포함 기준 금액
-                </small>
+                <small>VAT 포함 기준 금액</small>
               </div>
-
 
               <div className="rate-form-field">
                 <label htmlFor="rate-unit">
-                  기본 단위 *
+                  기본 단위 <em>*</em>
                 </label>
-
                 <input
                   id="rate-unit"
                   type="text"
                   maxLength={50}
                   value={defaultUnit}
                   onChange={(event) =>
-                    setDefaultUnit(
-                      event.target.value,
-                    )
+                    setDefaultUnit(event.target.value)
                   }
                   placeholder="건"
                 />
               </div>
 
-
               <div className="rate-form-field">
                 <label htmlFor="rate-hours">
                   예상시간
                 </label>
-
                 <div className="rate-input-suffix">
                   <input
                     id="rate-hours"
@@ -493,95 +407,110 @@ export function StandardRateModal({
                     step="1"
                     value={defaultHours}
                     onChange={(event) =>
-                      setDefaultHours(
-                        event.target.value,
-                      )
+                      setDefaultHours(event.target.value)
                     }
                   />
-
-                  <span>
-                    시간
-                  </span>
+                  <span>시간</span>
                 </div>
               </div>
-
             </div>
-
 
             <div className="rate-form-field">
               <label htmlFor="rate-internal-memo">
                 내부 메모
               </label>
-
               <textarea
                 id="rate-internal-memo"
+                rows={3}
                 value={internalMemo}
                 onChange={(event) =>
-                  setInternalMemo(
-                    event.target.value,
-                  )
+                  setInternalMemo(event.target.value)
                 }
                 placeholder="고객에게 공개되지 않는 내부 참고사항"
-                rows={3}
               />
             </div>
 
+            {isEdit && rateQuery.data && (
+              <div className="rate-category-current-status">
+                <span>현재 상태</span>
+                <Badge
+                  variant={
+                    rateQuery.data.active
+                      ? "success"
+                      : "neutral"
+                  }
+                >
+                  {rateQuery.data.active
+                    ? "사용"
+                    : "미사용"}
+                </Badge>
+              </div>
+            )}
 
             <footer className="rate-modal-footer">
-
-              <div>
-                {isEdit &&
-                  rateQuery.data && (
-                    <button
-                      type="button"
-                      className={
-                        rateQuery.data.active
-                          ? "btn rate-disable-button"
-                          : "btn"
-                      }
-                      onClick={
-                        handleChangeActive
-                      }
-                      disabled={isSaving}
-                    >
-                      {rateQuery.data.active
-                        ? "미사용으로 변경"
-                        : "사용으로 변경"}
-                    </button>
-                  )}
+              <div className="rate-modal-status-action">
+                {isEdit && rateQuery.data && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isSaving}
+                    onClick={handleChangeActive}
+                  >
+                    {rateQuery.data.active ? (
+                      <PowerOff
+                        size={16}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Power
+                        size={16}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {rateQuery.data.active
+                      ? "미사용으로 변경"
+                      : "사용으로 변경"}
+                  </Button>
+                )}
               </div>
 
-
               <div className="rate-modal-actions">
-
-                <button
+                <Button
                   type="button"
-                  className="btn"
-                  onClick={onClose}
+                  variant="outline"
                   disabled={isSaving}
+                  onClick={onClose}
                 >
                   취소
-                </button>
+                </Button>
 
-                <button
+                <Button
                   type="submit"
-                  className="btn btn-primary"
+                  variant="primary"
                   disabled={isSaving}
                 >
+                  {isSaving ? (
+                    <LoaderCircle
+                      size={16}
+                      className="rates-spin"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <Save
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  )}
                   {isSaving
-                    ? "저장 중..."
+                    ? "처리 중..."
                     : isEdit
                       ? "수정 저장"
                       : "등록"}
-                </button>
-
+                </Button>
               </div>
-
             </footer>
-
           </form>
         )}
-
       </div>
     </div>
   );

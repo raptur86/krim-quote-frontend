@@ -129,3 +129,20 @@ export async function issueQuoteApi(
 
   return data.data;
 }
+
+
+export async function copyQuoteApi(
+  quoteId: number,
+): Promise<QuoteCreateResponse> {
+  const { data } = await apiClient.post<
+    ApiResponse<QuoteCreateResponse>
+  >(`/quotes/${quoteId}/copy`);
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message || "견적 복사에 실패했습니다.",
+    );
+  }
+
+  return data.data;
+}

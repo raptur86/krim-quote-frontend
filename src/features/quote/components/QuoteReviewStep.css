@@ -1,177 +1,842 @@
+
+/* =========================================
+   KRIM Quote - Review Step
+========================================= */
+
 .quote-review {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  min-width: 0;
 }
+
+/* Topbar */
+
+.quote-review-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+}
+
+.quote-review-topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.quote-review-topbar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.quote-review-topbar h3 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.quote-review-topbar p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.quote-review-draft-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 7px 11px;
+  color: #475467;
+  background: #f2f4f7;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Document */
 
 .quote-review-document {
   padding: 32px;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-
-  background: #ffffff;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.04);
 }
+
+/* Document Header */
 
 .quote-review-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-
-  gap: 20px;
-
-  padding-bottom: 24px;
-
-  border-bottom: 2px solid #0f172a;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 26px;
+  border-bottom: 2px solid #1f4d3a;
 }
 
 .quote-review-brand {
-  font-size: 20px;
+  display: block;
+  color: #1f4d3a;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .quote-review-header h2 {
-  margin: 8px 0 0;
+  margin: 12px 0 4px;
+  color: #1d2933;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 5px;
+}
 
-  font-size: 28px;
+.quote-review-document-heading p {
+  margin: 0;
+  color: #98a2b3;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
 }
 
 .quote-review-number {
   display: flex;
   flex-direction: column;
-
-  gap: 5px;
-
+  gap: 7px;
   text-align: right;
 }
 
+.quote-review-number > span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.quote-review-number > strong {
+  color: #344054;
+  font-size: 13px;
+}
+
+.quote-review-number > small {
+  color: #98a2b3;
+  font-size: 10px;
+}
+
+/* Section Headings */
+
+.quote-review-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  color: #1f4d3a;
+}
+
+.quote-review-section-heading h3 {
+  margin: 0;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Basic Info */
+
 .quote-review-basic {
-  padding: 24px 0;
+  padding: 26px 0;
 }
 
 .quote-review-basic dl {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 16px 32px;
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
   margin: 0;
 }
 
-.quote-review-basic dl div {
+.quote-review-basic dl > div {
   display: grid;
-
-  grid-template-columns:
-    100px
-    1fr;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+  padding: 12px 14px;
+  background: #f8faf9;
+  border: 1px solid #edf1ee;
+  border-radius: 7px;
 }
 
 .quote-review-basic dt {
   color: #64748b;
+  font-size: 12px;
 }
 
 .quote-review-basic dd {
+  min-width: 0;
   margin: 0;
-
-  font-weight: 600;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
+/* Items */
+
 .quote-review-items {
+  min-width: 0;
+}
+
+.quote-review-items-count {
+  margin-left: auto;
+  padding: 5px 9px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.quote-review-table-scroll {
+  min-width: 0;
   overflow-x: auto;
+  border: 1px solid #e0e8e2;
+  border-radius: 9px;
 }
 
 .quote-review-items table {
   width: 100%;
-
+  min-width: 760px;
   border-collapse: collapse;
 }
 
 .quote-review-items th,
 .quote-review-items td {
-  padding: 12px;
-
-  border-bottom: 1px solid #e2e8f0;
-
+  padding: 14px 12px;
+  border-bottom: 1px solid #edf1ee;
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .quote-review-items th {
-  background: #f8fafc;
+  color: #64748b;
+  background: #f5f7f6;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.quote-review-items p {
-  margin: 4px 0 0;
+.quote-review-items tbody tr:last-child td {
+  border-bottom: 0;
+}
 
+.quote-review-items tbody tr:hover {
+  background: #f8fbf9;
+}
+
+.quote-review-items .quote-review-align-right {
+  text-align: right;
+}
+
+.quote-review-items .quote-review-align-center {
+  text-align: center;
+}
+
+.quote-review-category {
   color: #64748b;
+  font-size: 12px;
+}
 
-  font-size: 13px;
+.quote-review-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 150px;
+}
+
+.quote-review-feature strong {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quote-review-feature p {
+  margin: 0;
+  color: #98a2b3;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.quote-review-number-cell {
+  color: #344054;
+  font-size: 12px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-review-difficulty {
+  display: inline-flex;
+  padding: 5px 8px;
+  color: #475467;
+  background: #f2f4f7;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.quote-review-items td.quote-review-item-amount {
+  color: #1f4d3a;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Calculation */
+
+.quote-review-calculation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: start;
+  gap: 28px;
+  margin-top: 28px;
 }
 
 .quote-review-adjustment {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  gap: 12px;
-
-  padding-top: 24px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+  padding: 20px;
+  background: #f8faf9;
+  border: 1px solid #e7ece9;
+  border-radius: 10px;
 }
 
-.quote-review-adjustment input {
-  width: 180px;
-
-  padding: 9px 10px;
+.quote-review-adjustment .quote-review-section-heading {
+  margin-bottom: 5px;
 }
+
+.quote-review-adjustment label {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-review-adjustment-input {
+  position: relative;
+  max-width: 260px;
+}
+
+.quote-review-adjustment-input input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 10px 42px 10px 12px;
+  color: #344054;
+  background: #fff;
+  border: 1px solid #d0d9d3;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.quote-review-adjustment-input input:focus {
+  border-color: #1f4d3a;
+  box-shadow: 0 0 0 3px rgba(31, 77, 58, 0.12);
+}
+
+.quote-review-adjustment-input > span {
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.quote-review-adjustment > p {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Summary */
 
 .quote-review-summary {
-  width: 360px;
-
-  margin: 24px 0 0 auto;
+  min-width: 0;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 10px;
 }
 
-.quote-review-summary > div {
+.quote-review-summary > h3 {
+  margin: 0 0 18px;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.quote-review-summary-row {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
 
-  gap: 20px;
+.quote-review-summary-row span {
+  color: #64748b;
+  font-size: 12px;
+}
 
-  padding: 9px 0;
+.quote-review-summary-row strong {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-review-summary-row strong.quote-review-negative {
+  color: #b42318;
+}
+
+.quote-review-summary-row strong.quote-review-positive {
+  color: #1f4d3a;
+}
+
+.quote-review-summary-divider {
+  height: 1px;
+  margin: 8px 0;
+  background: #e7ece9;
 }
 
 .quote-review-total {
-  margin-top: 8px;
-
-  padding-top: 16px !important;
-
-  border-top: 2px solid #0f172a;
-
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 18px 0 0;
+  border-top: 2px solid #1f4d3a;
 }
+
+.quote-review-total > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.quote-review-total span {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quote-review-total small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.quote-review-total > strong {
+  color: #1f4d3a;
+  font-size: 22px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-review-vat-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+  padding: 11px;
+  color: #37634c;
+  background: #eaf4ed;
+  border-radius: 7px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Notes */
 
 .quote-review-note {
-  margin-top: 32px;
-
-  padding-top: 20px;
-
-  border-top: 1px solid #e2e8f0;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid #e7ece9;
 }
+
+.quote-review-note > p {
+  margin: 0;
+  padding: 16px;
+  color: #475467;
+  background: #f8faf9;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.quote-review-document-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 32px;
+  padding-top: 20px;
+  color: #98a2b3;
+  border-top: 1px solid #edf1ee;
+  font-size: 11px;
+}
+
+/* Actions */
 
 .quote-review-actions {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-
-  margin-top: 20px;
+  gap: 16px;
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
 }
 
 .quote-review-save {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
 .quote-review-save-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   margin: 0;
+  color: #b42318;
+  font-size: 12px;
+  font-weight: 600;
+}
 
-  color: #b91c1c;
+.quote-review-save-error svg {
+  flex-shrink: 0;
+}
+
+.quote-review-saving-icon {
+  animation: quote-review-spin 0.8s linear infinite;
+}
+
+@keyframes quote-review-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .quote-review-calculation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .quote-review-adjustment-input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-review-document {
+    padding: 20px;
+  }
+
+  .quote-review-basic dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quote-review-header {
+    gap: 16px;
+  }
+
+  .quote-review-header h2 {
+    font-size: 24px;
+  }
+
+  .quote-review-total > strong {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-review-topbar,
+  .quote-review-actions {
+    padding: 16px;
+  }
+
+  .quote-review-document {
+    padding: 16px;
+  }
+
+  .quote-review-header {
+    flex-direction: column;
+  }
+
+  .quote-review-number {
+    text-align: left;
+  }
+
+  .quote-review-basic dl > div {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+
+  .quote-review-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quote-review-actions > button,
+  .quote-review-save,
+  .quote-review-save > button {
+    width: 100%;
+  }
+
+  .quote-review-total {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-review-saving-icon {
+    animation: none;
+  }
+}
+
+
+/* =========================================
+   KRIM Quote - Review Refinements
+   2-19 UI Renewal
+========================================= */
+
+/* Document refinement */
+
+.quote-review-document {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(16, 44, 28, 0.05);
+}
+
+.quote-review-header {
+  padding-bottom: 28px;
+}
+
+.quote-review-brand {
+  letter-spacing: 0.12em;
+}
+
+.quote-review-basic dl > div {
+  transition: background-color 0.15s ease;
+}
+
+.quote-review-basic dl > div:hover {
+  background: #f1f7f3;
+}
+
+/* Item table */
+
+.quote-review-table-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c9d9ce #f5f7f6;
+}
+
+.quote-review-items tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.quote-review-items td.quote-review-item-amount {
+  font-weight: 800;
+}
+
+/* Adjustment */
+
+.quote-review-adjustment {
+  background: #f8fbf9;
+}
+
+.quote-review-adjustment-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 7px;
+  padding: 14px 0 0;
+  border-top: 1px solid #e0e8e2;
+}
+
+.quote-review-adjustment-preview span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-review-adjustment-preview strong {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-review-adjustment-preview strong.quote-review-negative {
+  color: #b42318;
+}
+
+.quote-review-adjustment-preview strong.quote-review-positive {
+  color: #1f4d3a;
+}
+
+/* Summary */
+
+.quote-review-summary {
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(16, 44, 28, 0.035);
+}
+
+.quote-review-summary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.quote-review-summary-heading h3 {
+  margin: 0;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.quote-review-summary-heading > span {
+  padding: 5px 8px;
+  color: #37634c;
+  background: #eaf4ed;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.quote-review-total {
+  margin-top: 17px;
+  padding-top: 20px;
+}
+
+.quote-review-total > strong {
+  letter-spacing: -0.035em;
+}
+
+.quote-review-vat-note {
+  line-height: 1.7;
+}
+
+.quote-review-vat-note svg {
+  flex-shrink: 0;
+}
+
+/* Footer */
+
+.quote-review-actions {
+  box-shadow: 0 2px 12px rgba(16, 44, 28, 0.035);
+}
+
+.quote-review-save {
+  min-width: 0;
+}
+
+.quote-review-save-error {
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .quote-review-calculation {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quote-review-summary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  .quote-review-topbar {
+    align-items: flex-start;
+  }
+
+  .quote-review-topbar h3 {
+    font-size: 14px;
+  }
+
+  .quote-review-document {
+    padding: 18px;
+  }
+
+  .quote-review-header h2 {
+    letter-spacing: 3px;
+  }
+
+  .quote-review-basic dl > div {
+    padding: 11px;
+  }
+
+  .quote-review-adjustment,
+  .quote-review-summary {
+    padding: 16px;
+  }
+
+  .quote-review-total > strong {
+    font-size: 20px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .quote-review-save {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .quote-review-save-error {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-review-basic dl > div,
+  .quote-review-items tbody tr {
+    transition: none;
+  }
 }

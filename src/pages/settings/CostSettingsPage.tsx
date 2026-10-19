@@ -1,8 +1,24 @@
+
 import {
   useMemo,
   useState,
   type FormEvent,
 } from "react";
+
+import {
+  AlertCircle,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  Coins,
+  History,
+  Info,
+  LoaderCircle,
+  Plus,
+  Save,
+  Trash2,
+  Wallet,
+} from "lucide-react";
 
 import { useCostSettings } from "../../features/cost/hooks/useCostSettings";
 import { useCreateCostSetting } from "../../features/cost/hooks/useCreateCostSetting";
@@ -38,7 +54,6 @@ function formatMoney(value: number): string {
 
 function toNumber(value: string): number {
   const parsed = Number(value.replace(/,/g, ""));
-
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
@@ -51,23 +66,20 @@ export function CostSettingsPage() {
     useState(30000);
   const [monthlyStandardHours, setMonthlyStandardHours] =
     useState(160);
-  const [effectiveFrom, setEffectiveFrom] =
-    useState(today());
+  const [effectiveFrom, setEffectiveFrom] = useState(today());
 
-  const [fixedCosts, setFixedCosts] = useState<
-    FixedCostDraft[]
-  >([]);
+  const [fixedCosts, setFixedCosts] =
+    useState<FixedCostDraft[]>([]);
 
   const [errorMessage, setErrorMessage] =
     useState<string | null>(null);
-
   const [successMessage, setSuccessMessage] =
     useState<string | null>(null);
 
   const monthlyFixedCost = useMemo(() => {
     return fixedCosts.reduce(
       (sum, item) => sum + item.monthlyAmount,
-      0,
+      0
     );
   }, [fixedCosts]);
 
@@ -77,7 +89,7 @@ export function CostSettingsPage() {
     }
 
     return Math.round(
-      monthlyFixedCost / monthlyStandardHours,
+      monthlyFixedCost / monthlyStandardHours
     );
   }, [monthlyFixedCost, monthlyStandardHours]);
 
@@ -85,7 +97,7 @@ export function CostSettingsPage() {
     return [...(costSettings.data ?? [])].sort(
       (a, b) =>
         b.effectiveFrom.localeCompare(a.effectiveFrom) ||
-        b.id - a.id,
+        b.id - a.id
     );
   }, [costSettings.data]);
 
@@ -103,35 +115,29 @@ export function CostSettingsPage() {
 
   function handleFixedCostNameChange(
     clientId: string,
-    value: string,
+    value: string
   ) {
     setFixedCosts((current) =>
       current.map((item) =>
         item.clientId === clientId
-          ? {
-              ...item,
-              costName: value,
-            }
-          : item,
-      ),
+          ? { ...item, costName: value }
+          : item
+      )
     );
   }
 
   function handleFixedCostAmountChange(
     clientId: string,
-    value: string,
+    value: string
   ) {
     const amount = Math.max(0, toNumber(value));
 
     setFixedCosts((current) =>
       current.map((item) =>
         item.clientId === clientId
-          ? {
-              ...item,
-              monthlyAmount: amount,
-            }
-          : item,
-      ),
+          ? { ...item, monthlyAmount: amount }
+          : item
+      )
     );
   }
 
@@ -142,7 +148,7 @@ export function CostSettingsPage() {
         .map((item, index) => ({
           ...item,
           sortOrder: index + 1,
-        })),
+        }))
     );
   }
 
@@ -166,7 +172,7 @@ export function CostSettingsPage() {
     const invalidFixedCost = fixedCosts.find(
       (item) =>
         !item.costName.trim() ||
-        item.monthlyAmount < 0,
+        item.monthlyAmount < 0
     );
 
     if (invalidFixedCost) {
@@ -177,7 +183,7 @@ export function CostSettingsPage() {
   }
 
   async function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
 
@@ -201,7 +207,7 @@ export function CostSettingsPage() {
           ...item,
           costName: item.costName.trim(),
           sortOrder: index + 1,
-        }),
+        })
       ),
     };
 
@@ -210,51 +216,51 @@ export function CostSettingsPage() {
         await createCostSetting.mutateAsync(request);
 
       setSuccessMessage(
-        `${result.settingName} 원가 설정이 저장되었습니다.`,
+        `${result.settingName} 원가 설정이 저장되었습니다.`
       );
 
-      /*
-       * 원가 설정은 이력 방식이므로
-       * 저장 후 현재 입력값을 유지한다.
-       *
-       * 새 기준을 연속해서 등록해야 하는 경우
-       * 기존 값을 수정하여 저장할 수 있다.
-       */
+      // 원가 설정은 이력 방식으로 등록한다.
+      // 저장 후 현재 입력값은 그대로 유지한다.
     } catch (error) {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "원가 설정 저장에 실패했습니다.",
+          : "원가 설정 저장에 실패했습니다."
       );
     }
   }
 
   return (
-    <div className="cost-settings-page">
-      <div className="cost-settings-header">
+    <main className="cost-settings-page">
+      <header className="cost-settings-header">
         <div>
+          <span className="cost-settings-eyebrow">
+            KRIM QUOTE / COST MANAGEMENT
+          </span>
           <h1>사업 원가 설정</h1>
-
           <p>
             견적 발행 시 내부 원가와 예상 수익성을
-            계산하기 위한 사업 원가 기준을 관리합니다.
+            계산하기 위한 사업 원가 기준을 관리한다.
           </p>
         </div>
-      </div>
+      </header>
 
       <form
         className="cost-settings-form"
-        onSubmit={handleSubmit}
+        onSubmit={(event) => void handleSubmit(event)}
       >
         <section className="cost-settings-section">
           <div className="cost-settings-section-header">
-            <div>
-              <h2>원가 기준 설정</h2>
-
-              <p>
-                대표자의 내부 시간가치와 월 기준
-                작업시간을 설정합니다.
-              </p>
+            <div className="cost-settings-section-heading">
+              <span className="cost-settings-section-icon">
+                <Clock3 size={20} aria-hidden="true" />
+              </span>
+              <div>
+                <h2>원가 기준 설정</h2>
+                <p>
+                  내부 시간가치와 월 기준 작업시간을 설정한다.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -263,14 +269,14 @@ export function CostSettingsPage() {
               <span>
                 설정명 <strong>*</strong>
               </span>
-
               <input
                 type="text"
                 value={settingName}
                 onChange={(event) =>
                   setSettingName(event.target.value)
                 }
-                placeholder="예: 2026 하반기 기준"
+                placeholder="예 : 2026 하반기 기준"
+                required
               />
             </label>
 
@@ -278,21 +284,22 @@ export function CostSettingsPage() {
               <span>
                 적용 시작일 <strong>*</strong>
               </span>
-
-              <input
-                type="date"
-                value={effectiveFrom}
-                onChange={(event) =>
-                  setEffectiveFrom(event.target.value)
-                }
-              />
+              <div className="cost-settings-date-input">
+                <input
+                  type="date"
+                  value={effectiveFrom}
+                  onChange={(event) =>
+                    setEffectiveFrom(event.target.value)
+                  }
+                  required
+                />
+              </div>
             </label>
 
             <label className="cost-settings-field">
               <span>
                 내부 시간단가 <strong>*</strong>
               </span>
-
               <div className="cost-settings-input-unit">
                 <input
                   type="number"
@@ -303,12 +310,12 @@ export function CostSettingsPage() {
                     setInternalHourlyCost(
                       Math.max(
                         0,
-                        Number(event.target.value) || 0,
-                      ),
+                        Number(event.target.value) || 0
+                      )
                     )
                   }
+                  required
                 />
-
                 <span>원 / 시간</span>
               </div>
             </label>
@@ -317,7 +324,6 @@ export function CostSettingsPage() {
               <span>
                 월 기준 작업시간 <strong>*</strong>
               </span>
-
               <div className="cost-settings-input-unit">
                 <input
                   type="number"
@@ -328,27 +334,39 @@ export function CostSettingsPage() {
                     setMonthlyStandardHours(
                       Math.max(
                         0,
-                        Number(event.target.value) || 0,
-                      ),
+                        Number(event.target.value) || 0
+                      )
                     )
                   }
+                  required
                 />
-
                 <span>시간 / 월</span>
               </div>
             </label>
+          </div>
+
+          <div className="cost-settings-info">
+            <Info size={17} aria-hidden="true" />
+            <p>
+              내부 시간단가는 견적 원가 계산에 사용하는
+              시간당 내부 비용 기준이다.
+            </p>
           </div>
         </section>
 
         <section className="cost-settings-section">
           <div className="cost-settings-section-header">
-            <div>
-              <h2>월 고정 사업비</h2>
-
-              <p>
-                매월 반복적으로 발생하는 사업 운영비를
-                등록합니다.
-              </p>
+            <div className="cost-settings-section-heading">
+              <span className="cost-settings-section-icon">
+                <Wallet size={20} aria-hidden="true" />
+              </span>
+              <div>
+                <h2>월 고정 사업비</h2>
+                <p>
+                  매월 반복적으로 발생하는 사업 운영비를
+                  등록한다.
+                </p>
+              </div>
             </div>
 
             <button
@@ -356,15 +374,21 @@ export function CostSettingsPage() {
               className="cost-settings-add-button"
               onClick={handleAddFixedCost}
             >
-              + 비용 항목 추가
+              <Plus size={16} aria-hidden="true" />
+              비용 항목 추가
             </button>
           </div>
 
           {fixedCosts.length === 0 ? (
             <div className="cost-settings-empty">
-              등록된 고정비 항목이 없습니다.
-              <br />
-              비용 항목 추가 버튼을 눌러 등록해주세요.
+              <span className="cost-settings-empty-icon">
+                <Wallet size={25} aria-hidden="true" />
+              </span>
+              <strong>등록된 고정비 항목이 없다.</strong>
+              <p>
+                비용 항목 추가 버튼을 눌러
+                월 고정 사업비를 등록한다.
+              </p>
             </div>
           ) : (
             <div className="cost-settings-fixed-costs">
@@ -381,12 +405,13 @@ export function CostSettingsPage() {
                 >
                   <input
                     type="text"
+                    aria-label="비용명"
                     value={item.costName}
-                    placeholder="예: 사무실 월세"
+                    placeholder="예 : 사무실 월세"
                     onChange={(event) =>
                       handleFixedCostNameChange(
                         item.clientId,
-                        event.target.value,
+                        event.target.value
                       )
                     }
                   />
@@ -394,29 +419,29 @@ export function CostSettingsPage() {
                   <div className="cost-settings-input-unit">
                     <input
                       type="number"
+                      aria-label="월 금액"
                       min={0}
                       step={1000}
                       value={item.monthlyAmount}
                       onChange={(event) =>
                         handleFixedCostAmountChange(
                           item.clientId,
-                          event.target.value,
+                          event.target.value
                         )
                       }
                     />
-
                     <span>원</span>
                   </div>
 
                   <button
                     type="button"
                     className="cost-settings-remove-button"
+                    aria-label={`${item.costName || "비용 항목"} 삭제`}
                     onClick={() =>
-                      handleRemoveFixedCost(
-                        item.clientId,
-                      )
+                      handleRemoveFixedCost(item.clientId)
                     }
                   >
+                    <Trash2 size={15} aria-hidden="true" />
                     삭제
                   </button>
                 </div>
@@ -425,79 +450,134 @@ export function CostSettingsPage() {
           )}
 
           <div className="cost-settings-summary">
-            <div>
-              <span>월 고정비 합계</span>
-
+            <div className="cost-settings-summary-item">
+              <span>
+                <Wallet size={16} aria-hidden="true" />
+                월 고정비 합계
+              </span>
               <strong>
-                {formatMoney(monthlyFixedCost)}원
+                {formatMoney(monthlyFixedCost)}
+                <small>원</small>
               </strong>
             </div>
 
-            <div>
-              <span>시간당 공통비</span>
-
+            <div className="cost-settings-summary-item">
+              <span>
+                <Coins size={16} aria-hidden="true" />
+                시간당 공통비
+              </span>
               <strong>
                 {formatMoney(hourlyOverheadCost)}
-                원 / h
+                <small>원 / h</small>
               </strong>
             </div>
 
             <p>
-              월 고정비 합계를 월 기준 작업시간으로
-              나눈 금액입니다.
+              <Info size={15} aria-hidden="true" />
+              시간당 공통비는 월 고정비 합계를
+              월 기준 작업시간으로 나눈 금액이다.
             </p>
           </div>
         </section>
 
         {errorMessage && (
-          <div className="cost-settings-message error">
+          <div
+            className="cost-settings-message error"
+            role="alert"
+          >
+            <AlertCircle size={17} aria-hidden="true" />
             {errorMessage}
           </div>
         )}
 
         {successMessage && (
-          <div className="cost-settings-message success">
+          <div
+            className="cost-settings-message success"
+            role="status"
+          >
+            <CheckCircle2 size={17} aria-hidden="true" />
             {successMessage}
           </div>
         )}
 
         <div className="cost-settings-actions">
+          <span className="cost-settings-actions-note">
+            저장 시 새로운 원가 설정 이력이 등록된다.
+          </span>
+
           <button
             type="submit"
             className="cost-settings-save-button"
             disabled={createCostSetting.isPending}
           >
-            {createCostSetting.isPending
-              ? "저장 중..."
-              : "원가 설정 저장"}
+            {createCostSetting.isPending ? (
+              <>
+                <LoaderCircle
+                  size={17}
+                  className="cost-settings-spinner"
+                  aria-hidden="true"
+                />
+                저장 중...
+              </>
+            ) : (
+              <>
+                <Save size={17} aria-hidden="true" />
+                원가 설정 저장
+              </>
+            )}
           </button>
         </div>
       </form>
 
       <section className="cost-settings-section cost-settings-history">
         <div className="cost-settings-section-header">
-          <div>
-            <h2>원가 설정 이력</h2>
-
-            <p>
-              지금까지 등록된 사업 원가 기준입니다.
-            </p>
+          <div className="cost-settings-section-heading">
+            <span className="cost-settings-section-icon">
+              <History size={20} aria-hidden="true" />
+            </span>
+            <div>
+              <h2>원가 설정 이력</h2>
+              <p>
+                지금까지 등록된 사업 원가 기준을
+                확인한다.
+              </p>
+            </div>
           </div>
+
+          <span className="cost-settings-history-count">
+            총 {sortedSettings.length}건
+          </span>
         </div>
 
         {costSettings.isLoading ? (
-          <div className="cost-settings-empty">
-            원가 설정 이력을 불러오는 중입니다.
+          <div className="cost-settings-empty" role="status">
+            <LoaderCircle
+              size={26}
+              className="cost-settings-spinner"
+              aria-hidden="true"
+            />
+            <strong>원가 설정 이력을 불러오는 중이다.</strong>
           </div>
         ) : costSettings.isError ? (
-          <div className="cost-settings-message error">
+          <div
+            className="cost-settings-message error"
+            role="alert"
+          >
+            <AlertCircle size={17} aria-hidden="true" />
             {costSettings.error instanceof Error
               ? costSettings.error.message
               : "원가 설정 이력을 불러오지 못했습니다."}
           </div>
         ) : sortedSettings.length === 0 ? (
           <div className="cost-settings-empty">
-            아직 등록된 원가 설정이 없습니다.
+            <span className="cost-settings-empty-icon">
+              <History size={25} aria-hidden="true" />
+            </span>
+            <strong>등록된 원가 설정 이력이 없다.</strong>
+            <p>
+              원가 기준을 저장하면 이곳에
+              이력이 표시된다.
+            </p>
           </div>
         ) : (
           <div className="cost-settings-history-list">
@@ -509,8 +589,11 @@ export function CostSettingsPage() {
                 <div className="cost-settings-history-title">
                   <div>
                     <h3>{setting.settingName}</h3>
-
                     <span>
+                      <CalendarDays
+                        size={14}
+                        aria-hidden="true"
+                      />
                       {setting.effectiveFrom}
                       {" ~ "}
                       {setting.effectiveTo ?? "현재"}
@@ -532,60 +615,51 @@ export function CostSettingsPage() {
                   <div>
                     <span>내부 시간단가</span>
                     <strong>
-                      {formatMoney(
-                        setting.internalHourlyCost,
-                      )}
-                      원 / h
+                      {formatMoney(setting.internalHourlyCost)}
+                      <small>원 / h</small>
                     </strong>
                   </div>
 
                   <div>
                     <span>월 기준 작업시간</span>
                     <strong>
-                      {formatMoney(
-                        setting.monthlyStandardHours,
-                      )}
-                      h
+                      {formatMoney(setting.monthlyStandardHours)}
+                      <small>h</small>
                     </strong>
                   </div>
 
                   <div>
                     <span>월 고정비</span>
                     <strong>
-                      {formatMoney(
-                        setting.monthlyFixedCost,
-                      )}
-                      원
+                      {formatMoney(setting.monthlyFixedCost)}
+                      <small>원</small>
                     </strong>
                   </div>
 
                   <div>
                     <span>시간당 공통비</span>
                     <strong>
-                      {formatMoney(
-                        setting.hourlyOverheadCost,
-                      )}
-                      원 / h
+                      {formatMoney(setting.hourlyOverheadCost)}
+                      <small>원 / h</small>
                     </strong>
                   </div>
                 </div>
 
                 {setting.fixedCosts.length > 0 && (
                   <div className="cost-settings-history-costs">
+                    <h4>고정비 상세내역</h4>
+
                     {setting.fixedCosts
                       .slice()
                       .sort(
                         (a, b) =>
-                          a.sortOrder - b.sortOrder,
+                          a.sortOrder - b.sortOrder
                       )
                       .map((item) => (
                         <div key={item.id}>
                           <span>{item.costName}</span>
-
                           <strong>
-                            {formatMoney(
-                              item.monthlyAmount,
-                            )}
+                            {formatMoney(item.monthlyAmount)}
                             원
                           </strong>
                         </div>
@@ -597,6 +671,6 @@ export function CostSettingsPage() {
           </div>
         )}
       </section>
-    </div>
+    </main>
   );
 }

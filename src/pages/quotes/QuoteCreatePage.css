@@ -1,76 +1,614 @@
+
+/* =========================================
+   KRIM Quote - Quote Create Page
+========================================= */
+
 .quote-create-page {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 28px;
+  box-sizing: border-box;
+  color: #1d2933;
 }
 
+/* Header */
+
 .quote-create-header {
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.quote-create-header-main {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.quote-create-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  color: #475467;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.quote-create-back:hover {
+  color: #1f4d3a;
+  border-color: #a7c6b2;
+  background: #f3f9f5;
+}
+
+.quote-create-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 12px;
+}
+
+.quote-create-header-text {
+  min-width: 0;
 }
 
 .quote-create-header h1 {
-  margin: 0 0 6px;
+  margin: 0;
+  color: #1d2933;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .quote-create-header p {
-  margin: 0;
+  margin: 5px 0 0;
   color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
+.quote-create-progress-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border: 1px solid #d5e8db;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Progress */
+
+.quote-create-progress {
+  padding: 22px 24px 20px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
+}
 
 .quote-create-steps {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .quote-create-step {
   display: flex;
   align-items: center;
-  gap: 8px;
-
-  padding: 10px 14px;
-
-  border: 1px solid #d7dce5;
-  border-radius: 8px;
-
+  gap: 11px;
+  min-width: 0;
+  padding: 13px 14px;
   color: #64748b;
+  background: #f8faf9;
+  border: 1px solid #e7ece9;
+  border-radius: 10px;
 }
 
 .quote-create-step.active {
-  border-color: #2563eb;
-  color: #2563eb;
-  font-weight: 700;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-color: #b9d6c2;
 }
 
 .quote-create-step.completed {
-  color: #15803d;
+  color: #37634c;
+  background: #f0f7f2;
+  border-color: #d5e8db;
 }
 
 .quote-create-step-number {
-  display: inline-flex;
-
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 24px;
-  height: 24px;
-
-  border: 1px solid currentColor;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  color: #64748b;
+  background: #fff;
+  border: 1px solid #dce5df;
   border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
 }
 
+.quote-create-step.active .quote-create-step-number {
+  color: #fff;
+  background: #1f4d3a;
+  border-color: #1f4d3a;
+}
 
-.quote-create-state,
-.quote-create-error,
-.quote-create-placeholder {
-  padding: 20px;
+.quote-create-step.completed .quote-create-step-number {
+  color: #fff;
+  background: #37634c;
+  border-color: #37634c;
+}
 
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+.quote-create-step-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
 
-  background: #ffffff;
+.quote-create-step-copy strong {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quote-create-step-copy small {
+  color: #8a9690;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.quote-create-step.active .quote-create-step-copy small,
+.quote-create-step.completed .quote-create-step-copy small {
+  color: #537663;
+}
+
+.quote-create-progress-track {
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  background: #e7ece9;
+  border-radius: 999px;
+}
+
+.quote-create-progress-fill {
+  height: 100%;
+  background: #1f4d3a;
+  border-radius: inherit;
+  transition: width 0.2s ease;
+}
+
+/* Content */
+
+.quote-create-content {
+  min-width: 0;
+}
+
+.quote-create-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.quote-create-section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.quote-create-section-heading h2 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.quote-create-section-heading p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* States */
+
+.quote-create-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 230px;
+  padding: 32px;
+  color: #64748b;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.quote-create-state > svg {
+  color: #1f4d3a;
+}
+
+.quote-create-state strong {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.quote-create-state p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .quote-create-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   margin-bottom: 16px;
-  color: #b91c1c;
+  padding: 14px 16px;
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.quote-create-error > svg {
+  flex-shrink: 0;
+}
+
+.quote-create-error strong {
+  display: block;
+  font-weight: 700;
+}
+
+.quote-create-error p {
+  margin: 4px 0 0;
+}
+
+.quote-create-load-error {
+  margin-bottom: 0;
+  padding: 20px;
+}
+
+.quote-create-spin {
+  animation: quote-create-spin 0.8s linear infinite;
+}
+
+@keyframes quote-create-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .quote-create-steps {
+    gap: 8px;
+  }
+
+  .quote-create-step {
+    padding: 12px 10px;
+  }
+
+  .quote-create-step-copy small {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-create-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .quote-create-header h1 {
+    font-size: 22px;
+  }
+
+  .quote-create-header-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .quote-create-progress {
+    padding: 16px;
+  }
+
+  .quote-create-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .quote-create-step {
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 4px;
+    text-align: center;
+  }
+
+  .quote-create-step-number {
+    width: 28px;
+    height: 28px;
+  }
+
+  .quote-create-step-copy strong {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 520px) {
+  .quote-create-header-main {
+    flex-wrap: wrap;
+  }
+
+  .quote-create-header-text {
+    flex: 1 1 180px;
+  }
+
+  .quote-create-progress-label {
+    margin-left: auto;
+  }
+
+  .quote-create-step-copy strong {
+    font-size: 10px;
+  }
+
+  .quote-create-section-heading h2 {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-create-progress-fill {
+    transition: none;
+  }
+
+  .quote-create-spin {
+    animation: none;
+  }
+}
+
+
+
+/* =========================================
+   KRIM Quote - Edit Page Extensions
+========================================= */
+
+.quote-create-header-info {
+  min-width: 0;
+}
+
+.quote-create-header-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.quote-create-header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 9px;
+}
+
+.quote-create-header-label {
+  color: #537663;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.quote-create-header-badge {
+  padding: 5px 9px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.quote-create-header-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.quote-create-header-details > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-create-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.quote-create-progress {
+  margin-bottom: 18px;
+  padding: 19px 22px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 11px;
+}
+
+.quote-create-progress-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.quote-create-progress-top > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.quote-create-progress-eyebrow {
+  color: #81918a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.quote-create-progress-top strong {
+  color: #1f4d3a;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.quote-create-progress-count {
+  color: #537663;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-create-progress-track {
+  height: 7px;
+  overflow: hidden;
+  background: #eaf0eb;
+  border-radius: 999px;
+}
+
+.quote-create-progress-fill {
+  height: 100%;
+  background: #1f4d3a;
+  border-radius: inherit;
+  transition: width 0.2s ease;
+}
+
+.quote-create-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.quote-create-step-content strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quote-create-step-content small {
+  color: #98a2b3;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.quote-create-step.active .quote-create-step-content small {
+  color: #537663;
+}
+
+.quote-create-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.quote-create-section-heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 43px;
+  height: 43px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 10px;
+}
+
+.quote-create-section-heading h2 {
+  margin: 0;
+  color: #344054;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.quote-create-section-heading p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .quote-create-header-actions {
+    width: 100%;
+  }
+
+  .quote-create-progress {
+    padding: 16px;
+  }
+
+  .quote-create-step-content small {
+    display: none;
+  }
+
+  .quote-create-section-heading h2 {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-create-progress-fill {
+    transition: none;
+  }
 }

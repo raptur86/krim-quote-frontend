@@ -1,442 +1,358 @@
+
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  ClipboardList,
+  FileCheck2,
+  FilePlus2,
+  LoaderCircle,
+  Send,
+} from "lucide-react";
 
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
 import { usePlatforms } from "../../features/platform/hooks/usePlatforms";
 
 import { QuoteBasicForm } from "../../features/quote/components/QuoteBasicForm";
-import {
-  QuoteReviewStep,
-} from "../../features/quote/components/QuoteReviewStep";
+import { QuoteItemsStep } from "../../features/quote/components/QuoteItemsStep";
+import { QuoteReviewStep } from "../../features/quote/components/QuoteReviewStep";
+
 import {
   quoteBasicSchema,
   type QuoteBasicFormValues,
 } from "../../features/quote/schemas/quoteBasicSchema";
-import type {
-  QuoteDraftItem,
-} from "../../features/quote/types/quote.types";
-
-import {
-  QuoteItemsStep,
-} from "../../features/quote/components/QuoteItemsStep";
-
-import {
-  useCreateQuote,
-} from "../../features/quote/hooks/useCreateQuote";
 
 import type {
   QuoteCreateRequest,
+  QuoteDraftItem,
 } from "../../features/quote/types/quote.types";
 
+import { useCreateQuote } from "../../features/quote/hooks/useCreateQuote";
 import { ROUTES } from "../../app/router/routes";
 
 import "./QuoteCreatePage.css";
 
+type QuoteStep = "BASIC" | "ITEMS" | "REVIEW" | "ISSUE";
 
-type QuoteStep =
-  | "BASIC"
-  | "ITEMS"
-  | "REVIEW"
-  | "ISSUE";
-
+const STEPS: {
+  key: QuoteStep;
+  label: string;
+  description: string;
+}[] = [
+  {
+    key: "BASIC",
+    label: "기본정보",
+    description: "고객 및 견적 정보",
+  },
+  {
+    key: "ITEMS",
+    label: "견적항목",
+    description: "기능 및 작업 단가",
+  },
+  {
+    key: "REVIEW",
+    label: "검토",
+    description: "금액 및 내용 확인",
+  },
+  {
+    key: "ISSUE",
+    label: "발행",
+    description: "견적서 발행",
+  },
+];
 
 function today(): string {
   const date = new Date();
-
   const year = date.getFullYear();
-
-  const month = String(
-    date.getMonth() + 1,
-  ).padStart(2, "0");
-
-  const day = String(
-    date.getDate(),
-  ).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
 
-
 export function QuoteCreatePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [searchParams] =
-    useSearchParams();
-
-  /*
-   * 고객 상세에서:
-   *
-   * /quotes/new?customerId=15
-   *
-   * 로 진입할 수 있다.
-   */
   const initialCustomerId =
-    Number(
-      searchParams.get(
-        "customerId",
-      ),
-    ) || 0;
+    Number(searchParams.get("customerId")) || 0;
 
-  const createQuote =
-    useCreateQuote();
+  const createQuote = useCreateQuote();
 
-  const [
-    saveError,
-    setSaveError,
-  ] = useState("");
-
-  const [step, setStep] =
-    useState<QuoteStep>("BASIC");
-
-  const [errorMessage, setErrorMessage] =
-    useState("");
-
+  const [saveError, setSaveError] = useState("");
+  const [step, setStep] = useState<QuoteStep>("BASIC");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [basicValues, setBasicValues] =
     useState<QuoteBasicFormValues>({
-      customerId:
-        initialCustomerId,
-
+      customerId: initialCustomerId,
       inquiryPlatformId: null,
-
       title: "",
-
       writtenDate: today(),
-
       validUntil: null,
-
       expectedDuration: null,
-
       customerNote: null,
-
       internalMemo: null,
     });
-  const [
-    quoteItems,
-    setQuoteItems,
-  ] =
+
+  const [quoteItems, setQuoteItems] =
     useState<QuoteDraftItem[]>([]);
-  const [
-    adjustmentAmount,
-    setAdjustmentAmount,
-  ] = useState(0);
-  /*
-   * 신규 견적에서는 활성 고객만 조회
-   */
-  const customersQuery =
-    useCustomers({
-      active: true,
-      page: 0,
-      size: 100,
-      sort: "customerName,asc",
-    });
 
+  const [adjustmentAmount, setAdjustmentAmount] = useState(0);
 
-  /*
-   * 신규 견적에서는 활성 플랫폼만 조회
-   */
-  const platformsQuery =
-    usePlatforms(true);
+  const customersQuery = useCustomers({
+    active: true,
+    page: 0,
+    size: 100,
+    sort: "customerName,asc",
+  });
 
+  const platformsQuery = usePlatforms(true);
 
-  const customers =
-    useMemo(
-      () =>
-        customersQuery.data
-          ?.content ?? [],
-      [customersQuery.data],
-    );
+  const customers = useMemo(
+    () => customersQuery.data?.content ?? [],
+    [customersQuery.data]
+  );
 
-
-  const platforms =
-    platformsQuery.data ?? [];
-
+  const platforms = platformsQuery.data ?? [];
 
   function handleBasicChange<
-    K extends keyof QuoteBasicFormValues,
+    K extends keyof QuoteBasicFormValues
   >(
     field: K,
-    value: QuoteBasicFormValues[K],
+    value: QuoteBasicFormValues[K]
   ) {
-    setBasicValues(
-      (previous) => ({
-        ...previous,
-        [field]: value,
-      }),
-    );
+    setBasicValues((previous) => ({
+      ...previous,
+      [field]: value,
+    }));
 
     setErrorMessage("");
   }
 
-
   function handleBasicNext() {
-    const result =
-      quoteBasicSchema.safeParse(
-        basicValues,
-      );
+    const result = quoteBasicSchema.safeParse(basicValues);
 
     if (!result.success) {
       setErrorMessage(
-        result.error.issues[0]
-          ?.message ??
-        "기본정보를 확인해주세요.",
+        result.error.issues[0]?.message ??
+          "기본정보를 확인해주세요."
       );
-
       return;
     }
 
     setErrorMessage("");
-
+    setSaveError("");
     setStep("ITEMS");
   }
 
-
   function handleCancel() {
-    navigate(
-      ROUTES.quotes,
-    );
+    navigate(ROUTES.quotes);
   }
+
   async function handleCreateQuote() {
-    if (
-      quoteItems.length === 0
-    ) {
-      setSaveError(
-        "견적항목을 하나 이상 추가해주세요.",
-      );
-
+    if (quoteItems.length === 0) {
+      setSaveError("견적항목을 하나 이상 추가해주세요.");
       setStep("ITEMS");
-
       return;
     }
 
-
-    const request:
-      QuoteCreateRequest = {
-      customerId:
-        basicValues.customerId,
-
-      inquiryPlatformId:
-        basicValues.inquiryPlatformId,
-
-      title:
-        basicValues.title.trim(),
-
-      writtenDate:
-        basicValues.writtenDate,
-
-      validUntil:
-        nullableText(
-          basicValues.validUntil,
-        ),
-
-      expectedDuration:
-        nullableText(
-          basicValues.expectedDuration,
-        ),
-
-      customerNote:
-        nullableText(
-          basicValues.customerNote,
-        ),
-
-      internalMemo:
-        nullableText(
-          basicValues.internalMemo,
-        ),
-
+    const request: QuoteCreateRequest = {
+      customerId: basicValues.customerId,
+      inquiryPlatformId: basicValues.inquiryPlatformId,
+      title: basicValues.title.trim(),
+      writtenDate: basicValues.writtenDate,
+      validUntil: nullableText(basicValues.validUntil),
+      expectedDuration: nullableText(
+        basicValues.expectedDuration
+      ),
+      customerNote: nullableText(basicValues.customerNote),
+      internalMemo: nullableText(basicValues.internalMemo),
       adjustmentAmount,
 
-      /*
-       * 아직 예상 정산액 입력 UI를
-       * 만들지 않았으므로 null.
-       */
-      expectedSettlementAmount:
-        null,
+      // 기존 요청 구조 유지
+      expectedSettlementAmount: null,
+      expectedSettlementMemo: null,
 
-      expectedSettlementMemo:
-        null,
+      items: quoteItems.map(
+        ({ clientId: _clientId, ...item }, index) => ({
+          ...item,
+          categoryName: nullableText(item.categoryName),
+          featureName: item.featureName.trim(),
+          description: nullableText(item.description),
+          unitName: item.unitName.trim(),
+          adjustmentReason: nullableText(
+            item.adjustmentReason
+          ),
+          internalMemo: nullableText(item.internalMemo),
+          sortOrder: index + 1,
+        })
+      ),
 
-      items:
-        quoteItems.map(
-          (
-            {
-              clientId: _clientId,
-              ...item
-            },
-            index,
-          ) => ({
-            ...item,
-
-            categoryName:
-              nullableText(
-                item.categoryName,
-              ),
-
-            featureName:
-              item.featureName.trim(),
-
-            description:
-              nullableText(
-                item.description,
-              ),
-
-            unitName:
-              item.unitName.trim(),
-
-            adjustmentReason:
-              nullableText(
-                item.adjustmentReason,
-              ),
-
-            internalMemo:
-              nullableText(
-                item.internalMemo,
-              ),
-
-            sortOrder:
-              index + 1,
-          }),
-        ),
-
-      /*
-       * 직접비 UI는 이후 추가.
-       */
+      // 직접비 입력 UI는 별도 개발 단계에서 구현
       directCosts: [],
     };
-
 
     try {
       setSaveError("");
 
-      const result =
-        await createQuote.mutateAsync(
-          request,
-        );
+      const result = await createQuote.mutateAsync(request);
 
-      navigate(
-        `${ROUTES.quotes}/${result.id}`,
-        {
-          replace: true,
-        },
-      );
+      navigate(`${ROUTES.quotes}/${result.id}`, {
+        replace: true,
+      });
     } catch (error) {
       setSaveError(
         error instanceof Error
           ? error.message
-          : "견적을 저장하지 못했습니다.",
+          : "견적을 저장하지 못했습니다."
       );
     }
   }
 
   const loading =
-    customersQuery.isLoading ||
-    platformsQuery.isLoading;
-
+    customersQuery.isLoading || platformsQuery.isLoading;
 
   const loadError =
-    customersQuery.isError ||
-    platformsQuery.isError;
+    customersQuery.isError || platformsQuery.isError;
 
+  const currentStepIndex = STEPS.findIndex(
+    (item) => item.key === step
+  );
 
   return (
     <main className="quote-create-page">
-
       <header className="quote-create-header">
+        <div className="quote-create-header-main">
+          <button
+            type="button"
+            className="quote-create-back"
+            aria-label="견적 목록으로 돌아가기"
+            onClick={handleCancel}
+          >
+            <ArrowLeft size={19} aria-hidden="true" />
+          </button>
 
-        <div>
-          <h1>
-            새 견적 작성
-          </h1>
+          <span className="quote-create-header-icon">
+            <FilePlus2 size={23} aria-hidden="true" />
+          </span>
 
-          <p>
-            고객에게 전달할 견적을
-            작성합니다.
-          </p>
+          <div className="quote-create-header-text">
+            <h1>새 견적 작성</h1>
+            <p>
+              고객 정보부터 견적항목과 금액 검토까지
+              단계별로 진행한다.
+            </p>
+          </div>
         </div>
 
+        <span className="quote-create-progress-label">
+          {currentStepIndex + 1} / {STEPS.length} 단계
+        </span>
       </header>
 
-
-      <nav
-        className="quote-create-steps"
-        aria-label="견적 작성 단계"
+      <section
+        className="quote-create-progress"
+        aria-label="견적 작성 진행 상황"
       >
-
-        <Step
-          number={1}
-          label="기본정보"
-          active={
-            step === "BASIC"
-          }
-          completed={
-            step !== "BASIC"
-          }
-        />
-
-        <Step
-          number={2}
-          label="견적항목"
-          active={
-            step === "ITEMS"
-          }
-          completed={
-            step === "REVIEW" ||
-            step === "ISSUE"
-          }
-        />
-
-        <Step
-          number={3}
-          label="검토"
-          active={
-            step === "REVIEW"
-          }
-          completed={
-            step === "ISSUE"
-          }
-        />
-
-        <Step
-          number={4}
-          label="발행"
-          active={
-            step === "ISSUE"
-          }
-          completed={false}
-        />
-
-      </nav>
-
-
-      {loading && (
-        <section className="quote-create-state">
-          고객 및 플랫폼 정보를
-          불러오고 있습니다.
-        </section>
-      )}
-
-
-      {loadError && (
-        <section
-          className="quote-create-error"
-          role="alert"
+        <nav
+          className="quote-create-steps"
+          aria-label="견적 작성 단계"
         >
-          견적 작성에 필요한 정보를
-          불러오지 못했습니다.
-        </section>
-      )}
+          {STEPS.map((item, index) => (
+            <Step
+              key={item.key}
+              number={index + 1}
+              label={item.label}
+              description={item.description}
+              active={step === item.key}
+              completed={index < currentStepIndex}
+            />
+          ))}
+        </nav>
 
+        <div
+          className="quote-create-progress-track"
+          aria-hidden="true"
+        >
+          <div
+            className="quote-create-progress-fill"
+            style={{
+              width: `${
+                ((currentStepIndex + 1) / STEPS.length) *
+                100
+              }%`,
+            }}
+          />
+        </div>
+      </section>
 
-      {!loading &&
-        !loadError &&
-        step === "BASIC" && (
+      <section
+        className="quote-create-content"
+        aria-label="견적 작성 내용"
+      >
+        {loading && (
+          <div className="quote-create-state" role="status">
+            <LoaderCircle
+              size={28}
+              className="quote-create-spin"
+              aria-hidden="true"
+            />
+            <strong>기본 정보를 불러오는 중</strong>
+            <p>
+              고객 및 유입 플랫폼 정보를 확인하고 있다.
+            </p>
+          </div>
+        )}
+
+        {loadError && (
+          <div
+            className="quote-create-error quote-create-load-error"
+            role="alert"
+          >
+            <AlertCircle size={21} aria-hidden="true" />
+            <div>
+              <strong>
+                견적 작성에 필요한 정보를 불러오지 못했다.
+              </strong>
+              <p>
+                고객 및 플랫폼 조회 상태를 확인한 후
+                다시 시도한다.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!loading && !loadError && step === "BASIC" && (
           <>
+            <div className="quote-create-section-heading">
+              <span className="quote-create-section-icon">
+                <ClipboardList
+                  size={19}
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <h2>기본정보 입력</h2>
+                <p>
+                  견적 대상 고객과 견적서의 기본 내용을
+                  입력한다.
+                </p>
+              </div>
+            </div>
+
             {errorMessage && (
               <div
                 className="quote-create-error"
                 role="alert"
               >
-                {errorMessage}
+                <AlertCircle
+                  size={18}
+                  aria-hidden="true"
+                />
+                <span>{errorMessage}</span>
               </div>
             )}
 
@@ -444,125 +360,151 @@ export function QuoteCreatePage() {
               values={basicValues}
               customers={customers}
               platforms={platforms}
-              onChange={
-                handleBasicChange
-              }
-              onNext={
-                handleBasicNext
-              }
-              onCancel={
-                handleCancel
-              }
+              onChange={handleBasicChange}
+              onNext={handleBasicNext}
+              onCancel={handleCancel}
             />
           </>
         )}
 
+        {!loading && !loadError && step === "ITEMS" && (
+          <>
+            <div className="quote-create-section-heading">
+              <span className="quote-create-section-icon">
+                <ClipboardList
+                  size={19}
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <h2>견적항목 구성</h2>
+                <p>
+                  개발 기능과 작업 단가를 구성한다.
+                </p>
+              </div>
+            </div>
 
-      {step === "ITEMS" && (
-        <QuoteItemsStep
-          items={quoteItems}
-          onChange={
-            setQuoteItems
-          }
-          onPrevious={() =>
-            setStep("BASIC")
-          }
-          onNext={() =>
-            setStep("REVIEW")
-          }
-        />
-      )}
-      {step === "REVIEW" && (
-        <QuoteReviewStep
-          basic={basicValues}
-          items={quoteItems}
-          customers={
-            customersQuery.data?.content ??
-            []
-          }
-          platforms={
-            platformsQuery.data ?? []
-          }
-          adjustmentAmount={
-            adjustmentAmount
-          }
-          onAdjustmentAmountChange={
-            setAdjustmentAmount
-          }
-          onPrevious={() =>
-            setStep("ITEMS")
-          }
-          onSave={() =>
-            void handleCreateQuote()
-          }
-          saving={
-            createQuote.isPending
-          }
-          saveError={
-            saveError
-          }
-        />
-      )}
+            {saveError && (
+              <div
+                className="quote-create-error"
+                role="alert"
+              >
+                <AlertCircle
+                  size={18}
+                  aria-hidden="true"
+                />
+                <span>{saveError}</span>
+              </div>
+            )}
 
+            <QuoteItemsStep
+              items={quoteItems}
+              onChange={(items) => {
+                setQuoteItems(items);
+                setSaveError("");
+              }}
+              onPrevious={() => {
+                setSaveError("");
+                setStep("BASIC");
+              }}
+              onNext={() => {
+                setSaveError("");
+                setStep("REVIEW");
+              }}
+            />
+          </>
+        )}
+
+        {!loading && !loadError && step === "REVIEW" && (
+          <>
+            <div className="quote-create-section-heading">
+              <span className="quote-create-section-icon">
+                <FileCheck2
+                  size={19}
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <h2>견적 최종 검토</h2>
+                <p>
+                  견적 내용과 최종 금액을 확인한 후
+                  저장한다.
+                </p>
+              </div>
+            </div>
+
+            <QuoteReviewStep
+              basic={basicValues}
+              items={quoteItems}
+              customers={customers}
+              platforms={platforms}
+              adjustmentAmount={adjustmentAmount}
+              onAdjustmentAmountChange={
+                setAdjustmentAmount
+              }
+              onPrevious={() => setStep("ITEMS")}
+              onSave={() => void handleCreateQuote()}
+              saving={createQuote.isPending}
+              saveError={saveError}
+            />
+          </>
+        )}
+      </section>
     </main>
   );
 }
 
-
 type StepProps = {
   number: number;
   label: string;
+  description: string;
   active: boolean;
   completed: boolean;
 };
 
-
 function Step({
   number,
   label,
+  description,
   active,
   completed,
 }: StepProps) {
   const className = [
     "quote-create-step",
-
-    active
-      ? "active"
-      : "",
-
-    completed
-      ? "completed"
-      : "",
+    active ? "active" : "",
+    completed ? "completed" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div className={className}>
-
+    <div
+      className={className}
+      aria-current={active ? "step" : undefined}
+    >
       <span className="quote-create-step-number">
-        {number}
+        {completed ? (
+          <Check size={16} aria-hidden="true" />
+        ) : (
+          number
+        )}
       </span>
 
-      <span>
-        {label}
+      <span className="quote-create-step-copy">
+        <strong>{label}</strong>
+        <small>{description}</small>
       </span>
-
     </div>
   );
 }
+
 function nullableText(
-  value:
-    | string
-    | null
-    | undefined,
+  value: string | null | undefined
 ): string | null {
   if (!value) {
     return null;
   }
 
-  const trimmed =
-    value.trim();
-
+  const trimmed = value.trim();
   return trimmed || null;
 }

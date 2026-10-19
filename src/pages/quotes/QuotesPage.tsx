@@ -1,407 +1,242 @@
+
 import {
   useEffect,
   useRef,
   useState,
   type FormEvent,
 } from "react";
-
 import { useNavigate } from "react-router-dom";
+import {
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  FilePlus2,
+  FileSearch,
+  LoaderCircle,
+  RotateCcw,
+  Search,
+  X,
+} from "lucide-react";
 
 import { useQuotes } from "../../features/quote/hooks/useQuotes";
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
 import { ROUTES } from "../../app/router/routes";
-import type {
-  QuoteStatus,
-} from "../../features/quote/types/quote.types";
+import type { QuoteStatus } from "../../features/quote/types/quote.types";
+
+import { Button } from "../../components/ui/Button";
+import { Badge } from "../../components/ui/Badge";
 
 import "./QuotesPage.css";
 
-
 const PAGE_SIZE = 20;
 
-
-type StatusFilter =
-  | "ALL"
-  | QuoteStatus;
-
+type StatusFilter = "ALL" | QuoteStatus;
 
 export function QuotesPage() {
   const navigate = useNavigate();
 
+  // 견적 검색 조건
+  const [keywordInput, setKeywordInput] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [status, setStatus] = useState<StatusFilter>("ALL");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [page, setPage] = useState(0);
 
-  /* =========================================================
-   * Quote Search
-   * ========================================================= */
-
-  const [
-    keywordInput,
-    setKeywordInput,
-  ] = useState("");
-
-  const [
-    keyword,
-    setKeyword,
-  ] = useState("");
-
-  const [
-    status,
-    setStatus,
-  ] = useState<StatusFilter>("ALL");
-
-  const [
-    fromDate,
-    setFromDate,
-  ] = useState("");
-
-  const [
-    toDate,
-    setToDate,
-  ] = useState("");
-
-  const [
-    page,
-    setPage,
-  ] = useState(0);
-
-
-  /* =========================================================
-   * Customer Search
-   * ========================================================= */
-
-  const [
-    customerKeyword,
-    setCustomerKeyword,
-  ] = useState("");
-
+  // 고객 자동완성
+  const [customerKeyword, setCustomerKeyword] = useState("");
   const [
     debouncedCustomerKeyword,
     setDebouncedCustomerKeyword,
   ] = useState("");
 
-  const [
-    selectedCustomerId,
-    setSelectedCustomerId,
-  ] = useState<number | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] =
+    useState<number | null>(null);
 
-  const [
-    selectedCustomerLabel,
-    setSelectedCustomerLabel,
-  ] = useState("");
+  const [selectedCustomerLabel, setSelectedCustomerLabel] =
+    useState("");
 
-  const [
-    customerSearchOpen,
-    setCustomerSearchOpen,
-  ] = useState(false);
+  const [customerSearchOpen, setCustomerSearchOpen] =
+    useState(false);
 
-  const customerSearchRef =
-    useRef<HTMLDivElement>(null);
-
-
-  /* =========================================================
-   * Customer Search Debounce
-   * ========================================================= */
+  const customerSearchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const value =
-      customerKeyword.trim();
+    const value = customerKeyword.trim();
 
-    /*
-     * 최소 2글자부터 검색
-     */
     if (value.length < 2) {
       setDebouncedCustomerKeyword("");
-
       return;
     }
 
-    const timer =
-      window.setTimeout(
-        () => {
-          setDebouncedCustomerKeyword(
-            value,
-          );
-        },
-        300,
-      );
+    const timer = window.setTimeout(() => {
+      setDebouncedCustomerKeyword(value);
+    }, 300);
 
-    return () => {
-      window.clearTimeout(timer);
-    };
+    return () => window.clearTimeout(timer);
   }, [customerKeyword]);
 
-
-  /* =========================================================
-   * Customer Search - Outside Click
-   * ========================================================= */
-
   useEffect(() => {
-    function handleMouseDown(
-      event: MouseEvent,
-    ) {
-      const target =
-        event.target as Node;
+    function handleMouseDown(event: MouseEvent) {
+      const target = event.target as Node;
 
       if (
         customerSearchRef.current &&
-        !customerSearchRef.current.contains(
-          target,
-        )
+        !customerSearchRef.current.contains(target)
       ) {
         setCustomerSearchOpen(false);
       }
     }
 
-    document.addEventListener(
-      "mousedown",
-      handleMouseDown,
-    );
+    document.addEventListener("mousedown", handleMouseDown);
 
     return () => {
       document.removeEventListener(
         "mousedown",
-        handleMouseDown,
+        handleMouseDown
       );
     };
   }, []);
 
+  const customerSearchQuery = useCustomers(
+    {
+      keyword: debouncedCustomerKeyword || undefined,
+      active: true,
+      page: 0,
+      size: 10,
+      sort: "customerName,asc",
+    },
+    debouncedCustomerKeyword.length >= 2
+  );
 
-  /* =========================================================
-   * Customer Search Query
-   * ========================================================= */
+  const quoteQuery = useQuotes({
+    keyword: keyword || undefined,
+    customerId: selectedCustomerId ?? undefined,
+    status: status === "ALL" ? undefined : status,
+    fromDate: fromDate || undefined,
+    toDate: toDate || undefined,
+    page,
+    size: PAGE_SIZE,
+    sort: "createdAt,desc",
+  });
 
-  const customerSearchQuery =
-    useCustomers(
-      {
-        keyword:
-          debouncedCustomerKeyword ||
-          undefined,
-
-        active: true,
-
-        page: 0,
-
-        size: 10,
-
-        sort: "customerName,asc",
-      },
-
-      debouncedCustomerKeyword.length >= 2,
-    );
-
-
-  /* =========================================================
-   * Quote Query
-   * ========================================================= */
-
-  const quoteQuery =
-    useQuotes({
-      keyword:
-        keyword || undefined,
-
-      customerId:
-        selectedCustomerId ??
-        undefined,
-
-      status:
-        status === "ALL"
-          ? undefined
-          : status,
-
-      fromDate:
-        fromDate || undefined,
-
-      toDate:
-        toDate || undefined,
-
-      page,
-
-      size: PAGE_SIZE,
-
-      sort: "createdAt,desc",
-    });
-
-
-  /* =========================================================
-   * Search
-   * ========================================================= */
-
-  function handleSearch(
-    event: FormEvent<HTMLFormElement>,
-  ) {
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
+    setKeyword(keywordInput.trim());
     setPage(0);
-
-    setKeyword(
-      keywordInput.trim(),
-    );
-
     setCustomerSearchOpen(false);
   }
-
-
-  /* =========================================================
-   * Reset
-   * ========================================================= */
 
   function handleReset() {
     setKeywordInput("");
     setKeyword("");
-
     setCustomerKeyword("");
     setDebouncedCustomerKeyword("");
-
     setSelectedCustomerId(null);
     setSelectedCustomerLabel("");
-
     setCustomerSearchOpen(false);
-
     setStatus("ALL");
-
     setFromDate("");
     setToDate("");
-
     setPage(0);
   }
 
+  function handleCustomerSelect(customer: {
+    id: number;
+    customerName: string;
+    companyName: string | null;
+  }) {
+    const label = customer.companyName
+      ? `${customer.customerName} / ${customer.companyName}`
+      : customer.customerName;
 
-  /* =========================================================
-   * Customer Select
-   * ========================================================= */
-
-  function handleCustomerSelect(
-    customer: {
-      id: number;
-      customerName: string;
-      companyName: string | null;
-    },
-  ) {
-    const label =
-      customer.companyName
-        ? `${customer.customerName} / ${customer.companyName}`
-        : customer.customerName;
-
-    setSelectedCustomerId(
-      customer.id,
-    );
-
-    setSelectedCustomerLabel(
-      label,
-    );
-
+    setSelectedCustomerId(customer.id);
+    setSelectedCustomerLabel(label);
     setCustomerKeyword("");
     setDebouncedCustomerKeyword("");
-
     setCustomerSearchOpen(false);
-
     setPage(0);
   }
-
-
-  /* =========================================================
-   * Customer Clear
-   * ========================================================= */
 
   function handleCustomerClear() {
     setSelectedCustomerId(null);
     setSelectedCustomerLabel("");
-
     setCustomerKeyword("");
     setDebouncedCustomerKeyword("");
-
     setCustomerSearchOpen(false);
-
     setPage(0);
   }
 
+  function openQuote(quoteId: number) {
+    navigate(`${ROUTES.quotes}/${quoteId}`);
+  }
+
+  const quoteData = quoteQuery.data;
+
+  const showResults =
+    !quoteQuery.isLoading &&
+    !quoteQuery.isError &&
+    quoteData !== undefined;
 
   return (
-    <div className="quotes-page">
+    <main className="quotes-page">
+      <header className="quotes-page-header">
+        <div className="quotes-page-heading">
+          <span className="quotes-page-heading-icon">
+            <FileSearch size={23} aria-hidden="true" />
+          </span>
 
-      {/* =====================================================
-          Header
-      ====================================================== */}
-
-      <div className="quotes-page-header">
-
-        <div>
-          <h1>
-            견적 관리
-          </h1>
-
-          <p>
-            작성한 견적을 조회하고 관리합니다.
-          </p>
+          <div>
+            <h1>견적 관리</h1>
+            <p>작성한 견적을 조회하고 관리한다.</p>
+          </div>
         </div>
 
-
-        <button
+        <Button
           type="button"
-          className="btn btn-primary"
-          onClick={() =>
-            navigate(ROUTES.quoteCreate)
-          }
+          variant="primary"
+          onClick={() => navigate(ROUTES.quoteCreate)}
         >
-          + 새 견적 작성
-        </button>
+          <FilePlus2 size={17} aria-hidden="true" />
+          새 견적 작성
+        </Button>
+      </header>
 
-      </div>
-
-
-      {/* =====================================================
-          Search
-      ====================================================== */}
-
-      <section className="quotes-search-card">
-
+      {/* 검색 및 필터 */}
+      <section
+        className="quotes-search-card"
+        aria-label="견적 검색 조건"
+      >
         <form
           className="quotes-search-form"
           onSubmit={handleSearch}
         >
-
           <div className="quotes-search-main">
-
-            {/* ===============================================
-                Keyword
-            ================================================ */}
-
             <div className="quotes-field quotes-keyword-field">
+              <label htmlFor="quote-keyword">검색</label>
 
-              <label htmlFor="quote-keyword">
-                검색
-              </label>
+              <div className="quotes-input-icon-wrap">
+                <Search size={17} aria-hidden="true" />
 
-              <input
-                id="quote-keyword"
-                type="search"
-                value={keywordInput}
-                placeholder="견적번호 / 고객명 / 회사명 / 견적명"
-                onChange={(event) =>
-                  setKeywordInput(
-                    event.target.value,
-                  )
-                }
-              />
-
+                <input
+                  id="quote-keyword"
+                  type="search"
+                  value={keywordInput}
+                  placeholder="견적번호 / 고객명 / 회사명 / 견적명"
+                  onChange={(event) =>
+                    setKeywordInput(event.target.value)
+                  }
+                />
+              </div>
             </div>
-
-
-            {/* ===============================================
-                Customer Autocomplete
-            ================================================ */}
 
             <div
               className="quotes-field quotes-customer-search"
               ref={customerSearchRef}
             >
-
-              <label htmlFor="quote-customer">
-                고객
-              </label>
-
+              <label htmlFor="quote-customer">고객</label>
 
               <div className="quotes-customer-search-control">
-
                 <input
                   id="quote-customer"
                   type="search"
@@ -412,195 +247,136 @@ export function QuotesPage() {
                       : customerKeyword
                   }
                   placeholder="고객명 / 회사명 검색"
+                  aria-expanded={
+                    customerSearchOpen &&
+                    selectedCustomerId === null
+                  }
+                  aria-controls="quotes-customer-results"
                   onFocus={() => {
                     if (
                       selectedCustomerId === null &&
-                      customerKeyword
-                        .trim()
-                        .length >= 2
+                      customerKeyword.trim().length >= 2
                     ) {
-                      setCustomerSearchOpen(
-                        true,
-                      );
+                      setCustomerSearchOpen(true);
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") {
+                      setCustomerSearchOpen(false);
                     }
                   }}
                   onChange={(event) => {
-                    /*
-                     * 이미 고객이 선택되어 있는데
-                     * 다시 입력하면 기존 선택 해제
-                     */
-                    setSelectedCustomerId(
-                      null,
-                    );
-
-                    setSelectedCustomerLabel(
-                      "",
-                    );
-
-                    setCustomerKeyword(
-                      event.target.value,
-                    );
-
-                    setCustomerSearchOpen(
-                      true,
-                    );
-
+                    setSelectedCustomerId(null);
+                    setSelectedCustomerLabel("");
+                    setCustomerKeyword(event.target.value);
+                    setCustomerSearchOpen(true);
                     setPage(0);
                   }}
                 />
-
 
                 {selectedCustomerId !== null && (
                   <button
                     type="button"
                     className="quotes-customer-clear"
                     aria-label="선택한 고객 해제"
-                    onClick={
-                      handleCustomerClear
-                    }
+                    onClick={handleCustomerClear}
                   >
-                    ×
+                    <X size={16} aria-hidden="true" />
                   </button>
                 )}
-
               </div>
-
-
-              {/* =============================================
-                  Customer Search Result
-              ============================================== */}
 
               {customerSearchOpen &&
                 selectedCustomerId === null &&
-                customerKeyword
-                  .trim()
-                  .length >= 2 && (
-
-                  <div className="quotes-customer-results">
-
+                customerKeyword.trim().length >= 2 && (
+                  <div
+                    id="quotes-customer-results"
+                    className="quotes-customer-results"
+                  >
                     {customerSearchQuery.isFetching && (
-                      <div className="quotes-customer-result-state">
+                      <div
+                        className="quotes-customer-result-state"
+                        role="status"
+                      >
+                        <LoaderCircle
+                          size={15}
+                          className="quotes-spin"
+                          aria-hidden="true"
+                        />
                         고객 검색 중...
                       </div>
                     )}
 
-
                     {!customerSearchQuery.isFetching &&
                       customerSearchQuery.isError && (
-
-                        <div className="quotes-customer-result-state quotes-customer-result-error">
+                        <div
+                          className="quotes-customer-result-state quotes-customer-result-error"
+                          role="alert"
+                        >
                           고객 검색에 실패했습니다.
                         </div>
-
                       )}
-
 
                     {!customerSearchQuery.isFetching &&
                       !customerSearchQuery.isError &&
                       debouncedCustomerKeyword.length >= 2 &&
-                      customerSearchQuery.data &&
-                      customerSearchQuery.data.content.length === 0 && (
-
+                      customerSearchQuery.data?.content.length ===
+                        0 && (
                         <div className="quotes-customer-result-state">
                           검색된 고객이 없습니다.
                         </div>
-
                       )}
-
 
                     {!customerSearchQuery.isFetching &&
                       !customerSearchQuery.isError &&
                       customerSearchQuery.data?.content.map(
                         (customer) => (
-
                           <button
                             key={customer.id}
                             type="button"
                             className="quotes-customer-result"
                             onClick={() =>
-                              handleCustomerSelect(
-                                customer,
-                              )
+                              handleCustomerSelect(customer)
                             }
                           >
-
                             <strong>
                               {customer.customerName}
                             </strong>
-
 
                             {customer.companyName && (
                               <span>
                                 {customer.companyName}
                               </span>
                             )}
-
                           </button>
-
-                        ),
+                        )
                       )}
-
                   </div>
-
                 )}
-
             </div>
 
-
-            {/* ===============================================
-                Status
-            ================================================ */}
-
-            <div className="quotes-field">
-
-              <label htmlFor="quote-status">
-                상태
-              </label>
+            <div className="quotes-field quotes-status-field">
+              <label htmlFor="quote-status">상태</label>
 
               <select
                 id="quote-status"
                 value={status}
                 onChange={(event) => {
                   setStatus(
-                    event.target
-                      .value as StatusFilter,
+                    event.target.value as StatusFilter
                   );
-
                   setPage(0);
                 }}
               >
-
-                <option value="ALL">
-                  전체
-                </option>
-
-                <option value="DRAFT">
-                  작성중
-                </option>
-
-                <option value="ISSUED">
-                  발행
-                </option>
-
-                <option value="EXPIRED">
-                  만료
-                </option>
-
-                <option value="CANCELLED">
-                  취소
-                </option>
-
+                <option value="ALL">전체</option>
+                <option value="DRAFT">작성중</option>
+                <option value="ISSUED">발행</option>
+                <option value="EXPIRED">만료</option>
+                <option value="CANCELLED">취소</option>
               </select>
-
             </div>
 
-
-            {/* ===============================================
-                From Date
-            ================================================ */}
-
-            <div className="quotes-field">
-
+            <div className="quotes-field quotes-date-field">
               <label htmlFor="quote-from-date">
                 작성일 시작
               </label>
@@ -610,23 +386,13 @@ export function QuotesPage() {
                 type="date"
                 value={fromDate}
                 onChange={(event) => {
-                  setFromDate(
-                    event.target.value,
-                  );
-
+                  setFromDate(event.target.value);
                   setPage(0);
                 }}
               />
-
             </div>
 
-
-            {/* ===============================================
-                To Date
-            ================================================ */}
-
-            <div className="quotes-field">
-
+            <div className="quotes-field quotes-date-field">
               <label htmlFor="quote-to-date">
                 작성일 종료
               </label>
@@ -636,421 +402,308 @@ export function QuotesPage() {
                 type="date"
                 value={toDate}
                 onChange={(event) => {
-                  setToDate(
-                    event.target.value,
-                  );
-
+                  setToDate(event.target.value);
                   setPage(0);
                 }}
               />
-
             </div>
-
           </div>
-
-
-          {/* ===============================================
-              Search Actions
-          ================================================ */}
 
           <div className="quotes-search-actions">
-
-            <button
-              type="submit"
-              className="btn btn-primary"
-            >
+            <Button type="submit" variant="primary">
+              <Search size={16} aria-hidden="true" />
               검색
-            </button>
+            </Button>
 
-
-            <button
+            <Button
               type="button"
-              className="btn"
+              variant="outline"
               onClick={handleReset}
             >
+              <RotateCcw size={15} aria-hidden="true" />
               초기화
-            </button>
-
+            </Button>
           </div>
-
         </form>
-
       </section>
 
-
-      {/* =====================================================
-          Result Header
-      ====================================================== */}
-
-      <div className="quotes-result-header">
-
-        <div>
-
-          <strong>
-            견적 목록
-          </strong>
-
-
-          {quoteQuery.data && (
-            <span>
-              총{" "}
-              {quoteQuery.data.totalElements.toLocaleString(
-                "ko-KR",
-              )}
-              건
-            </span>
-          )}
-
-        </div>
-
-
-        {quoteQuery.isFetching &&
-          !quoteQuery.isLoading && (
-
-            <span className="quotes-refreshing">
-              새로고침 중...
-            </span>
-
-          )}
-
-      </div>
-
-
-      {/* =====================================================
-          Loading
-      ====================================================== */}
-
-      {quoteQuery.isLoading && (
-        <div className="quotes-state">
-          견적 목록을 불러오고 있습니다.
-        </div>
-      )}
-
-
-      {/* =====================================================
-          Error
-      ====================================================== */}
-
-      {quoteQuery.isError && (
-        <div className="quotes-state quotes-error">
-
-          <strong>
-            견적 목록을 불러오지 못했습니다.
-          </strong>
-
-          <p>
-            {quoteQuery.error instanceof Error
-              ? quoteQuery.error.message
-              : "잠시 후 다시 시도해주세요."}
-          </p>
-
-        </div>
-      )}
-
-
-      {/* =====================================================
-          Empty
-      ====================================================== */}
-
-      {!quoteQuery.isLoading &&
-        !quoteQuery.isError &&
-        quoteQuery.data &&
-        quoteQuery.data.content.length === 0 && (
-
-          <div className="quotes-state">
-
-            <strong>
-              검색된 견적이 없습니다.
+      {/* 결과 */}
+      <section
+        className="quotes-results"
+        aria-labelledby="quotes-result-title"
+      >
+        <div className="quotes-result-header">
+          <div className="quotes-result-heading">
+            <strong id="quotes-result-title">
+              견적 목록
             </strong>
 
-            <p>
-              검색 조건을 변경하거나 새로운 견적을 작성해주세요.
-            </p>
-
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() =>
-                navigate(ROUTES.quoteCreate)
-              }
-            >
-              + 새 견적 작성
-            </button>
-
+            {quoteData && (
+              <span>
+                총{" "}
+                {quoteData.totalElements.toLocaleString(
+                  "ko-KR"
+                )}
+                건
+              </span>
+            )}
           </div>
 
+          {quoteQuery.isFetching &&
+            !quoteQuery.isLoading && (
+              <span
+                className="quotes-refreshing"
+                role="status"
+              >
+                <LoaderCircle
+                  size={14}
+                  className="quotes-spin"
+                  aria-hidden="true"
+                />
+                새로고침 중...
+              </span>
+            )}
+        </div>
+
+        {quoteQuery.isLoading && (
+          <div className="quotes-state" role="status">
+            <LoaderCircle
+              size={28}
+              className="quotes-spin"
+              aria-hidden="true"
+            />
+            <strong>견적 목록을 불러오는 중</strong>
+            <p>잠시만 기다려 주세요.</p>
+          </div>
         )}
 
+        {quoteQuery.isError && (
+          <div
+            className="quotes-state quotes-error"
+            role="alert"
+          >
+            <AlertCircle
+              size={29}
+              aria-hidden="true"
+            />
+            <strong>
+              견적 목록을 불러오지 못했습니다.
+            </strong>
+            <p>
+              {quoteQuery.error instanceof Error
+                ? quoteQuery.error.message
+                : "잠시 후 다시 시도해 주세요."}
+            </p>
+          </div>
+        )}
 
-      {/* =====================================================
-          Table
-      ====================================================== */}
+        {showResults && quoteData.content.length === 0 && (
+          <div className="quotes-state">
+            <FileSearch size={32} aria-hidden="true" />
+            <strong>검색된 견적이 없습니다.</strong>
+            <p>
+              검색 조건을 변경하거나 새로운 견적을
+              작성할 수 있습니다.
+            </p>
 
-      {!quoteQuery.isLoading &&
-        !quoteQuery.isError &&
-        quoteQuery.data &&
-        quoteQuery.data.content.length > 0 && (
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => navigate(ROUTES.quoteCreate)}
+            >
+              <FilePlus2 size={16} aria-hidden="true" />
+              새 견적 작성
+            </Button>
+          </div>
+        )}
 
+        {showResults && quoteData.content.length > 0 && (
           <>
-
             <div className="quotes-table-wrapper">
-
               <table className="quotes-table">
-
                 <thead>
-
                   <tr>
-                    <th>견적번호</th>
-                    <th>고객</th>
-                    <th>견적명</th>
-                    <th>유입경로</th>
-                    <th>작성일</th>
-                    <th>유효기간</th>
-                    <th>금액</th>
-                    <th>상태</th>
+                    <th scope="col">견적번호</th>
+                    <th scope="col">고객</th>
+                    <th scope="col">견적명</th>
+                    <th scope="col">유입경로</th>
+                    <th scope="col">작성일</th>
+                    <th scope="col">유효기간</th>
+                    <th
+                      scope="col"
+                      className="quotes-money-column"
+                    >
+                      금액
+                    </th>
+                    <th scope="col">상태</th>
                   </tr>
-
                 </thead>
 
-
                 <tbody>
-
-                  {quoteQuery.data.content.map(
-                    (quote) => (
-
-                      <tr
-                        key={quote.id}
-                        tabIndex={0}
-                        onClick={() =>
-                          navigate(
-                            `${ROUTES.quotes}/${quote.id}`,
-                          )
-                        }
-                        onKeyDown={(event) => {
-                          if (
-                            event.key === "Enter" ||
-                            event.key === " "
-                          ) {
-                            event.preventDefault();
-
-                            navigate(
-                              `${ROUTES.quotes}/${quote.id}`,
-                            );
-                          }
-                        }}
-                      >
-
-                        <td className="quotes-number">
+                  {quoteData.content.map((quote) => (
+                    <tr key={quote.id}>
+                      <td>
+                        <button
+                          type="button"
+                          className="quotes-number"
+                          onClick={() => openQuote(quote.id)}
+                        >
                           {quote.quoteNumber}
-                        </td>
+                        </button>
+                      </td>
 
+                      <td>
+                        <div className="quotes-customer">
+                          <strong>
+                            {quote.customerName}
+                          </strong>
 
-                        <td>
+                          {quote.companyName && (
+                            <span>
+                              {quote.companyName}
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-                          <div className="quotes-customer">
-
-                            <strong>
-                              {quote.customerName}
-                            </strong>
-
-
-                            {quote.companyName && (
-                              <span>
-                                {quote.companyName}
-                              </span>
-                            )}
-
-                          </div>
-
-                        </td>
-
-
-                        <td>
+                      <td>
+                        <button
+                          type="button"
+                          className="quotes-title-link"
+                          onClick={() => openQuote(quote.id)}
+                        >
                           {quote.title}
-                        </td>
+                        </button>
+                      </td>
 
+                      <td>
+                        {quote.inquiryPlatformName || "-"}
+                      </td>
 
-                        <td>
-                          {quote.inquiryPlatformName ||
-                            "-"}
-                        </td>
+                      <td>
+                        {formatDate(quote.writtenDate)}
+                      </td>
 
+                      <td>
+                        {quote.validUntil
+                          ? formatDate(quote.validUntil)
+                          : "-"}
+                      </td>
 
-                        <td>
-                          {formatDate(
-                            quote.writtenDate,
-                          )}
-                        </td>
+                      <td className="quotes-money">
+                        {formatMoney(quote.totalAmount)}
+                      </td>
 
-
-                        <td>
-                          {quote.validUntil
-                            ? formatDate(
-                                quote.validUntil,
-                              )
-                            : "-"}
-                        </td>
-
-
-                        <td className="quotes-money">
-                          {formatMoney(
-                            quote.totalAmount,
-                          )}
-                        </td>
-
-
-                        <td>
-                          <QuoteStatusBadge
-                            status={
-                              quote.status
-                            }
-                          />
-                        </td>
-
-                      </tr>
-
-                    ),
-                  )}
-
+                      <td>
+                        <QuoteStatusBadge
+                          status={quote.status}
+                        />
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
-
               </table>
-
             </div>
 
-
-            {/* =================================================
-                Pagination
-            ================================================== */}
-
             <div className="quotes-pagination">
-
-              <button
+              <Button
                 type="button"
-                className="btn"
-                disabled={
-                  quoteQuery.data.first
-                }
+                variant="outline"
+                size="sm"
+                disabled={quoteData.first}
                 onClick={() =>
-                  setPage(
-                    (current) =>
-                      Math.max(
-                        current - 1,
-                        0,
-                      ),
+                  setPage((current) =>
+                    Math.max(current - 1, 0)
                   )
                 }
               >
+                <ChevronLeft
+                  size={16}
+                  aria-hidden="true"
+                />
                 이전
-              </button>
-
+              </Button>
 
               <span>
-
-                {quoteQuery.data.totalPages === 0
-                  ? 0
-                  : quoteQuery.data.page + 1}
-
+                <strong>
+                  {quoteData.totalPages === 0
+                    ? 0
+                    : quoteData.page + 1}
+                </strong>
                 {" / "}
-
-                {quoteQuery.data.totalPages}
-
+                {quoteData.totalPages}
               </span>
 
-
-              <button
+              <Button
                 type="button"
-                className="btn"
-                disabled={
-                  quoteQuery.data.last
-                }
+                variant="outline"
+                size="sm"
+                disabled={quoteData.last}
                 onClick={() =>
-                  setPage(
-                    (current) =>
-                      current + 1,
-                  )
+                  setPage((current) => current + 1)
                 }
               >
                 다음
-              </button>
-
+                <ChevronRight
+                  size={16}
+                  aria-hidden="true"
+                />
+              </Button>
             </div>
-
           </>
-
         )}
-
-    </div>
+      </section>
+    </main>
   );
 }
-
-
-/* =========================================================
- * Status
- * ========================================================= */
 
 function QuoteStatusBadge({
   status,
 }: {
   status: QuoteStatus;
 }) {
-  const labels:
-    Record<QuoteStatus, string> = {
-      DRAFT: "작성중",
-      ISSUED: "발행",
-      EXPIRED: "만료",
-      CANCELLED: "취소",
-    };
+  const labels: Record<QuoteStatus, string> = {
+    DRAFT: "작성중",
+    ISSUED: "발행",
+    EXPIRED: "만료",
+    CANCELLED: "취소",
+  };
+
+  const variants: Record<
+    QuoteStatus,
+    "warning" | "success" | "neutral" | "danger"
+  > = {
+    DRAFT: "warning",
+    ISSUED: "success",
+    EXPIRED: "neutral",
+    CANCELLED: "danger",
+  };
 
   return (
-    <span
-      className={
-        `quotes-status quotes-status-${status.toLowerCase()}`
-      }
-    >
+    <Badge variant={variants[status]}>
       {labels[status]}
-    </span>
+    </Badge>
   );
 }
 
-
-/* =========================================================
- * Format
- * ========================================================= */
-
-function formatMoney(
-  amount: number,
-) {
-  return `${amount.toLocaleString(
-    "ko-KR",
-  )}원`;
+function formatMoney(amount: number) {
+  return `${amount.toLocaleString("ko-KR")}원`;
 }
 
-
-function formatDate(
-  value: string,
-) {
+function formatDate(value: string) {
   if (!value) {
     return "-";
   }
 
-  const date =
-    new Date(value);
+  const date = new Date(value);
 
-  if (
-    Number.isNaN(
-      date.getTime(),
-    )
-  ) {
+  if (Number.isNaN(date.getTime())) {
     return value;
   }
 
-  return new Intl.DateTimeFormat(
-    "ko-KR",
-    {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    },
-  ).format(date);
+  return new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }

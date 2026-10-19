@@ -556,3 +556,336 @@
     animation: none;
   }
 }
+
+
+
+/* =========================================
+   KRIM Quote - Rate Modals Renewal
+   RatesPage.css 맨 아래 추가
+========================================= */
+
+.rate-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(12, 30, 23, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.rate-modal,
+.rate-category-modal {
+  width: min(720px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(10, 30, 20, 0.22);
+}
+
+.rate-category-modal {
+  width: min(480px, 100%);
+}
+
+.rate-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  border-bottom: 1px solid #e7ece9;
+}
+
+.rate-modal-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.rate-modal-heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 11px;
+}
+
+.rate-modal-header h2 {
+  margin: 0;
+  color: #1d2933;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.rate-modal-header p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.rate-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: #64748b;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.rate-modal-close:hover:not(:disabled) {
+  color: #1d2933;
+  background: #f1f5f2;
+}
+
+.rate-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rate-form {
+  padding: 24px;
+}
+
+.rate-form-field {
+  min-width: 0;
+  margin-bottom: 20px;
+}
+
+.rate-form-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rate-form-field label em {
+  color: #b42318;
+  font-style: normal;
+}
+
+.rate-form-field input,
+.rate-form-field select,
+.rate-form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  color: #344054;
+  background: #fff;
+  border: 1px solid #d0d9d3;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.rate-form-field input,
+.rate-form-field select {
+  height: 42px;
+}
+
+.rate-form-field textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.rate-form-field input:focus,
+.rate-form-field select:focus,
+.rate-form-field textarea:focus {
+  border-color: #1f4d3a;
+  box-shadow: 0 0 0 3px rgba(31, 77, 58, 0.12);
+}
+
+.rate-form-field small {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.rate-form-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: 14px;
+}
+
+.rate-input-suffix {
+  position: relative;
+}
+
+.rate-input-suffix input {
+  padding-right: 45px;
+}
+
+.rate-input-suffix span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.rate-form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.rate-form-error svg {
+  flex-shrink: 0;
+}
+
+.rate-category-current-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 14px 16px;
+  background: #f5f7f6;
+  border: 1px solid #e7ece9;
+  border-radius: 9px;
+}
+
+.rate-category-current-status > span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rate-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 24px -24px -24px;
+  padding: 18px 24px;
+  background: #f8faf9;
+  border-top: 1px solid #e7ece9;
+}
+
+.rate-modal-status-action,
+.rate-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rate-modal-actions {
+  margin-left: auto;
+}
+
+.rate-modal-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 220px;
+  padding: 40px 24px;
+  color: #64748b;
+  text-align: center;
+}
+
+.rate-modal-state > svg {
+  color: #1f4d3a;
+}
+
+.rate-modal-state strong {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rate-modal-state-error > svg,
+.rate-modal-state-error strong {
+  color: #b42318;
+}
+
+@media (max-width: 600px) {
+  .rate-modal-backdrop {
+    align-items: center;
+    padding: 12px;
+  }
+
+  .rate-modal,
+  .rate-category-modal {
+    max-height: calc(100dvh - 24px);
+    border-radius: 12px;
+  }
+
+  .rate-modal-header {
+    padding: 18px;
+  }
+
+  .rate-form {
+    padding: 18px;
+  }
+
+  .rate-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .rate-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+    margin: 20px -18px -18px;
+    padding: 16px 18px;
+  }
+
+  .rate-modal-status-action,
+  .rate-modal-actions {
+    width: 100%;
+  }
+
+  .rate-modal-actions {
+    margin-left: 0;
+  }
+
+  .rate-modal-actions > button {
+    flex: 1;
+  }
+
+  .rate-modal-status-action > button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rate-modal-backdrop {
+    backdrop-filter: none;
+  }
+}
