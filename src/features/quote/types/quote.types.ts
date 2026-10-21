@@ -1,3 +1,4 @@
+
 /* =========================================================
  * Status
  * ========================================================= */
@@ -7,7 +8,6 @@ export type QuoteStatus =
   | "ISSUED"
   | "EXPIRED"
   | "CANCELLED";
-
 
 /* =========================================================
  * Quote Item
@@ -22,7 +22,6 @@ export type QuoteItemRequest = {
   categoryName: string | null;
 
   featureName: string;
-
   description: string | null;
 
   /**
@@ -31,24 +30,19 @@ export type QuoteItemRequest = {
   quoteUnitPrice: number;
 
   quantity: number;
-
   unitName: string;
 
   difficultyCode: string;
-
   difficultyRate: number;
 
   adjustmentAmount: number;
-
   adjustmentReason: string | null;
 
   estimatedHours: number;
-
   internalMemo: string | null;
 
   sortOrder: number;
 };
-
 
 /* =========================================================
  * Direct Cost
@@ -56,14 +50,10 @@ export type QuoteItemRequest = {
 
 export type QuoteDirectCostRequest = {
   costName: string;
-
   amount: number;
-
   memo: string | null;
-
   sortOrder: number;
 };
-
 
 /* =========================================================
  * Create / Update
@@ -75,15 +65,11 @@ export type QuoteCreateRequest = {
   inquiryPlatformId: number | null;
 
   title: string;
-
   writtenDate: string;
-
   validUntil: string | null;
 
   expectedDuration: string | null;
-
   customerNote: string | null;
-
   internalMemo: string | null;
 
   /**
@@ -99,13 +85,10 @@ export type QuoteCreateRequest = {
   expectedSettlementMemo: string | null;
 
   items: QuoteItemRequest[];
-
   directCosts: QuoteDirectCostRequest[];
 };
 
-export type QuoteUpdateRequest =
-  QuoteCreateRequest;
-
+export type QuoteUpdateRequest = QuoteCreateRequest;
 
 /* =========================================================
  * Create Response
@@ -113,16 +96,11 @@ export type QuoteUpdateRequest =
 
 export type QuoteCreateResponse = {
   id: number;
-
   quoteNumber: string;
-
   status: QuoteStatus;
-
   totalAmount: number;
-
   createdAt: string;
 };
-
 
 /* =========================================================
  * List
@@ -132,49 +110,42 @@ export type QuoteListItem = {
   id: number;
 
   quoteNumber: string;
-
   title: string;
 
   customerId: number;
-
   customerName: string;
-
   companyName: string | null;
 
   inquiryPlatformId: number | null;
-
   inquiryPlatformName: string | null;
 
   status: QuoteStatus;
 
   writtenDate: string;
-
   validUntil: string | null;
 
   totalAmount: number;
 
   issuedAt: string | null;
-
   createdAt: string;
+
+  /* v1.2 개정 이력 */
+  originalQuoteId: number | null;
+  sourceQuoteId: number | null;
+  revisionNo: number;
 };
 
 export type QuoteListParams = {
   keyword?: string;
-
   customerId?: number;
-
   status?: QuoteStatus;
-
   inquiryPlatformId?: number;
 
   fromDate?: string;
-
   toDate?: string;
 
   page?: number;
-
   size?: number;
-
   sort?: string;
 };
 
@@ -182,28 +153,32 @@ export type QuotePageResponse = {
   content: QuoteListItem[];
 
   page: number;
-
   size: number;
 
   totalElements: number;
-
   totalPages: number;
 
   first: boolean;
-
   last: boolean;
 };
 
-export type QuoteDraftItem =
-  QuoteItemRequest & {
-    clientId: string;
-  };
-  export type QuoteDetailCustomer = {
+/* =========================================================
+ * Draft Item
+ * ========================================================= */
+
+export type QuoteDraftItem = QuoteItemRequest & {
+  clientId: string;
+};
+
+/* =========================================================
+ * Quote Detail - Customer / Platform
+ * ========================================================= */
+
+export type QuoteDetailCustomer = {
   id: number;
   customerName: string;
   companyName: string | null;
 };
-
 
 export type QuoteDetailPlatform = {
   id: number;
@@ -211,122 +186,112 @@ export type QuoteDetailPlatform = {
   name: string;
 };
 
+/* =========================================================
+ * Quote Detail - Item
+ * ========================================================= */
 
 export type QuoteDetailItem = {
   id: number;
 
   standardRateId: number | null;
-
   categoryName: string | null;
 
   featureName: string;
-
   description: string | null;
 
   standardPriceSnapshot: number | null;
 
   quoteUnitPrice: number;
-
   quantity: number;
-
   unitName: string;
 
   difficultyCode: string;
-
   difficultyRate: number;
 
   adjustmentAmount: number;
-
   adjustmentReason: string | null;
 
   calculatedAmount: number;
-
   finalAmount: number;
 
   estimatedHours: number;
-
   internalMemo: string | null;
 
   sortOrder: number;
 };
 
+/* =========================================================
+ * Quote Detail - Direct Cost
+ * ========================================================= */
 
 export type QuoteDirectCost = {
   id: number;
 
   costName: string;
-
   amount: number;
 
   memo: string | null;
-
   sortOrder: number;
 };
 
+/* =========================================================
+ * Quote Detail Response
+ * ========================================================= */
 
 export type QuoteDetailResponse = {
   id: number;
 
   quoteNumber: string;
-
   status: QuoteStatus;
 
   customer: QuoteDetailCustomer;
 
-  inquiryPlatform:
-    | QuoteDetailPlatform
-    | null;
+  inquiryPlatform: QuoteDetailPlatform | null;
 
   title: string;
 
   writtenDate: string;
-
   validUntil: string | null;
 
   expectedDuration: string | null;
-
   customerNote: string | null;
-
   internalMemo: string | null;
 
   items: QuoteDetailItem[];
-
   directCosts: QuoteDirectCost[];
 
   itemsAmount: number;
-
   adjustmentAmount: number;
 
   supplyAmount: number;
-
   vatRate: number;
-
   vatAmount: number;
-
   totalAmount: number;
 
-  expectedSettlementAmount:
-    | number
-    | null;
-
-  expectedDeductionAmount:
-    | number
-    | null;
-
-  expectedSettlementMemo:
-    | string
-    | null;
+  expectedSettlementAmount: number | null;
+  expectedDeductionAmount: number | null;
+  expectedSettlementMemo: string | null;
 
   estimatedHours: number;
+
   publicUrl: string | null;
 
   createdAt: string;
-
   updatedAt: string;
+
+  /* v1.2 개정 이력 */
+  originalQuoteId: number | null;
+  sourceQuoteId: number | null;
+  revisionNo: number;
 };
+
+/* =========================================================
+ * Issue Response
+ * ========================================================= */
 
 export type QuoteIssueResponse = {
   id: number;
+
   quoteNumber: string;
   status: "ISSUED";
 
@@ -337,3 +302,62 @@ export type QuoteIssueResponse = {
   publicUrl: string;
   issuedAt: string;
 };
+
+/* =========================================================
+ * v1.2 - Quote Copy
+ * ========================================================= */
+
+/**
+ * REVISION : 기존 견적의 개정본 생성
+ * DUPLICATE : 독립된 새 견적으로 복제
+ *
+ * 실제 백엔드 QuoteCopyType enum과 일치해야 한다.
+ */
+export type QuoteCopyType = "REVISION" | "DUPLICATE";
+
+export interface QuoteCopyRequest {
+  copyType: QuoteCopyType;
+}
+
+/**
+ * POST /api/v1/quotes/{id}/copy
+ */
+export interface QuoteCopyResponse {
+  quoteId: number;
+  quoteNumber: string;
+
+  copyType: QuoteCopyType;
+
+  originalQuoteId: number | null;
+  sourceQuoteId: number | null;
+
+  revisionNo: number;
+}
+
+/* =========================================================
+ * v1.2 - Quote Revision History
+ * ========================================================= */
+
+/**
+ * GET /api/v1/quotes/{id}/revisions
+ *
+ * 개정 이력의 각 견적 정보를 나타낸다.
+ */
+export interface QuoteRevisionResponse {
+  quoteId: number;
+  quoteNumber: string;
+
+  status: QuoteStatus;
+  revisionNo: number;
+
+  originalQuoteId: number | null;
+  sourceQuoteId: number | null;
+
+  title: string;
+  writtenDate: string;
+
+  totalAmount: number;
+
+  issuedAt: string | null;
+  createdAt: string;
+}

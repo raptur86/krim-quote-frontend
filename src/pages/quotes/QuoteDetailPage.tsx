@@ -16,6 +16,8 @@ import {
   ReceiptText,
   Send,
   Wallet,
+  GitBranch,
+  History,
 } from "lucide-react";
 
 import { ROUTES } from "../../app/router/routes";
@@ -26,7 +28,7 @@ import { useCopyQuote } from "../../features/quote/hooks/useCopyQuote";
 import { useIssueQuote } from "../../features/quote/hooks/useIssueQuote";
 import { Button } from "../../components/ui/Button";
 import { QuoteSalesSection } from "./QuoteSalesSection";
-
+import { useQuoteRevisions } from "../../features/quote/hooks/useQuoteRevisions";
 import "./QuoteDetailPage.css";
 
 export function QuoteDetailPage() {
@@ -35,6 +37,7 @@ export function QuoteDetailPage() {
 
   const id = Number(quoteId);
   const quoteQuery = useQuote(id);
+  const revisionsQuery = useQuoteRevisions(id);
   const issueQuote = useIssueQuote();
 
   const copyQuote = useCopyQuote();
@@ -94,9 +97,10 @@ export function QuoteDetailPage() {
     }
 
     const confirmed = window.confirm(
-      "발행된 견적을 복사하시겠습니까?\n\n" +
-      "기존 견적은 유지되고 새로운 임시 견적이 생성됩니다.\n" +
-      "복사 후 새 견적 수정 화면으로 이동합니다."
+      "발행된 견적의 개정본을 생성하시겠습니까?\n\n" +
+      "기존 발행 견적은 변경되지 않습니다.\n" +
+      "새로운 개정 견적이 작성 중(DRAFT) 상태로 생성됩니다.\n\n" +
+      "생성 후 견적 수정 화면으로 이동합니다."
     );
 
     if (!confirmed) {
@@ -106,27 +110,28 @@ export function QuoteDetailPage() {
     setQuoteCopyError(null);
 
     try {
-      const result = await copyQuote.mutateAsync(quote.id);
+      const result = await copyQuote.mutateAsync({
+        quoteId: quote.id,
+        copyType: "REVISION",
+      });
 
       if (
-        !Number.isSafeInteger(result.id) ||
-        result.id <= 0
+        !Number.isSafeInteger(result.quoteId) ||
+        result.quoteId <= 0
       ) {
         throw new Error(
-          "복사된 견적의 ID가 올바르지 않습니다."
+          "생성된 개정 견적의 ID가 올바르지 않습니다."
         );
       }
-      if (result.status !== "DRAFT") {
-        throw new Error("복사된 견적이 작성 중 상태가 아닙니다.");
-      }
+
       navigate(
-        `${ROUTES.quotes}/${result.id}/edit`
+        `${ROUTES.quotes}/${result.quoteId}/edit`
       );
     } catch (error) {
       setQuoteCopyError(
         error instanceof Error
           ? error.message
-          : "견적 복사에 실패했습니다."
+          : "견적 개정본 생성에 실패했습니다."
       );
     }
   }
@@ -238,7 +243,18 @@ export function QuoteDetailPage() {
             <span className="quote-detail-number">
               {quote.quoteNumber || "견적번호 미발행"}
             </span>
+            <span
+              className={[
+                "quote-detail-revision-badge",
+                quote.revisionNo > 0 ? "revised" : "original",
+              ].join(" ")}
+            >
+              <GitBranch size={13} aria-hidden="true" />
 
+              {quote.revisionNo > 0
+                ? `${quote.revisionNo}차 개정`
+                : "원본"}
+            </span>
             <span
               className={[
                 "quote-detail-status",
@@ -409,48 +425,249 @@ export function QuoteDetailPage() {
         </div>
       )}
 
+      {/* =========================================
+    v1.2 - 견적 개정 이력
+========================================= */}
+
       <section className="quote-detail-section">
         <div className="quote-detail-section-heading">
           <span className="quote-detail-section-icon">
-            <ClipboardList size={19} aria-hidden="true" />
+            <History size={19} aria-hidden="true" />
           </span>
+
           <div>
-            <h2>기본정보</h2>
-            <p>견적과 고객의 기본 정보를 확인한다.</p>
+            <h2>견적 개정 이력</h2>
+            <p>
+              최초 견적부터 현재 견적까지의 개정 내역을 확인한다.
+            </p>
+          </div>
+
+          {!revisionsQuery.isLoading &&
+            !revisionsQuery.isError &&
+            revisionsQuery.data && (
+              <span className="quote-detail-count">
+                총 {revisionsQuery.data.length}건
+              </span>
+            )}
+        </div>
+
+        {/* 현재 견적 개정 정보 */}
+
+        <div className="quote-detail-revision-overview">
+          <div>
+            <span>현재 견적</span>
+            <strong>{quote.quoteNumber}</strong>
+          </div>
+
+          <div>
+            <span>개정 차수</span>
+            <strong>
+              {quote.revisionNo === 0
+                ? "최초 견적"
+                : `${quote.revisionNo}차 개정`}
+            </strong>
+          </div>
+
+          <div>
+            <span>최초 견적</span>
+            {quote.originalQuoteId != null ? (
+              <button
+                type="button"
+                className="quote-detail-revision-link"
+                onClick={() =>
+                  navigate(
+                    `${ROUTES.quotes}/${quote.originalQuoteId}`
+                  )
+                }
+              >
+                상세 보기
+                <ExternalLink size={13} aria-hidden="true" />
+              </button>
+            ) : (
+              <strong>현재 견적이 원본</strong>
+            )}
+          </div>
+
+          <div>
+            <span>직전 견적</span>
+            {quote.sourceQuoteId != null ? (
+              <button
+                type="button"
+                className="quote-detail-revision-link"
+                onClick={() =>
+                  navigate(
+                    `${ROUTES.quotes}/${quote.sourceQuoteId}`
+                  )
+                }
+              >
+                상세 보기
+                <ExternalLink size={13} aria-hidden="true" />
+              </button>
+            ) : (
+              <strong>없음</strong>
+            )}
           </div>
         </div>
 
-        <dl className="quote-detail-info">
-          <div>
-            <dt>고객</dt>
-            <dd>
-              {quote.customer.customerName}
-              {quote.customer.companyName
-                ? ` / ${quote.customer.companyName}`
-                : ""}
-            </dd>
-          </div>
+        {/* 개정 이력 조회 중 */}
 
-          <div>
-            <dt>의뢰 플랫폼</dt>
-            <dd>{quote.inquiryPlatform?.name ?? "-"}</dd>
+        {revisionsQuery.isLoading && (
+          <div
+            className="quote-detail-revision-feedback"
+            role="status"
+          >
+            <LoaderCircle
+              size={20}
+              className="quote-detail-spin"
+              aria-hidden="true"
+            />
+            개정 이력을 불러오는 중입니다.
           </div>
+        )}
 
-          <div>
-            <dt>작성일</dt>
-            <dd>{quote.writtenDate}</dd>
-          </div>
+        {/* 개정 이력 조회 실패 */}
 
-          <div>
-            <dt>유효기간</dt>
-            <dd>{quote.validUntil ?? "-"}</dd>
-          </div>
+        {revisionsQuery.isError && (
+          <div
+            className="quote-detail-revision-feedback error"
+            role="alert"
+          >
+            <AlertCircle size={18} aria-hidden="true" />
 
-          <div>
-            <dt>예상 기간</dt>
-            <dd>{quote.expectedDuration ?? "-"}</dd>
+            <span>
+              {revisionsQuery.error instanceof Error
+                ? revisionsQuery.error.message
+                : "개정 이력을 불러오지 못했습니다."}
+            </span>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                void revisionsQuery.refetch();
+              }}
+            >
+              다시 시도
+            </Button>
           </div>
-        </dl>
+        )}
+
+        {/* 개정 이력 없음 */}
+
+        {revisionsQuery.isSuccess &&
+          revisionsQuery.data.length === 0 && (
+            <div className="quote-detail-revision-feedback">
+              등록된 개정 이력이 없습니다.
+            </div>
+          )}
+
+        {/* 개정 이력 목록 */}
+
+        {revisionsQuery.isSuccess &&
+          revisionsQuery.data.length > 0 && (
+            <div className="quote-detail-revision-list">
+              {[...revisionsQuery.data]
+                .sort((a, b) => a.revisionNo - b.revisionNo)
+                .map((revision) => {
+                  const isCurrent =
+                    revision.quoteId === quote.id;
+
+                  return (
+                    <div
+                      key={revision.quoteId}
+                      className={[
+                        "quote-detail-revision-item",
+                        isCurrent ? "current" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
+                      <div className="quote-detail-revision-step">
+                        <GitBranch
+                          size={17}
+                          aria-hidden="true"
+                        />
+                      </div>
+
+                      <div className="quote-detail-revision-content">
+                        <div className="quote-detail-revision-title">
+                          <strong>
+                            {revision.revisionNo === 0
+                              ? "최초 견적"
+                              : `${revision.revisionNo}차 개정`}
+                          </strong>
+
+                          <span
+                            className={[
+                              "quote-detail-status",
+                              revision.status === "DRAFT"
+                                ? "draft"
+                                : revision.status === "ISSUED"
+                                  ? "issued"
+                                  : "other",
+                            ].join(" ")}
+                          >
+                            {revision.status === "DRAFT"
+                              ? "작성 중"
+                              : revision.status === "ISSUED"
+                                ? "발행 완료"
+                                : revision.status}
+                          </span>
+
+                          {isCurrent && (
+                            <span className="quote-detail-revision-current">
+                              현재 견적
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="quote-detail-revision-number">
+                          {revision.quoteNumber}
+                        </div>
+
+                        <div className="quote-detail-revision-meta">
+                          <span>
+                            {revision.title}
+                          </span>
+
+                          <span>
+                            {formatMoney(revision.totalAmount)}
+                          </span>
+
+                          <span>
+                            작성일 : {revision.writtenDate}
+                          </span>
+
+                          {revision.issuedAt && (
+                            <span>
+                              발행일 : {revision.issuedAt.slice(0, 10)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {!isCurrent && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() =>
+                            navigate(
+                              `${ROUTES.quotes}/${revision.quoteId}`
+                            )
+                          }
+                        >
+                          <ExternalLink
+                            size={14}
+                            aria-hidden="true"
+                          />
+                          상세 보기
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          )}
       </section>
 
       <section className="quote-detail-section">

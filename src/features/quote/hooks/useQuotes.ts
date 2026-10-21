@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 
 import { getQuotesApi } from "../api/quoteApi";
@@ -5,7 +6,6 @@ import { getQuotesApi } from "../api/quoteApi";
 import type {
   QuoteListParams,
 } from "../types/quote.types";
-
 
 export const quoteKeys = {
   all: ["quotes"] as const,
@@ -21,8 +21,14 @@ export const quoteKeys = {
 
   detail: (quoteId: number) =>
     [...quoteKeys.details(), quoteId] as const,
-};
 
+  // v1.2 - 개정 이력
+  revisions: () =>
+    [...quoteKeys.all, "revisions"] as const,
+
+  revision: (quoteId: number) =>
+    [...quoteKeys.revisions(), quoteId] as const,
+};
 
 export function useQuotes(
   params?: QuoteListParams,

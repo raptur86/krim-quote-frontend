@@ -566,3 +566,214 @@
     animation: none;
   }
 }
+
+
+/* =========================================
+   v1.2 - Quote Revision History
+========================================= */
+
+.quote-detail-revision-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.quote-detail-revision-badge.original {
+  color: #475467;
+  background: #f2f4f7;
+}
+
+.quote-detail-revision-badge.revised {
+  color: #1f4d3a;
+  background: #eaf4ed;
+}
+
+.quote-detail-revision-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.quote-detail-revision-overview > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  padding: 16px;
+  background: #f8faf9;
+  border: 1px solid #edf1ee;
+  border-radius: 9px;
+}
+
+.quote-detail-revision-overview span {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.quote-detail-revision-overview strong {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.quote-detail-revision-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  color: #1f4d3a;
+  background: transparent;
+  border: 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.quote-detail-revision-link:hover {
+  text-decoration: underline;
+}
+
+.quote-detail-revision-link:focus-visible {
+  outline: 2px solid #1f4d3a;
+  outline-offset: 4px;
+}
+
+.quote-detail-revision-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 90px;
+  padding: 20px;
+  color: #64748b;
+  background: #f8faf9;
+  border: 1px solid #edf1ee;
+  border-radius: 9px;
+  font-size: 12px;
+}
+
+.quote-detail-revision-feedback.error {
+  color: #b42318;
+  background: #fef3f2;
+  border-color: #fecdca;
+}
+
+.quote-detail-revision-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quote-detail-revision-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e0e8e2;
+  border-radius: 10px;
+}
+
+.quote-detail-revision-item.current {
+  background: #f0f7f2;
+  border-color: #a9cfb5;
+}
+
+.quote-detail-revision-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  border-radius: 50%;
+}
+
+.quote-detail-revision-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.quote-detail-revision-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.quote-detail-revision-title > strong {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quote-detail-revision-current {
+  padding: 4px 8px;
+  color: #1f4d3a;
+  background: #d5e8db;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.quote-detail-revision-number {
+  margin-bottom: 8px;
+  color: #475467;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-detail-revision-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .quote-detail-revision-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-detail-revision-item {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .quote-detail-revision-content {
+    flex-basis: calc(100% - 60px);
+  }
+
+  .quote-detail-revision-item > button {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-detail-revision-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quote-detail-revision-item {
+    padding: 14px;
+  }
+}
