@@ -9,6 +9,8 @@ import {
   ClipboardList,
   FilePenLine,
   FileText,
+  GitBranch,
+  ExternalLink,
   LoaderCircle,
   Pencil,
   ReceiptText,
@@ -85,7 +87,9 @@ export function QuoteEditPage() {
 
   const platformsQuery = usePlatforms(true);
 
-  const [initialized, setInitialized] = useState(false);
+  const [initializedQuoteId, setInitializedQuoteId] =
+    useState<number | null>(null);
+
   const [step, setStep] = useState<QuoteStep>("BASIC");
 
   const [basicValues, setBasicValues] =
@@ -101,19 +105,29 @@ export function QuoteEditPage() {
   const [saveError, setSaveError] = useState("");
 
   /*
-   * 상세 조회 데이터를 최초 한 번만 편집 상태로 변환한다.
-   * 이후에는 사용자가 수정 중인 값을 유지한다.
+   * 상세 조회 데이터를 편집 상태로 변환한다.
+   *
+   * 동일한 견적에서는 최초 한 번만 초기화하여
+   * 사용자가 수정 중인 입력값을 유지한다.
+   *
+   * 다른 견적 ID로 이동하면 해당 견적의
+   * 데이터를 새롭게 초기화한다.
    */
   useEffect(() => {
     const quote = quoteQuery.data;
 
-    if (!quote || initialized || quote.status !== "DRAFT") {
+    if (
+      !quote ||
+      quote.id === initializedQuoteId ||
+      quote.status !== "DRAFT"
+    ) {
       return;
     }
 
     setBasicValues({
       customerId: quote.customer.id,
-      inquiryPlatformId: quote.inquiryPlatform?.id ?? null,
+      inquiryPlatformId:
+        quote.inquiryPlatform?.id ?? null,
       title: quote.title,
       writtenDate: quote.writtenDate,
       validUntil: quote.validUntil,
@@ -146,8 +160,13 @@ export function QuoteEditPage() {
     );
 
     setAdjustmentAmount(quote.adjustmentAmount);
-    setInitialized(true);
-  }, [quoteQuery.data, initialized]);
+
+    setStep("BASIC");
+    setErrorMessage("");
+    setSaveError("");
+
+    setInitializedQuoteId(quote.id);
+  }, [quoteQuery.data, initializedQuoteId]);
 
   const customers = useMemo(
     () => customersQuery.data?.content ?? [],
@@ -215,7 +234,12 @@ export function QuoteEditPage() {
   }
 
   async function handleUpdateQuote() {
-    if (!basicValues || updateQuote.isPending) {
+    if (
+      !basicValues ||
+      updateQuote.isPending ||
+      quoteQuery.data?.status !== "DRAFT" ||
+      initializedQuoteId !== id
+    ) {
       return;
     }
 
@@ -242,22 +266,29 @@ export function QuoteEditPage() {
 
     const request: QuoteUpdateRequest = {
       customerId: basicValues.customerId,
+
       inquiryPlatformId:
         basicValues.inquiryPlatformId,
+
       title: basicValues.title.trim(),
       writtenDate: basicValues.writtenDate,
+
       validUntil: nullableText(
         basicValues.validUntil
       ),
+
       expectedDuration: nullableText(
         basicValues.expectedDuration
       ),
+
       customerNote: nullableText(
         basicValues.customerNote
       ),
+
       internalMemo: nullableText(
         basicValues.internalMemo
       ),
+
       adjustmentAmount,
 
       /*
@@ -280,20 +311,27 @@ export function QuoteEditPage() {
 
         return {
           ...item,
+
           categoryName: nullableText(
             item.categoryName
           ),
+
           featureName: item.featureName.trim(),
+
           description: nullableText(
             item.description
           ),
+
           unitName: item.unitName.trim(),
+
           adjustmentReason: nullableText(
             item.adjustmentReason
           ),
+
           internalMemo: nullableText(
             item.internalMemo
           ),
+
           sortOrder: index + 1,
         };
       }),
@@ -313,6 +351,12 @@ export function QuoteEditPage() {
         ) ?? [],
     };
 
+    /*
+     * originalQuoteId, sourceQuoteId, revisionNo는
+     * 백엔드에서 관리하는 개정 관계 정보이다.
+     *
+     * 따라서 QuoteUpdateRequest에 포함하지 않는다.
+     */
     try {
       setSaveError("");
 
@@ -394,7 +438,7 @@ export function QuoteEditPage() {
     );
   }
 
-  if (!basicValues) {
+  if (!basicValues || initializedQuoteId !== id) {
     return (
       <EditState
         type="loading"
@@ -404,8 +448,15 @@ export function QuoteEditPage() {
     );
   }
 
+  const quote = quoteQuery.data;
+  const isRevision = quote.revisionNo > 0;
+
   return (
     <main className="quote-create-page">
+      {/* =========================================
+          Header
+      ========================================= */}
+
       <header className="quote-create-header">
         <div className="quote-create-header-info">
           <div className="quote-create-header-meta">
@@ -423,9 +474,24 @@ export function QuoteEditPage() {
             <span className="quote-create-header-badge">
               견적 수정
             </span>
+
+            <span className="quote-edit-revision-badge">
+              <GitBranch
+                size={14}
+                aria-hidden="true"
+              />
+
+              {isRevision
+                ? `${quote.revisionNo}차 개정`
+                : "원본 견적"}
+            </span>
           </div>
 
-          <h1>견적 수정</h1>
+          <h1>
+            {isRevision
+              ? `${quote.revisionNo}차 개정 견적 수정`
+              : "견적 수정"}
+          </h1>
 
           <p>
             기존 견적의 기본정보와 항목을 수정하고
@@ -438,7 +504,8 @@ export function QuoteEditPage() {
                 size={15}
                 aria-hidden="true"
               />
-              {quoteQuery.data.quoteNumber ||
+
+              {quote.quoteNumber ||
                 "견적번호 미발행"}
             </span>
 
@@ -467,6 +534,79 @@ export function QuoteEditPage() {
           </Button>
         </div>
       </header>
+
+      {/* =========================================
+          v1.2 - Revision Lineage
+      ========================================= */}
+
+      {isRevision && (
+        <section
+          className="quote-edit-lineage"
+          aria-label="견적 개정 정보"
+        >
+          <div className="quote-edit-lineage-heading">
+            <GitBranch
+              size={19}
+              aria-hidden="true"
+            />
+
+            <div>
+              <strong>
+                {quote.revisionNo}차 개정 견적
+              </strong>
+
+              <p>
+                원본 견적은 변경되지 않으며,
+                현재 개정본만 수정한다.
+              </p>
+            </div>
+          </div>
+
+          <div className="quote-edit-lineage-links">
+            {quote.originalQuoteId != null && (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={updateQuote.isPending}
+                onClick={() =>
+                  navigate(
+                    `${ROUTES.quotes}/${quote.originalQuoteId}`
+                  )
+                }
+              >
+                <ExternalLink
+                  size={15}
+                  aria-hidden="true"
+                />
+                최초 견적 보기
+              </Button>
+            )}
+
+            {quote.sourceQuoteId != null && (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={updateQuote.isPending}
+                onClick={() =>
+                  navigate(
+                    `${ROUTES.quotes}/${quote.sourceQuoteId}`
+                  )
+                }
+              >
+                <ExternalLink
+                  size={15}
+                  aria-hidden="true"
+                />
+                직전 견적 보기
+              </Button>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* =========================================
+          Progress
+      ========================================= */}
 
       <section
         className="quote-create-progress"
@@ -502,6 +642,10 @@ export function QuoteEditPage() {
           />
         </div>
       </section>
+
+      {/* =========================================
+          Step Navigation
+      ========================================= */}
 
       <nav
         className="quote-create-steps"
@@ -541,6 +685,10 @@ export function QuoteEditPage() {
           </div>
         ))}
       </nav>
+
+      {/* =========================================
+          Edit Content
+      ========================================= */}
 
       <section className="quote-create-content">
         <div className="quote-create-section-heading">
@@ -582,6 +730,10 @@ export function QuoteEditPage() {
           </div>
         </div>
 
+        {/* =========================================
+            Step 1 - Basic Information
+        ========================================= */}
+
         {step === "BASIC" && (
           <>
             {errorMessage && (
@@ -607,6 +759,10 @@ export function QuoteEditPage() {
             />
           </>
         )}
+
+        {/* =========================================
+            Step 2 - Quote Items
+        ========================================= */}
 
         {step === "ITEMS" && (
           <>
@@ -635,6 +791,10 @@ export function QuoteEditPage() {
           </>
         )}
 
+        {/* =========================================
+            Step 3 - Review
+        ========================================= */}
+
         {step === "REVIEW" && (
           <QuoteReviewStep
             basic={basicValues}
@@ -657,6 +817,10 @@ export function QuoteEditPage() {
     </main>
   );
 }
+
+/* =========================================
+   Loading / Error State
+========================================= */
 
 type EditStateProps = {
   type: "loading" | "error";
@@ -717,6 +881,10 @@ function EditState({
     </main>
   );
 }
+
+/* =========================================
+   Utilities
+========================================= */
 
 function nullableText(
   value: string | null | undefined

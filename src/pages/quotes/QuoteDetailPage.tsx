@@ -561,7 +561,10 @@ export function QuoteDetailPage() {
             </div>
           )}
 
-        {/* 개정 이력 목록 */}
+
+        {/* =========================================
+    개정 이력 목록 - Compact Layout
+========================================= */}
 
         {revisionsQuery.isSuccess &&
           revisionsQuery.data.length > 0 && (
@@ -572,102 +575,111 @@ export function QuoteDetailPage() {
                   const isCurrent =
                     revision.quoteId === quote.id;
 
-                  return (
-                    <div
-                      key={revision.quoteId}
-                      className={[
-                        "quote-detail-revision-item",
-                        isCurrent ? "current" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      <div className="quote-detail-revision-step">
+                  const revisionLabel =
+                    revision.revisionNo === 0
+                      ? "최초 견적"
+                      : `${revision.revisionNo}차 개정`;
+
+                  const statusLabel =
+                    revision.status === "DRAFT"
+                      ? "작성 중"
+                      : revision.status === "ISSUED"
+                        ? "발행 완료"
+                        : revision.status === "EXPIRED"
+                          ? "만료"
+                          : revision.status === "CANCELLED"
+                            ? "취소"
+                            : revision.status;
+
+                  const statusClass =
+                    revision.status === "DRAFT"
+                      ? "draft"
+                      : revision.status === "ISSUED"
+                        ? "issued"
+                        : "other";
+
+                  const content = (
+                    <>
+                      <span className="quote-detail-revision-step">
                         <GitBranch
-                          size={17}
+                          size={15}
                           aria-hidden="true"
                         />
-                      </div>
+                      </span>
 
-                      <div className="quote-detail-revision-content">
-                        <div className="quote-detail-revision-title">
-                          <strong>
-                            {revision.revisionNo === 0
-                              ? "최초 견적"
-                              : `${revision.revisionNo}차 개정`}
-                          </strong>
+                      <strong className="quote-detail-revision-name">
+                        {revisionLabel}
+                      </strong>
 
-                          <span
-                            className={[
-                              "quote-detail-status",
-                              revision.status === "DRAFT"
-                                ? "draft"
-                                : revision.status === "ISSUED"
-                                  ? "issued"
-                                  : "other",
-                            ].join(" ")}
-                          >
-                            {revision.status === "DRAFT"
-                              ? "작성 중"
-                              : revision.status === "ISSUED"
-                                ? "발행 완료"
-                                : revision.status}
-                          </span>
+                      <span
+                        className={[
+                          "quote-detail-status",
+                          statusClass,
+                        ].join(" ")}
+                      >
+                        {statusLabel}
+                      </span>
 
-                          {isCurrent && (
-                            <span className="quote-detail-revision-current">
-                              현재 견적
-                            </span>
-                          )}
-                        </div>
+                      {isCurrent && (
+                        <span className="quote-detail-revision-current">
+                          현재 견적
+                        </span>
+                      )}
 
-                        <div className="quote-detail-revision-number">
-                          {revision.quoteNumber}
-                        </div>
+                      <span
+                        className="quote-detail-revision-number"
+                        title={revision.quoteNumber}
+                      >
+                        {revision.quoteNumber}
+                      </span>
 
-                        <div className="quote-detail-revision-meta">
-                          <span>
-                            {revision.title}
-                          </span>
-
-                          <span>
-                            {formatMoney(revision.totalAmount)}
-                          </span>
-
-                          <span>
-                            작성일 : {revision.writtenDate}
-                          </span>
-
-                          {revision.issuedAt && (
-                            <span>
-                              발행일 : {revision.issuedAt.slice(0, 10)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                      <span className="quote-detail-revision-amount">
+                        {formatMoney(revision.totalAmount)}
+                      </span>
 
                       {!isCurrent && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() =>
-                            navigate(
-                              `${ROUTES.quotes}/${revision.quoteId}`
-                            )
-                          }
-                        >
+                        <span className="quote-detail-revision-open">
                           <ExternalLink
                             size={14}
                             aria-hidden="true"
                           />
-                          상세 보기
-                        </Button>
+                          <span>상세 보기</span>
+                        </span>
                       )}
-                    </div>
+                    </>
+                  );
+
+                  if (isCurrent) {
+                    return (
+                      <div
+                        key={revision.quoteId}
+                        className="quote-detail-revision-item current"
+                        aria-current="true"
+                      >
+                        {content}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={revision.quoteId}
+                      type="button"
+                      className="quote-detail-revision-item quote-detail-revision-clickable"
+                      onClick={() =>
+                        navigate(
+                          `${ROUTES.quotes}/${revision.quoteId}`
+                        )
+                      }
+                      aria-label={`${revisionLabel}, ${revision.quoteNumber}, ${formatMoney(revision.totalAmount)} 상세 보기`}
+                    >
+                      {content}
+                    </button>
                   );
                 })}
             </div>
           )}
+
       </section>
 
       <section className="quote-detail-section">

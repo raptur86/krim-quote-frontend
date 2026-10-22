@@ -612,3 +612,92 @@
     transition: none;
   }
 }
+
+/* =========================================
+   KRIM Quote v1.2
+   Quote Edit Revision Information
+========================================= */
+
+.quote-edit-revision-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #1f4d3a;
+  background: #eaf4ed;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Revision Lineage */
+
+.quote-edit-lineage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  background: #f0f7f2;
+  border: 1px solid #cce2d2;
+  border-radius: 12px;
+}
+
+.quote-edit-lineage-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  color: #1f4d3a;
+}
+
+.quote-edit-lineage-heading > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.quote-edit-lineage-heading strong {
+  display: block;
+  color: #1f4d3a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.quote-edit-lineage-heading p {
+  margin: 6px 0 0;
+  color: #537663;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.quote-edit-lineage-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .quote-edit-lineage {
+    padding: 18px;
+  }
+
+  .quote-edit-lineage-heading {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .quote-edit-lineage {
+    padding: 16px;
+  }
+
+  .quote-edit-lineage-links {
+    width: 100%;
+  }
+}

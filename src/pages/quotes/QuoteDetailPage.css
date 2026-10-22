@@ -668,20 +668,34 @@
   border-color: #fecdca;
 }
 
+
+/* =========================================
+   Compact Revision History
+========================================= */
+
 .quote-detail-revision-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .quote-detail-revision-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px;
+  flex-wrap: nowrap;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 7px 12px;
   background: #fff;
   border: 1px solid #e0e8e2;
-  border-radius: 10px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #344054;
+  font: inherit;
+  text-align: left;
 }
 
 .quote-detail-revision-item.current {
@@ -689,63 +703,119 @@
   border-color: #a9cfb5;
 }
 
+.quote-detail-revision-clickable {
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.quote-detail-revision-clickable:hover {
+  background: #f8fbf9;
+  border-color: #a9cfb5;
+}
+
+.quote-detail-revision-clickable:focus-visible {
+  outline: 2px solid #1f4d3a;
+  outline-offset: 2px;
+}
+
+/* Icon */
+
 .quote-detail-revision-step {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
   color: #1f4d3a;
   background: #eaf4ed;
   border-radius: 50%;
 }
 
-.quote-detail-revision-content {
-  flex: 1;
-  min-width: 0;
-}
+/* Revision name */
 
-.quote-detail-revision-title {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 7px;
-}
-
-.quote-detail-revision-title > strong {
+.quote-detail-revision-name {
+  flex: 0 0 auto;
   color: #344054;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
+
+/* Status */
+
+.quote-detail-revision-item .quote-detail-status {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  font-size: 10px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+/* Current */
 
 .quote-detail-revision-current {
-  padding: 4px 8px;
+  flex: 0 0 auto;
+  padding: 4px 7px;
   color: #1f4d3a;
   background: #d5e8db;
   border-radius: 5px;
   font-size: 10px;
   font-weight: 700;
+  white-space: nowrap;
 }
+
+/* Quote number */
 
 .quote-detail-revision-number {
-  margin-bottom: 8px;
-  color: #475467;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.quote-detail-revision-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
   color: #64748b;
   font-size: 11px;
-  line-height: 1.6;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Responsive */
+/* Amount */
+
+.quote-detail-revision-amount {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Detail link */
+
+.quote-detail-revision-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 5px;
+  padding-left: 8px;
+  color: #1f4d3a;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.quote-detail-revision-clickable:hover
+.quote-detail-revision-open {
+  text-decoration: underline;
+}
+
+/* =========================================
+   Responsive
+========================================= */
 
 @media (max-width: 1100px) {
   .quote-detail-revision-overview {
@@ -755,16 +825,20 @@
 
 @media (max-width: 768px) {
   .quote-detail-revision-item {
-    align-items: flex-start;
-    flex-wrap: wrap;
+    gap: 7px;
+    padding: 7px 10px;
   }
 
-  .quote-detail-revision-content {
-    flex-basis: calc(100% - 60px);
+  .quote-detail-revision-number {
+    display: none;
   }
 
-  .quote-detail-revision-item > button {
-    margin-left: auto;
+  .quote-detail-revision-open {
+    padding-left: 3px;
+  }
+
+  .quote-detail-revision-open span {
+    display: none;
   }
 }
 
@@ -774,6 +848,48 @@
   }
 
   .quote-detail-revision-item {
-    padding: 14px;
+    gap: 6px;
+    min-height: 44px;
+    padding: 6px 8px;
+  }
+
+  .quote-detail-revision-step {
+    flex-basis: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .quote-detail-revision-name {
+    font-size: 11px;
+  }
+
+  .quote-detail-revision-item .quote-detail-status,
+  .quote-detail-revision-current {
+    padding: 3px 5px;
+    font-size: 9px;
+  }
+
+  .quote-detail-revision-amount {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .quote-detail-revision-step {
+    display: none;
+  }
+
+  .quote-detail-revision-current {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-detail-spin {
+    animation: none;
+  }
+
+  .quote-detail-revision-clickable {
+    transition: none;
   }
 }

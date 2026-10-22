@@ -10,8 +10,10 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   FilePlus2,
   FileSearch,
+  GitBranch,
   LoaderCircle,
   RotateCcw,
   Search,
@@ -21,7 +23,11 @@ import {
 import { useQuotes } from "../../features/quote/hooks/useQuotes";
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
 import { ROUTES } from "../../app/router/routes";
-import type { QuoteStatus } from "../../features/quote/types/quote.types";
+
+import type {
+  QuoteListItem,
+  QuoteStatus,
+} from "../../features/quote/types/quote.types";
 
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
@@ -180,6 +186,8 @@ export function QuotesPage() {
 
   return (
     <main className="quotes-page">
+      {/* Header */}
+
       <header className="quotes-page-header">
         <div className="quotes-page-heading">
           <span className="quotes-page-heading-icon">
@@ -188,7 +196,7 @@ export function QuotesPage() {
 
           <div>
             <h1>견적 관리</h1>
-            <p>작성한 견적을 조회하고 관리한다.</p>
+            <p>작성한 견적과 개정 이력을 조회하고 관리한다.</p>
           </div>
         </div>
 
@@ -203,6 +211,7 @@ export function QuotesPage() {
       </header>
 
       {/* 검색 및 필터 */}
+
       <section
         className="quotes-search-card"
         aria-label="견적 검색 조건"
@@ -428,6 +437,7 @@ export function QuotesPage() {
       </section>
 
       {/* 결과 */}
+
       <section
         className="quotes-results"
         aria-labelledby="quotes-result-title"
@@ -524,6 +534,7 @@ export function QuotesPage() {
                 <thead>
                   <tr>
                     <th scope="col">견적번호</th>
+                    <th scope="col">개정 구분</th>
                     <th scope="col">고객</th>
                     <th scope="col">견적명</th>
                     <th scope="col">유입경로</th>
@@ -542,15 +553,48 @@ export function QuotesPage() {
                 <tbody>
                   {quoteData.content.map((quote) => (
                     <tr key={quote.id}>
+                      {/* 견적번호 */}
+
                       <td>
-                        <button
-                          type="button"
-                          className="quotes-number"
-                          onClick={() => openQuote(quote.id)}
-                        >
-                          {quote.quoteNumber}
-                        </button>
+                        <div className="quotes-number-cell">
+                          <button
+                            type="button"
+                            className="quotes-number"
+                            onClick={() => openQuote(quote.id)}
+                          >
+                            {quote.quoteNumber}
+                          </button>
+
+                          <span
+                            className={[
+                              "quotes-revision-badge",
+                              quote.revisionNo > 0
+                                ? "revised"
+                                : "original",
+                            ].join(" ")}
+                          >
+                            <GitBranch
+                              size={12}
+                              aria-hidden="true"
+                            />
+
+                            {quote.revisionNo > 0
+                              ? `${quote.revisionNo}차 개정`
+                              : "원본"}
+                          </span>
+                        </div>
                       </td>
+
+                      {/* 개정 구분 */}
+
+                      <td>
+                        <QuoteRevisionCell
+                          quote={quote}
+                          onOpenQuote={openQuote}
+                        />
+                      </td>
+
+                      {/* 고객 */}
 
                       <td>
                         <div className="quotes-customer">
@@ -566,6 +610,8 @@ export function QuotesPage() {
                         </div>
                       </td>
 
+                      {/* 견적명 */}
+
                       <td>
                         <button
                           type="button"
@@ -576,13 +622,19 @@ export function QuotesPage() {
                         </button>
                       </td>
 
+                      {/* 유입경로 */}
+
                       <td>
                         {quote.inquiryPlatformName || "-"}
                       </td>
 
+                      {/* 작성일 */}
+
                       <td>
                         {formatDate(quote.writtenDate)}
                       </td>
+
+                      {/* 유효기간 */}
 
                       <td>
                         {quote.validUntil
@@ -590,9 +642,13 @@ export function QuotesPage() {
                           : "-"}
                       </td>
 
+                      {/* 금액 */}
+
                       <td className="quotes-money">
                         {formatMoney(quote.totalAmount)}
                       </td>
+
+                      {/* 상태 */}
 
                       <td>
                         <QuoteStatusBadge
@@ -604,6 +660,8 @@ export function QuotesPage() {
                 </tbody>
               </table>
             </div>
+
+            {/* 페이지네이션 */}
 
             <div className="quotes-pagination">
               <Button
@@ -657,6 +715,81 @@ export function QuotesPage() {
   );
 }
 
+/* =========================================
+   v1.2 - Revision Cell
+========================================= */
+
+type QuoteRevisionCellProps = {
+  quote: QuoteListItem;
+  onOpenQuote: (quoteId: number) => void;
+};
+
+function QuoteRevisionCell({
+  quote,
+  onOpenQuote,
+}: QuoteRevisionCellProps) {
+  const isRevision = quote.revisionNo > 0;
+
+  if (!isRevision) {
+    return (
+      <div className="quotes-revision-cell">
+        <span className="quotes-revision-original">
+          최초 견적
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="quotes-revision-cell">
+      <strong className="quotes-revision-label">
+        {quote.revisionNo}차 개정
+      </strong>
+
+      <div className="quotes-revision-links">
+        {quote.originalQuoteId != null && (
+          <button
+            type="button"
+            className="quotes-revision-link"
+            title="최초 견적 상세 보기"
+            onClick={() =>
+              onOpenQuote(quote.originalQuoteId!)
+            }
+          >
+            원본
+            <ExternalLink
+              size={11}
+              aria-hidden="true"
+            />
+          </button>
+        )}
+
+        {quote.sourceQuoteId != null &&
+          quote.sourceQuoteId !== quote.originalQuoteId && (
+            <button
+              type="button"
+              className="quotes-revision-link"
+              title="직전 견적 상세 보기"
+              onClick={() =>
+                onOpenQuote(quote.sourceQuoteId!)
+              }
+            >
+              직전 견적
+              <ExternalLink
+                size={11}
+                aria-hidden="true"
+              />
+            </button>
+          )}
+      </div>
+    </div>
+  );
+}
+
+/* =========================================
+   Quote Status Badge
+========================================= */
+
 function QuoteStatusBadge({
   status,
 }: {
@@ -685,6 +818,10 @@ function QuoteStatusBadge({
     </Badge>
   );
 }
+
+/* =========================================
+   Format Utilities
+========================================= */
 
 function formatMoney(amount: number) {
   return `${amount.toLocaleString("ko-KR")}원`;
