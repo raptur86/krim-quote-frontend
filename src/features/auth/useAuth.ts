@@ -1,12 +1,32 @@
+
 import { createContext, useContext } from "react";
-import type { Admin, LoginRequest } from "./types/auth.types";
+
+import type {
+  Admin,
+  LoginRequest,
+} from "./types/auth.types";
+
 type Auth = {
-  admin: Admin | null; loading: boolean; sessionError: string;
-  login: (request: LoginRequest) => Promise<void>; logout: () => Promise<void>;
+  admin: Admin | null;
+  loading: boolean;
+  sessionError: string;
+
+  expiresAt: number | null;
+  extending: boolean;
+
+  login: (request: LoginRequest) => Promise<void>;
+  logout: () => Promise<void>;
+  extendLogin: () => Promise<void>;
 };
+
 export const AuthContext = createContext<Auth | null>(null);
+
 export function useAuth() {
   const auth = useContext(AuthContext);
-  if (!auth) throw new Error("AuthProvider가 필요합니다.");
+
+  if (!auth) {
+    throw new Error("AuthProvider가 필요합니다.");
+  }
+
   return auth;
 }

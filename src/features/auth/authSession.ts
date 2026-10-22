@@ -1,67 +1,54 @@
-const KEY =
-  "krim.auth.session";
 
-export const AUTH_EXPIRED =
-  "krim:auth-expired";
+const KEY = "krim.auth.session";
+
+export const AUTH_EXPIRED = "krim:auth-expired";
 
 export type Session = {
   accessToken: string;
   expiresAt: number;
 };
 
-export function readSession():
-  | Session
-  | null {
+export function readSession(): Session | null {
   try {
-    const value =
-      JSON.parse(
-        sessionStorage.getItem(KEY) ??
-          "null",
-      );
+    const value = JSON.parse(
+      sessionStorage.getItem(KEY) ?? "null",
+    );
 
     if (
-      typeof value?.accessToken ===
-        "string" &&
+      typeof value?.accessToken === "string" &&
       value.accessToken &&
-      Number.isFinite(
-        value.expiresAt,
-      ) &&
+      Number.isFinite(value.expiresAt) &&
       value.expiresAt > Date.now()
     ) {
-      return value;
+      return value as Session;
     }
   } catch {
-    // Invalid or unavailable storage.
+    // 저장소 접근 실패 또는 잘못된 데이터
   }
 
   return null;
 }
 
-export function saveSession(
-  session: Session,
-) {
+export function saveSession(session: Session) {
   sessionStorage.setItem(
     KEY,
     JSON.stringify(session),
   );
 }
 
-/**
- * 세션 데이터만 삭제한다.
- *
- * 정상 로그아웃에서도 사용하므로
- * 만료 이벤트를 발생시키지 않는다.
- */
 export function clearSession() {
   try {
     sessionStorage.removeItem(KEY);
   } catch {
-    // Ignore storage error.
+    // 저장소 접근 실패 무시
   }
 }
 
 /**
- * 인증이 실제로 만료되었을 때만 사용한다.
+ * 인증 만료 처리
+ *
+ * 정상 로그아웃과 구분하여
+ * AuthProvider에 만료 이벤트를 전달한다.
  */
 export function expireSession() {
   clearSession();
