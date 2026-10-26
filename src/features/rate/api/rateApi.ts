@@ -1,3 +1,4 @@
+
 import { apiClient } from "../../../services/apiClient";
 
 import type {
@@ -13,8 +14,12 @@ import type {
   StandardRatePageResponse,
   StandardRateSaveRequest,
   UpdateRateCategoryRequest,
+  PackageFeatureResponse,
+  PackageFeatureCreateRequest,
+  PackageFeatureUpdateRequest,
+  PackageFeatureListParams,
+  PackageFeatureActiveRequest,
 } from "../types/rate.types";
-
 
 /* =========================================================
    Rate Category
@@ -25,14 +30,9 @@ export async function getRateCategoriesApi(
 ): Promise<RateCategory[]> {
   const { data } = await apiClient.get<
     ApiResponse<RateCategory[]>
-  >(
-    "/rate-categories",
-    {
-      params: {
-        active,
-      },
-    },
-  );
+  >("/rate-categories", {
+    params: { active },
+  });
 
   if (!data.success || !data.data) {
     throw new Error(
@@ -44,16 +44,12 @@ export async function getRateCategoriesApi(
   return data.data;
 }
 
-
 export async function createRateCategoryApi(
   request: CreateRateCategoryRequest,
 ): Promise<RateCategory> {
   const { data } = await apiClient.post<
     ApiResponse<RateCategory>
-  >(
-    "/rate-categories",
-    request,
-  );
+  >("/rate-categories", request);
 
   if (!data.success || !data.data) {
     throw new Error(
@@ -64,7 +60,6 @@ export async function createRateCategoryApi(
 
   return data.data;
 }
-
 
 export async function updateRateCategoryApi(
   categoryId: number,
@@ -87,7 +82,6 @@ export async function updateRateCategoryApi(
   return data.data;
 }
 
-
 export async function changeRateCategoryActiveApi(
   categoryId: number,
   request: ChangeActiveRequest,
@@ -109,7 +103,6 @@ export async function changeRateCategoryActiveApi(
   return data.data;
 }
 
-
 /* =========================================================
    Standard Rate
 ========================================================= */
@@ -119,12 +112,9 @@ export async function getStandardRatesApi(
 ): Promise<StandardRatePageResponse> {
   const { data } = await apiClient.get<
     ApiResponse<StandardRatePageResponse>
-  >(
-    "/standard-rates",
-    {
-      params,
-    },
-  );
+  >("/standard-rates", {
+    params,
+  });
 
   if (!data.success || !data.data) {
     throw new Error(
@@ -136,15 +126,12 @@ export async function getStandardRatesApi(
   return data.data;
 }
 
-
 export async function getStandardRateApi(
   rateId: number,
 ): Promise<StandardRateDetail> {
   const { data } = await apiClient.get<
     ApiResponse<StandardRateDetail>
-  >(
-    `/standard-rates/${rateId}`,
-  );
+  >(`/standard-rates/${rateId}`);
 
   if (!data.success || !data.data) {
     throw new Error(
@@ -156,16 +143,12 @@ export async function getStandardRateApi(
   return data.data;
 }
 
-
 export async function createStandardRateApi(
   request: StandardRateSaveRequest,
 ): Promise<StandardRateDetail> {
   const { data } = await apiClient.post<
     ApiResponse<StandardRateDetail>
-  >(
-    "/standard-rates",
-    request,
-  );
+  >("/standard-rates", request);
 
   if (!data.success || !data.data) {
     throw new Error(
@@ -176,7 +159,6 @@ export async function createStandardRateApi(
 
   return data.data;
 }
-
 
 export async function updateStandardRateApi(
   rateId: number,
@@ -199,7 +181,6 @@ export async function updateStandardRateApi(
   return data.data;
 }
 
-
 export async function changeStandardRateActiveApi(
   rateId: number,
   request: ChangeActiveRequest,
@@ -215,6 +196,123 @@ export async function changeStandardRateActiveApi(
     throw new Error(
       data.message ||
         "표준단가 상태를 변경하지 못했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+/* =========================================================
+   Package Features
+========================================================= */
+
+/**
+ * 패키지에 등록된 포함 기능 조회
+ *
+ * GET /standard-rates/{rateId}/features
+ *
+ * active=true : 활성 기능만 조회
+ * active=false : 비활성 기능만 조회
+ * active 미지정 : 전체 조회
+ */
+export async function getPackageFeaturesApi(
+  rateId: number,
+  params?: PackageFeatureListParams,
+): Promise<PackageFeatureResponse[]> {
+  const { data } = await apiClient.get<
+    ApiResponse<PackageFeatureResponse[]>
+  >(
+    `/standard-rates/${rateId}/features`,
+    { params },
+  );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "패키지 포함 기능을 불러오지 못했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+/**
+ * 패키지 포함 기능 등록
+ *
+ * POST /standard-rates/{rateId}/features
+ */
+export async function createPackageFeatureApi(
+  rateId: number,
+  request: PackageFeatureCreateRequest,
+): Promise<PackageFeatureResponse> {
+  const { data } = await apiClient.post<
+    ApiResponse<PackageFeatureResponse>
+  >(
+    `/standard-rates/${rateId}/features`,
+    request,
+  );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "패키지 포함 기능을 등록하지 못했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+/**
+ * 패키지 포함 기능 수정
+ *
+ * PUT /standard-rates/{rateId}/features/{itemId}
+ *
+ * itemId는 패키지 구성 항목 ID이다.
+ * featureRateId와 혼동하면 안 된다.
+ */
+export async function updatePackageFeatureApi(
+  rateId: number,
+  itemId: number,
+  request: PackageFeatureUpdateRequest,
+): Promise<PackageFeatureResponse> {
+  const { data } = await apiClient.put<
+    ApiResponse<PackageFeatureResponse>
+  >(
+    `/standard-rates/${rateId}/features/${itemId}`,
+    request,
+  );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "패키지 포함 기능을 수정하지 못했습니다.",
+    );
+  }
+
+  return data.data;
+}
+
+/**
+ * 패키지 포함 기능 활성 상태 변경
+ *
+ * PATCH /standard-rates/{rateId}/features/{itemId}/active
+ */
+export async function changePackageFeatureActiveApi(
+  rateId: number,
+  itemId: number,
+  request: PackageFeatureActiveRequest,
+): Promise<PackageFeatureResponse> {
+  const { data } = await apiClient.patch<
+    ApiResponse<PackageFeatureResponse>
+  >(
+    `/standard-rates/${rateId}/features/${itemId}/active`,
+    request,
+  );
+
+  if (!data.success || !data.data) {
+    throw new Error(
+      data.message ||
+        "패키지 포함 기능 상태를 변경하지 못했습니다.",
     );
   }
 

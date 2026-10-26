@@ -10,38 +10,49 @@ export type QuoteStatus =
   | "CANCELLED";
 
 /* =========================================================
- * Quote Item
+ * Quote Item Type
+ * ========================================================= */
+
+export type QuoteItemType =
+  | "FEATURE"
+  | "PACKAGE"
+  | "INCLUDED_FEATURE"
+  | "ADDITIONAL_FEATURE";
+
+/* =========================================================
+ * Quote Item Request
  * ========================================================= */
 
 export type QuoteItemRequest = {
-  /**
-   * 표준단가에서 가져온 항목이면 ID 존재
-   * 직접 입력 항목이면 null
-   */
   standardRateId: number | null;
   categoryName: string | null;
 
   featureName: string;
   description: string | null;
 
-  /**
-   * 실제 견적에 사용할 단가
-   */
   quoteUnitPrice: number;
-
   quantity: number;
-  unitName: string;
+  unitName: string | null;
 
-  difficultyCode: string;
+  difficultyCode: string | null;
   difficultyRate: number;
 
-  adjustmentAmount: number;
+  adjustmentAmount: number | null;
   adjustmentReason: string | null;
 
-  estimatedHours: number;
+  estimatedHours: number | null;
   internalMemo: string | null;
 
   sortOrder: number;
+
+  // 패키지 견적 확장
+  itemType?: QuoteItemType | null;
+
+  // 서버 요청 items 배열의 부모 PACKAGE 인덱스
+  parentPackageItemIndex?: number | null;
+
+  // 포함 기능의 적용 범위 스냅샷
+  packageScopeSnapshot?: string | null;
 };
 
 /* =========================================================
@@ -72,16 +83,9 @@ export type QuoteCreateRequest = {
   customerNote: string | null;
   internalMemo: string | null;
 
-  /**
-   * 견적 전체 조정금액
-   */
   adjustmentAmount: number;
 
-  /**
-   * 플랫폼에서 실제로 받을 것으로 예상하는 금액
-   */
   expectedSettlementAmount: number | null;
-
   expectedSettlementMemo: string | null;
 
   items: QuoteItemRequest[];
@@ -129,7 +133,7 @@ export type QuoteListItem = {
   issuedAt: string | null;
   createdAt: string;
 
-  /* v1.2 개정 이력 */
+  // v1.2 개정 이력
   originalQuoteId: number | null;
   sourceQuoteId: number | null;
   revisionNo: number;
@@ -167,7 +171,12 @@ export type QuotePageResponse = {
  * ========================================================= */
 
 export type QuoteDraftItem = QuoteItemRequest & {
+  // 프론트엔드 항목 고유 식별자
   clientId: string;
+
+  // 프론트엔드에서 사용하는 부모 패키지 식별자
+  // API 요청 시에는 전송하지 않는다.
+  parentPackageClientId?: string | null;
 };
 
 /* =========================================================
@@ -203,21 +212,29 @@ export type QuoteDetailItem = {
 
   quoteUnitPrice: number;
   quantity: number;
-  unitName: string;
+  unitName: string | null;
 
-  difficultyCode: string;
+  difficultyCode: string | null;
   difficultyRate: number;
 
-  adjustmentAmount: number;
+  adjustmentAmount: number | null;
   adjustmentReason: string | null;
 
   calculatedAmount: number;
   finalAmount: number;
 
-  estimatedHours: number;
+  estimatedHours: number | null;
   internalMemo: string | null;
 
   sortOrder: number;
+
+  // 패키지 견적 확장
+  itemType?: QuoteItemType | null;
+
+  // 저장된 부모 PACKAGE 견적항목의 DB ID
+  parentPackageItemId?: number | null;
+
+  packageScopeSnapshot?: string | null;
 };
 
 /* =========================================================
@@ -279,7 +296,7 @@ export type QuoteDetailResponse = {
   createdAt: string;
   updatedAt: string;
 
-  /* v1.2 개정 이력 */
+  // v1.2 개정 이력
   originalQuoteId: number | null;
   sourceQuoteId: number | null;
   revisionNo: number;
@@ -307,21 +324,14 @@ export type QuoteIssueResponse = {
  * v1.2 - Quote Copy
  * ========================================================= */
 
-/**
- * REVISION : 기존 견적의 개정본 생성
- * DUPLICATE : 독립된 새 견적으로 복제
- *
- * 실제 백엔드 QuoteCopyType enum과 일치해야 한다.
- */
-export type QuoteCopyType = "REVISION" | "DUPLICATE";
+export type QuoteCopyType =
+  | "REVISION"
+  | "DUPLICATE";
 
 export interface QuoteCopyRequest {
   copyType: QuoteCopyType;
 }
 
-/**
- * POST /api/v1/quotes/{id}/copy
- */
 export interface QuoteCopyResponse {
   quoteId: number;
   quoteNumber: string;
@@ -338,11 +348,6 @@ export interface QuoteCopyResponse {
  * v1.2 - Quote Revision History
  * ========================================================= */
 
-/**
- * GET /api/v1/quotes/{id}/revisions
- *
- * 개정 이력의 각 견적 정보를 나타낸다.
- */
 export interface QuoteRevisionResponse {
   quoteId: number;
   quoteNumber: string;
