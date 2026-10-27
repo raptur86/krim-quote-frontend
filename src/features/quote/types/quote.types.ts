@@ -210,22 +210,10 @@ export type QuoteDetailItem = {
   internalMemo: string | null;
 
   sortOrder: number;
-<<<<<<< HEAD
-  itemType: QuoteItemType | null;
+itemType: QuoteItemType | null;
 parentPackageItemId: number | null;
 packageScopeSnapshot: string | null;
-=======
-
-  // 패키지 견적 확장
-  itemType?: QuoteItemType | null;
-
-  // 저장된 부모 PACKAGE 견적항목의 DB ID
-  parentPackageItemId?: number | null;
-
-  packageScopeSnapshot?: string | null;
->>>>>>> e839c443ecd62ad9a24acf1fa86ab91404a44495
 };
-
 /* =========================================================
  * Quote Detail - Direct Cost
  * ========================================================= */
