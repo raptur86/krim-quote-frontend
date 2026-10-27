@@ -1,4 +1,5 @@
 
+
 /* =========================================================
  * Status
  * ========================================================= */
@@ -10,17 +11,7 @@ export type QuoteStatus =
   | "CANCELLED";
 
 /* =========================================================
- * Quote Item Type
- * ========================================================= */
-
-export type QuoteItemType =
-  | "FEATURE"
-  | "PACKAGE"
-  | "INCLUDED_FEATURE"
-  | "ADDITIONAL_FEATURE";
-
-/* =========================================================
- * Quote Item Request
+ * Quote Item
  * ========================================================= */
 export type QuoteItemType =
   | "FEATURE"
@@ -32,7 +23,6 @@ export type QuoteItemRequest = {
   categoryName: string | null;
   featureName: string;
   description: string | null;
-<<<<<<< HEAD
   quoteUnitPrice: number;
   quantity: number;
   unitName: string | null;
@@ -40,39 +30,13 @@ export type QuoteItemRequest = {
   difficultyRate: number;
   adjustmentAmount: number | null;
   adjustmentReason: string | null;
-=======
-
-  quoteUnitPrice: number;
-  quantity: number;
-  unitName: string | null;
-
-  difficultyCode: string | null;
-  difficultyRate: number;
-
-  adjustmentAmount: number | null;
-  adjustmentReason: string | null;
-
->>>>>>> e839c443ecd62ad9a24acf1fa86ab91404a44495
   estimatedHours: number | null;
   internalMemo: string | null;
   sortOrder: number;
-<<<<<<< HEAD
   itemType: QuoteItemType | null;
   parentPackageItemIndex: number | null;
   packageScopeSnapshot: string | null;
-=======
-
-  // 패키지 견적 확장
-  itemType?: QuoteItemType | null;
-
-  // 서버 요청 items 배열의 부모 PACKAGE 인덱스
-  parentPackageItemIndex?: number | null;
-
-  // 포함 기능의 적용 범위 스냅샷
-  packageScopeSnapshot?: string | null;
->>>>>>> e839c443ecd62ad9a24acf1fa86ab91404a44495
 };
-
 /* =========================================================
  * Direct Cost
  * ========================================================= */
