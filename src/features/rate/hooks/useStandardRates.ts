@@ -1,3 +1,4 @@
+
 import {
   useMutation,
   useQuery,
@@ -14,6 +15,10 @@ import {
   getStandardRatesApi,
   updateRateCategoryApi,
   updateStandardRateApi,
+  getPackageFeaturesApi,
+  createPackageFeatureApi,
+  updatePackageFeatureApi,
+  changePackageFeatureActiveApi,
 } from "../api/rateApi";
 
 import type {
@@ -21,8 +26,9 @@ import type {
   StandardRateListParams,
   StandardRateSaveRequest,
   UpdateRateCategoryRequest,
+  PackageFeatureCreateRequest,
+  PackageFeatureUpdateRequest,
 } from "../types/rate.types";
-
 
 /* =========================================================
    Query Keys
@@ -34,9 +40,7 @@ export const standardRateKeys = {
   lists: () =>
     [...standardRateKeys.all, "list"] as const,
 
-  list: (
-    params?: StandardRateListParams,
-  ) =>
+  list: (params?: StandardRateListParams) =>
     [
       ...standardRateKeys.lists(),
       params,
@@ -50,8 +54,22 @@ export const standardRateKeys = {
       ...standardRateKeys.details(),
       rateId,
     ] as const,
-};
 
+  packageFeatures: (rateId: number) =>
+    [
+      ...standardRateKeys.detail(rateId),
+      "features",
+    ] as const,
+
+  packageFeatureList: (
+    rateId: number,
+    active?: boolean,
+  ) =>
+    [
+      ...standardRateKeys.packageFeatures(rateId),
+      { active },
+    ] as const,
+};
 
 export const rateCategoryKeys = {
   all: ["rate-categories"] as const,
@@ -66,7 +84,6 @@ export const rateCategoryKeys = {
     ] as const,
 };
 
-
 /* =========================================================
    Rate Category Query
 ========================================================= */
@@ -75,14 +92,11 @@ export function useRateCategories(
   active?: boolean,
 ) {
   return useQuery({
-    queryKey:
-      rateCategoryKeys.list(active),
-
+    queryKey: rateCategoryKeys.list(active),
     queryFn: () =>
       getRateCategoriesApi(active),
   });
 }
-
 
 /* =========================================================
    Rate Category Mutations
@@ -104,7 +118,6 @@ export function useCreateRateCategory() {
     },
   });
 }
-
 
 export function useUpdateRateCategory() {
   const queryClient = useQueryClient();
@@ -134,7 +147,6 @@ export function useUpdateRateCategory() {
   });
 }
 
-
 export function useChangeRateCategoryActive() {
   const queryClient = useQueryClient();
 
@@ -163,7 +175,6 @@ export function useChangeRateCategoryActive() {
   });
 }
 
-
 /* =========================================================
    Standard Rate Queries
 ========================================================= */
@@ -172,31 +183,24 @@ export function useStandardRates(
   params?: StandardRateListParams,
 ) {
   return useQuery({
-    queryKey:
-      standardRateKeys.list(params),
-
+    queryKey: standardRateKeys.list(params),
     queryFn: () =>
       getStandardRatesApi(params),
   });
 }
 
-
 export function useStandardRate(
   rateId: number,
 ) {
   return useQuery({
-    queryKey:
-      standardRateKeys.detail(rateId),
-
+    queryKey: standardRateKeys.detail(rateId),
     queryFn: () =>
       getStandardRateApi(rateId),
-
     enabled:
       Number.isInteger(rateId) &&
       rateId > 0,
   });
 }
-
 
 /* =========================================================
    Standard Rate Mutations
@@ -218,7 +222,6 @@ export function useCreateStandardRate() {
     },
   });
 }
-
 
 export function useUpdateStandardRate() {
   const queryClient = useQueryClient();
@@ -251,7 +254,6 @@ export function useUpdateStandardRate() {
   });
 }
 
-
 export function useChangeStandardRateActive() {
   const queryClient = useQueryClient();
 
@@ -271,6 +273,157 @@ export function useChangeStandardRateActive() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: standardRateKeys.lists(),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.detail(
+            variables.rateId,
+          ),
+      });
+    },
+  });
+}
+
+/* =========================================================
+   Package Feature Query
+========================================================= */
+
+/**
+ * 패키지에 포함된 기능 목록 조회
+ */
+export function usePackageFeatures(
+  rateId: number,
+  active?: boolean,
+) {
+  return useQuery({
+    queryKey:
+      standardRateKeys.packageFeatureList(
+        rateId,
+        active,
+      ),
+
+    queryFn: () =>
+      getPackageFeaturesApi(
+        rateId,
+        { active },
+      ),
+
+    enabled:
+      Number.isInteger(rateId) &&
+      rateId > 0,
+  });
+}
+
+/* =========================================================
+   Package Feature Mutations
+========================================================= */
+
+/**
+ * 패키지 포함 기능 등록
+ */
+export function useCreatePackageFeature() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      rateId,
+      request,
+    }: {
+      rateId: number;
+      request: PackageFeatureCreateRequest;
+    }) =>
+      createPackageFeatureApi(
+        rateId,
+        request,
+      ),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.packageFeatures(
+            variables.rateId,
+          ),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.detail(
+            variables.rateId,
+          ),
+      });
+    },
+  });
+}
+
+/**
+ * 패키지 포함 기능 수정
+ */
+export function useUpdatePackageFeature() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      rateId,
+      itemId,
+      request,
+    }: {
+      rateId: number;
+      itemId: number;
+      request: PackageFeatureUpdateRequest;
+    }) =>
+      updatePackageFeatureApi(
+        rateId,
+        itemId,
+        request,
+      ),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.packageFeatures(
+            variables.rateId,
+          ),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.detail(
+            variables.rateId,
+          ),
+      });
+    },
+  });
+}
+
+/**
+ * 패키지 포함 기능 활성 상태 변경
+ */
+export function useChangePackageFeatureActive() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      rateId,
+      itemId,
+      active,
+    }: {
+      rateId: number;
+      itemId: number;
+      active: boolean;
+    }) =>
+      changePackageFeatureActiveApi(
+        rateId,
+        itemId,
+        { active },
+      ),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey:
+          standardRateKeys.packageFeatures(
+            variables.rateId,
+          ),
       });
 
       queryClient.invalidateQueries({
