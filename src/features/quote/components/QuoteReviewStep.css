@@ -840,3 +840,33 @@
     transition: none;
   }
 }
+
+/* 패키지 견적 검토 */
+
+.quote-review-items tbody tr.quote-review-package-row {
+  background: #f0f6f2;
+}
+
+.quote-review-package-row .quote-review-feature strong {
+  color: #1f4d3a;
+  font-weight: 700;
+}
+
+.quote-review-package-row .quote-review-item-amount {
+  color: #1f4d3a;
+  font-weight: 700;
+}
+
+.quote-review-items tbody tr.quote-review-included-row {
+  background: #fafcfb;
+}
+
+.quote-review-included-row .quote-review-feature strong {
+  color: #52675a;
+  font-weight: 500;
+}
+
+.quote-review-included-row .quote-review-item-amount {
+  color: #648575;
+  font-weight: 600;
+}

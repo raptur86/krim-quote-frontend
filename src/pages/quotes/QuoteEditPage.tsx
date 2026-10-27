@@ -37,6 +37,11 @@ import type {
   QuoteUpdateRequest,
 } from "../../features/quote/types/quote.types";
 
+import {
+  toQuoteDraftItems,
+  toQuoteItemRequests,
+} from "../../features/quote/utils/quoteItemMapper";
+
 import { Button } from "../../components/ui/Button";
 
 import "../quotes/QuoteCreatePage.css";
@@ -105,13 +110,13 @@ export function QuoteEditPage() {
   const [saveError, setSaveError] = useState("");
 
   /*
-   * 상세 조회 데이터를 편집 상태로 변환한다.
+   * 패키지 견적 지원
    *
-   * 동일한 견적에서는 최초 한 번만 초기화하여
-   * 사용자가 수정 중인 입력값을 유지한다.
+   * 상세 조회 응답의 parentPackageItemId를
+   * 프론트엔드 전용 parentPackageClientId로 복원한다.
    *
-   * 다른 견적 ID로 이동하면 해당 견적의
-   * 데이터를 새롭게 초기화한다.
+   * 동일 견적에서는 최초 한 번만 초기화하여
+   * 사용자가 수정 중인 값을 유지한다.
    */
   useEffect(() => {
     const quote = quoteQuery.data;
@@ -121,6 +126,23 @@ export function QuoteEditPage() {
       quote.id === initializedQuoteId ||
       quote.status !== "DRAFT"
     ) {
+      return;
+    }
+
+    /*
+     * 패키지 부모 관계가 잘못된 경우
+     * 변환 오류를 사용자에게 표시한다.
+     */
+    let restoredItems: QuoteDraftItem[];
+
+    try {
+      restoredItems = toQuoteDraftItems(quote.items);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "기존 견적항목을 복원하지 못했습니다."
+      );
       return;
     }
 
@@ -136,29 +158,7 @@ export function QuoteEditPage() {
       internalMemo: quote.internalMemo,
     });
 
-    setQuoteItems(
-      quote.items
-        .slice()
-        .sort((a, b) => a.sortOrder - b.sortOrder)
-        .map((item) => ({
-          clientId: `quote-item-${item.id}`,
-          standardRateId: item.standardRateId,
-          categoryName: item.categoryName,
-          featureName: item.featureName,
-          description: item.description,
-          quoteUnitPrice: item.quoteUnitPrice,
-          quantity: item.quantity,
-          unitName: item.unitName,
-          difficultyCode: item.difficultyCode,
-          difficultyRate: item.difficultyRate,
-          adjustmentAmount: item.adjustmentAmount,
-          adjustmentReason: item.adjustmentReason,
-          estimatedHours: item.estimatedHours,
-          internalMemo: item.internalMemo,
-          sortOrder: item.sortOrder,
-        }))
-    );
-
+    setQuoteItems(restoredItems);
     setAdjustmentAmount(quote.adjustmentAmount);
 
     setStep("BASIC");
@@ -264,102 +264,90 @@ export function QuoteEditPage() {
       return;
     }
 
-    const request: QuoteUpdateRequest = {
-      customerId: basicValues.customerId,
-
-      inquiryPlatformId:
-        basicValues.inquiryPlatformId,
-
-      title: basicValues.title.trim(),
-      writtenDate: basicValues.writtenDate,
-
-      validUntil: nullableText(
-        basicValues.validUntil
-      ),
-
-      expectedDuration: nullableText(
-        basicValues.expectedDuration
-      ),
-
-      customerNote: nullableText(
-        basicValues.customerNote
-      ),
-
-      internalMemo: nullableText(
-        basicValues.internalMemo
-      ),
-
-      adjustmentAmount,
-
-      /*
-       * 정산정보 입력 UI는 현재 단계에서 변경하지 않는다.
-       * 기존 상세 데이터의 값을 그대로 보존한다.
-       */
-      expectedSettlementAmount:
-        quoteQuery.data?.expectedSettlementAmount ??
-        null,
-
-      expectedSettlementMemo:
-        quoteQuery.data?.expectedSettlementMemo ??
-        null,
-
-      items: quoteItems.map((draftItem, index) => {
-        const { clientId, ...item } = draftItem;
-
-        // clientId는 프론트엔드 전용 식별자이다.
-        void clientId;
-
-        return {
-          ...item,
-
-          categoryName: nullableText(
-            item.categoryName
-          ),
-
-          featureName: item.featureName.trim(),
-
-          description: nullableText(
-            item.description
-          ),
-
-          unitName: item.unitName.trim(),
-
-          adjustmentReason: nullableText(
-            item.adjustmentReason
-          ),
-
-          internalMemo: nullableText(
-            item.internalMemo
-          ),
-
-          sortOrder: index + 1,
-        };
-      }),
-
-      /*
-       * 기존 직접비는 편집 UI에 없으므로
-       * 수정 요청에서도 보존한다.
-       */
-      directCosts:
-        quoteQuery.data?.directCosts.map(
-          (cost, index) => ({
-            costName: cost.costName,
-            amount: cost.amount,
-            memo: nullableText(cost.memo),
-            sortOrder: index + 1,
-          })
-        ) ?? [],
-    };
-
     /*
-     * originalQuoteId, sourceQuoteId, revisionNo는
-     * 백엔드에서 관리하는 개정 관계 정보이다.
+     * 패키지 견적 지원
      *
-     * 따라서 QuoteUpdateRequest에 포함하지 않는다.
+     * 항목 순서를 기준으로 부모 패키지의
+     * zero-based 배열 인덱스를 계산한다.
+     *
+     * clientId, parentPackageClientId는
+     * 서버 요청에 포함하지 않는다.
+     *
+     * 변환 및 API 요청 오류를 모두
+     * catch에서 처리한다.
      */
     try {
       setSaveError("");
 
+      const requestItems =
+        toQuoteItemRequests(quoteItems);
+
+      const request: QuoteUpdateRequest = {
+        customerId: basicValues.customerId,
+
+        inquiryPlatformId:
+          basicValues.inquiryPlatformId,
+
+        title: basicValues.title.trim(),
+        writtenDate: basicValues.writtenDate,
+
+        validUntil: nullableText(
+          basicValues.validUntil
+        ),
+
+        expectedDuration: nullableText(
+          basicValues.expectedDuration
+        ),
+
+        customerNote: nullableText(
+          basicValues.customerNote
+        ),
+
+        internalMemo: nullableText(
+          basicValues.internalMemo
+        ),
+
+        adjustmentAmount,
+
+        /*
+         * 정산정보 입력 UI는 현재 단계에서 변경하지 않는다.
+         * 기존 상세 데이터의 값을 그대로 보존한다.
+         */
+        expectedSettlementAmount:
+          quoteQuery.data?.expectedSettlementAmount ??
+          null,
+
+        expectedSettlementMemo:
+          quoteQuery.data?.expectedSettlementMemo ??
+          null,
+
+        /*
+         * PACKAGE / FEATURE / INCLUDED_FEATURE /
+         * ADDITIONAL_FEATURE를 포함한 저장 항목.
+         */
+        items: requestItems,
+
+        /*
+         * 기존 직접비는 편집 UI에 없으므로
+         * 수정 요청에서도 보존한다.
+         */
+        directCosts:
+          quoteQuery.data?.directCosts.map(
+            (cost, index) => ({
+              costName: cost.costName,
+              amount: cost.amount,
+              memo: nullableText(cost.memo),
+              sortOrder: index + 1,
+            })
+          ) ?? [],
+      };
+
+      /*
+       * originalQuoteId, sourceQuoteId, revisionNo는
+       * 백엔드에서 관리하는 개정 관계 정보이다.
+       *
+       * QuoteUpdateRequest에 포함하지 않는다.
+       */
       await updateQuote.mutateAsync({
         quoteId: id,
         request,
@@ -441,9 +429,20 @@ export function QuoteEditPage() {
   if (!basicValues || initializedQuoteId !== id) {
     return (
       <EditState
-        type="loading"
-        title="편집 정보를 준비하는 중"
-        description="기존 견적항목을 편집 화면으로 변환하고 있습니다."
+        type={errorMessage ? "error" : "loading"}
+        title={
+          errorMessage
+            ? "견적항목 복원 오류"
+            : "편집 정보를 준비하는 중"
+        }
+        description={
+          errorMessage ||
+          "기존 견적항목을 편집 화면으로 변환하고 있습니다."
+        }
+        onBack={
+          errorMessage ? handleCancel : undefined
+        }
+        backLabel="견적 상세로"
       />
     );
   }

@@ -12,36 +12,29 @@ export type QuoteStatus =
 /* =========================================================
  * Quote Item
  * ========================================================= */
-
+export type QuoteItemType =
+  | "FEATURE"
+  | "PACKAGE"
+  | "INCLUDED_FEATURE"
+  | "ADDITIONAL_FEATURE";
 export type QuoteItemRequest = {
-  /**
-   * 표준단가에서 가져온 항목이면 ID 존재
-   * 직접 입력 항목이면 null
-   */
   standardRateId: number | null;
   categoryName: string | null;
-
   featureName: string;
   description: string | null;
-
-  /**
-   * 실제 견적에 사용할 단가
-   */
   quoteUnitPrice: number;
-
   quantity: number;
-  unitName: string;
-
-  difficultyCode: string;
+  unitName: string | null;
+  difficultyCode: string | null;
   difficultyRate: number;
-
-  adjustmentAmount: number;
+  adjustmentAmount: number | null;
   adjustmentReason: string | null;
-
-  estimatedHours: number;
+  estimatedHours: number | null;
   internalMemo: string | null;
-
   sortOrder: number;
+  itemType: QuoteItemType | null;
+  parentPackageItemIndex: number | null;
+  packageScopeSnapshot: string | null;
 };
 
 /* =========================================================
@@ -168,6 +161,7 @@ export type QuotePageResponse = {
 
 export type QuoteDraftItem = QuoteItemRequest & {
   clientId: string;
+  parentPackageClientId: string | null;
 };
 
 /* =========================================================
@@ -203,9 +197,9 @@ export type QuoteDetailItem = {
 
   quoteUnitPrice: number;
   quantity: number;
-  unitName: string;
+  unitName: string | null;
 
-  difficultyCode: string;
+  difficultyCode: string | null;
   difficultyRate: number;
 
   adjustmentAmount: number;
@@ -214,10 +208,13 @@ export type QuoteDetailItem = {
   calculatedAmount: number;
   finalAmount: number;
 
-  estimatedHours: number;
+  estimatedHours: number | null;
   internalMemo: string | null;
 
   sortOrder: number;
+  itemType: QuoteItemType | null;
+parentPackageItemId: number | null;
+packageScopeSnapshot: string | null;
 };
 
 /* =========================================================

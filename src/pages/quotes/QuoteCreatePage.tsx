@@ -9,7 +9,6 @@ import {
   FileCheck2,
   FilePlus2,
   LoaderCircle,
-  Send,
 } from "lucide-react";
 
 import { useCustomers } from "../../features/customer/hooks/useCustomers";
@@ -30,6 +29,11 @@ import type {
 } from "../../features/quote/types/quote.types";
 
 import { useCreateQuote } from "../../features/quote/hooks/useCreateQuote";
+
+import {
+  toQuoteItemRequests,
+} from "../../features/quote/utils/quoteItemMapper";
+
 import { ROUTES } from "../../app/router/routes";
 
 import "./QuoteCreatePage.css";
@@ -100,7 +104,8 @@ export function QuoteCreatePage() {
   const [quoteItems, setQuoteItems] =
     useState<QuoteDraftItem[]>([]);
 
-  const [adjustmentAmount, setAdjustmentAmount] = useState(0);
+  const [adjustmentAmount, setAdjustmentAmount] =
+    useState(0);
 
   const customersQuery = useCustomers({
     active: true,
@@ -119,7 +124,7 @@ export function QuoteCreatePage() {
   const platforms = platformsQuery.data ?? [];
 
   function handleBasicChange<
-    K extends keyof QuoteBasicFormValues
+    K extends keyof QuoteBasicFormValues,
   >(
     field: K,
     value: QuoteBasicFormValues[K]
@@ -153,52 +158,83 @@ export function QuoteCreatePage() {
   }
 
   async function handleCreateQuote() {
+    if (createQuote.isPending) {
+      return;
+    }
+
+    const basicResult =
+      quoteBasicSchema.safeParse(basicValues);
+
+    if (!basicResult.success) {
+      setErrorMessage(
+        basicResult.error.issues[0]?.message ??
+          "기본정보를 확인해주세요."
+      );
+      setStep("BASIC");
+      return;
+    }
+
     if (quoteItems.length === 0) {
       setSaveError("견적항목을 하나 이상 추가해주세요.");
       setStep("ITEMS");
       return;
     }
 
-    const request: QuoteCreateRequest = {
-      customerId: basicValues.customerId,
-      inquiryPlatformId: basicValues.inquiryPlatformId,
-      title: basicValues.title.trim(),
-      writtenDate: basicValues.writtenDate,
-      validUntil: nullableText(basicValues.validUntil),
-      expectedDuration: nullableText(
-        basicValues.expectedDuration
-      ),
-      customerNote: nullableText(basicValues.customerNote),
-      internalMemo: nullableText(basicValues.internalMemo),
-      adjustmentAmount,
-
-      // 기존 요청 구조 유지
-      expectedSettlementAmount: null,
-      expectedSettlementMemo: null,
-
-      items: quoteItems.map(
-        ({ clientId: _clientId, ...item }, index) => ({
-          ...item,
-          categoryName: nullableText(item.categoryName),
-          featureName: item.featureName.trim(),
-          description: nullableText(item.description),
-          unitName: item.unitName.trim(),
-          adjustmentReason: nullableText(
-            item.adjustmentReason
-          ),
-          internalMemo: nullableText(item.internalMemo),
-          sortOrder: index + 1,
-        })
-      ),
-
-      // 직접비 입력 UI는 별도 개발 단계에서 구현
-      directCosts: [],
-    };
-
     try {
       setSaveError("");
 
-      const result = await createQuote.mutateAsync(request);
+      /*
+       * 패키지 견적 저장 변환
+       *
+       * - clientId는 서버에 전송하지 않는다.
+       * - INCLUDED_FEATURE의 부모 패키지를 찾는다.
+       * - parentPackageItemIndex를 계산한다.
+       * - 포함 기능의 금액을 0원으로 처리한다.
+       * - sortOrder를 최종 배열 순서로 지정한다.
+       *
+       * 변환 과정에서 오류가 발생하면
+       * API 요청을 보내지 않고 catch에서 처리한다.
+       */
+      const requestItems =
+        toQuoteItemRequests(quoteItems);
+
+      const request: QuoteCreateRequest = {
+        customerId: basicValues.customerId,
+        inquiryPlatformId: basicValues.inquiryPlatformId,
+        title: basicValues.title.trim(),
+        writtenDate: basicValues.writtenDate,
+
+        validUntil: nullableText(
+          basicValues.validUntil
+        ),
+
+        expectedDuration: nullableText(
+          basicValues.expectedDuration
+        ),
+
+        customerNote: nullableText(
+          basicValues.customerNote
+        ),
+
+        internalMemo: nullableText(
+          basicValues.internalMemo
+        ),
+
+        adjustmentAmount,
+
+        // 기존 정산 요청 구조 유지
+        expectedSettlementAmount: null,
+        expectedSettlementMemo: null,
+
+        // 패키지 부모 관계를 포함한 견적항목
+        items: requestItems,
+
+        // 직접비 입력 UI는 별도 개발 단계에서 구현
+        directCosts: [],
+      };
+
+      const result =
+        await createQuote.mutateAsync(request);
 
       navigate(`${ROUTES.quotes}/${result.id}`, {
         replace: true,
