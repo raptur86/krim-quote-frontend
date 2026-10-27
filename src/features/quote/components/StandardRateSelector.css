@@ -384,3 +384,127 @@
     transition: none;
   }
 }
+
+/* 표준단가 필터 */
+
+.standard-rate-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.standard-rate-category-filter {
+  min-width: 180px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d8e2dc;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+}
+
+.standard-rate-type-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.standard-rate-type-filters button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #dce5df;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.standard-rate-type-filters button.active {
+  border-color: #b8d3c3;
+  background: #e9f3ed;
+  color: #1f4d3a;
+}
+
+.standard-rate-type-filters button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* 패키지 / 개별 기능 목록 */
+
+.standard-rate-list-header-extended,
+.standard-rate-row-extended {
+  display: grid;
+  grid-template-columns:
+    48px
+    84px
+    minmax(110px, 150px)
+    minmax(200px, 1fr)
+    125px;
+  gap: 12px;
+  align-items: center;
+}
+
+.standard-rate-list-header-extended {
+  padding: 12px;
+  background: #f5f8f6;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.standard-rate-row-extended {
+  padding: 13px 12px;
+}
+
+.standard-rate-row-extended.selected {
+  background: #f0f7f2;
+}
+
+.standard-rate-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 2px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.standard-rate-type-badge.package {
+  background: #ffe6e9;
+  color: #be3452;
+}
+
+.standard-rate-type-badge.feature {
+  background: #e5f0ff;
+  color: #2563a6;
+}
+
+.standard-rate-row-extended .standard-rate-feature {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.standard-rate-row-extended .standard-rate-price {
+  white-space: nowrap;
+}
+
+.standard-rate-list-container {
+  overflow-x: auto;
+}
+
+.standard-rate-list-header-extended,
+.standard-rate-row-extended {
+  min-width: 680px;
+}

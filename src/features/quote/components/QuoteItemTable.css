@@ -308,3 +308,181 @@
     transition: none;
   }
 }
+
+/* =========================================================
+   Package Quote Table
+   ========================================================= */
+
+.quote-item-table-package {
+  width: 100%;
+  min-width: 1020px;
+  border-collapse: collapse;
+}
+
+.quote-item-table-package th {
+  white-space: nowrap;
+}
+
+.quote-item-table-package td {
+  vertical-align: middle;
+}
+
+.quote-item-table-package .quote-item-package-row {
+  background: #eef6f0;
+}
+
+.quote-item-table-package .quote-item-package-row:hover {
+  background: #e6f1e9;
+}
+
+.quote-item-table-package .quote-item-included-row {
+  background: #fafcfb;
+}
+
+.quote-item-table-package .quote-item-included-row:hover {
+  background: #f3f8f5;
+}
+
+.quote-item-table-package .quote-item-additional-row {
+  background: #fffefa;
+}
+
+.quote-item-table-package .quote-item-orphan-row {
+  background: #fff1f0;
+}
+
+.quote-item-type-package {
+  background: #fce7ed;
+  color: #b4234b;
+}
+
+.quote-item-type-included {
+  background: #e7f3e9;
+  color: #287348;
+}
+
+.quote-item-type-additional {
+  background: #fff1d6;
+  color: #946200;
+}
+
+.quote-item-child-number {
+  display: inline-block;
+  min-width: 42px;
+  padding-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.quote-item-feature-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.quote-item-feature-title strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.quote-item-package-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #1f4d3a;
+  cursor: pointer;
+}
+
+.quote-item-package-toggle:hover {
+  background: #dbece0;
+}
+
+.quote-item-feature-child {
+  padding-left: 14px;
+}
+
+.quote-item-child-connector {
+  margin-right: 3px;
+  font-size: 17px;
+  color: #91a99a;
+}
+
+.quote-item-package-count {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #e0ede4;
+  color: #356448;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.quote-item-included-amount,
+.quote-item-included-label {
+  color: #2d8250;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.quote-item-included-quantity,
+.quote-item-included-manage {
+  color: #64748b;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.quote-item-relation-error {
+  color: #b42318;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-item-inline-field,
+.quote-item-inline-difficulty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.quote-item-inline-field input,
+.quote-item-inline-difficulty input {
+  width: 62px;
+  height: 32px;
+  padding: 4px 6px;
+  border: 1px solid #d8e2dc;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: 12px;
+  text-align: right;
+}
+
+.quote-item-inline-field input:focus,
+.quote-item-inline-difficulty input:focus {
+  outline: 2px solid #b8d8c4;
+  outline-offset: 1px;
+}
+
+.quote-item-inline-field span,
+.quote-item-inline-difficulty span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.quote-item-table-package .quote-item-package-row
+.quote-item-total {
+  color: #1f4d3a;
+  font-weight: 700;
+}
