@@ -397,36 +397,115 @@ export function PublicQuotePage() {
                 </thead>
 
                 <tbody>
-                  {quote.items.map((item, index) => (
-                    <tr
-                      key={`${item.featureName}-${index}`}
-                    >
-                      <td className="public-quote-category">
-                        {item.categoryName || "-"}
-                      </td>
+                  {quote.items.map((item, index) => {
+                    // 기존 견적 응답과 확장 응답 모두 지원
+                    const packageItem = item as typeof item & {
+                      itemType?:
+                        | "PACKAGE"
+                        | "INCLUDED_FEATURE"
+                        | "FEATURE"
+                        | null;
+                      parentPackageItemIndex?: number | null;
+                    };
 
-                      <td className="public-quote-feature">
-                        <strong>
-                          {item.featureName}
-                        </strong>
-                      </td>
+                    const isPackage =
+                      packageItem.itemType === "PACKAGE";
 
-                      <td className="public-quote-description">
-                        {item.description || "-"}
-                      </td>
+                    const isIncluded =
+                      packageItem.itemType ===
+                      "INCLUDED_FEATURE";
 
-                      <td className="public-quote-align-center public-quote-quantity">
-                        {item.quantity} {item.unitName}
-                      </td>
+                    return (
+                      <tr
+                        key={`${item.featureName}-${index}`}
+                        className={
+                          isPackage
+                            ? "public-quote-package-row"
+                            : isIncluded
+                              ? "public-quote-included-row"
+                              : undefined
+                        }
+                      >
+                        <td className="public-quote-category">
+                          {item.categoryName || "-"}
+                        </td>
 
-                      <td className="public-quote-money public-quote-item-money">
-                        {formatMoney(item.amount)}원
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="public-quote-feature">
+                          <div
+                            className={
+                              isIncluded
+                                ? "public-quote-included-name"
+                                : undefined
+                            }
+                          >
+                            {isIncluded && (
+                              <span
+                                className="public-quote-tree-mark"
+                                aria-hidden="true"
+                              >
+                                └
+                              </span>
+                            )}
+
+                            <div>
+                              <strong>
+                                {item.featureName}
+                              </strong>
+
+                              {isPackage && (
+                                <span className="public-quote-type-badge is-package">
+                                  패키지
+                                </span>
+                              )}
+
+                              {isIncluded && (
+                                <span className="public-quote-type-badge is-included">
+                                  패키지 포함 기능
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="public-quote-description">
+                          {item.description || "-"}
+                        </td>
+
+                        <td className="public-quote-align-center public-quote-quantity">
+                          {item.quantity} {item.unitName}
+                        </td>
+
+                        <td className="public-quote-money public-quote-item-money">
+                          {isIncluded ? (
+                            <span className="public-quote-included-price">
+                              포함
+                            </span>
+                          ) : (
+                            <>
+                              {formatMoney(item.amount)}원
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
+
+            {quote.items.some(
+              (item) =>
+                (
+                  item as typeof item & {
+                    itemType?: string;
+                  }
+                ).itemType === "INCLUDED_FEATURE"
+            ) && (
+              <p className="public-quote-package-note">
+                패키지 포함 기능은 패키지 금액에
+                포함되며 별도로 청구되지 않습니다.
+              </p>
+            )}
           </section>
 
           <section className="public-quote-total-section">
@@ -464,7 +543,8 @@ export function PublicQuotePage() {
                   size={15}
                   aria-hidden="true"
                 />
-                최종 견적금액에는 부가세가 포함되어 있습니다.
+                최종 견적금액에는 부가세가
+                포함되어 있습니다.
               </p>
             </div>
           </section>

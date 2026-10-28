@@ -25,7 +25,6 @@ import {
   TableRow,
   TableHeaderCell,
   TableCell,
-  TableEmpty,
 } from "../../components/ui/Table";
 
 import "./CustomersPage.css";

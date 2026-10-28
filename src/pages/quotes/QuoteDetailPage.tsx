@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   CalendarDays,
   CheckCircle2,
-  ClipboardList,
   Copy,
   ExternalLink,
   FileText,
@@ -752,9 +751,9 @@ export function QuoteDetailPage() {
                     className={[
                       "align-right",
                       "quote-detail-numeric",
-                      item.adjustmentAmount < 0
+                      item.adjustmentAmount ?? 0< 0
                         ? "quote-detail-negative"
-                        : item.adjustmentAmount > 0
+                        : item.adjustmentAmount ?? 0  > 0
                           ? "quote-detail-positive"
                           : "",
                     ]
@@ -762,7 +761,7 @@ export function QuoteDetailPage() {
                       .join(" ")}
                   >
                     {formatSignedMoney(
-                      item.adjustmentAmount
+                      item.adjustmentAmount ?? 0
                     )}
                   </td>
 
