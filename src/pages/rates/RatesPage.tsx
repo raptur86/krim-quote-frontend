@@ -23,6 +23,7 @@ import {
 import type {
   RateCategory,
   StandardRateListParams,
+  StandardRateType,
 } from "../../features/rate/types/rate.types";
 
 import { Button } from "../../components/ui/Button";
@@ -33,6 +34,7 @@ import "./RatesPage.css";
 const PAGE_SIZE = 20;
 
 type ActiveFilter = "ALL" | "ACTIVE" | "INACTIVE";
+type RateTypeFilter = "ALL" | StandardRateType;
 
 function formatMoney(value: number) {
   return value.toLocaleString("ko-KR");
@@ -51,6 +53,9 @@ export function RatesPage() {
   const [activeFilter, setActiveFilter] =
     useState<ActiveFilter>("ALL");
 
+  const [rateTypeFilter, setRateTypeFilter] =
+    useState<RateTypeFilter>("ALL");
+
   const [page, setPage] = useState(0);
 
   const [modalRateId, setModalRateId] =
@@ -62,6 +67,10 @@ export function RatesPage() {
     () => ({
       keyword: keyword || undefined,
       categoryId: selectedCategoryId,
+      rateType:
+        rateTypeFilter === "ALL"
+          ? undefined
+          : rateTypeFilter,
       active:
         activeFilter === "ALL"
           ? undefined
@@ -70,7 +79,13 @@ export function RatesPage() {
       size: PAGE_SIZE,
       sort: "id,desc",
     }),
-    [keyword, selectedCategoryId, activeFilter, page]
+    [
+      keyword,
+      selectedCategoryId,
+      activeFilter,
+      rateTypeFilter,
+      page,
+    ]
   );
 
   const ratesQuery = useStandardRates(listParams);
@@ -86,6 +101,7 @@ export function RatesPage() {
     setKeyword("");
     setSelectedCategoryId(undefined);
     setActiveFilter("ALL");
+    setRateTypeFilter("ALL");
     setPage(0);
   }
 
@@ -113,7 +129,10 @@ export function RatesPage() {
       <header className="rates-page-header">
         <div className="rates-page-heading">
           <span className="rates-page-heading-icon">
-            <CircleDollarSign size={24} aria-hidden="true" />
+            <CircleDollarSign
+              size={24}
+              aria-hidden="true"
+            />
           </span>
 
           <div>
@@ -140,7 +159,10 @@ export function RatesPage() {
         <aside className="rates-category">
           <div className="rates-category-header">
             <div className="rates-category-title">
-              <FolderTree size={18} aria-hidden="true" />
+              <FolderTree
+                size={18}
+                aria-hidden="true"
+              />
 
               <div>
                 <h2>카테고리</h2>
@@ -160,7 +182,10 @@ export function RatesPage() {
           </div>
 
           {categoriesQuery.isLoading && (
-            <div className="rates-category-state" role="status">
+            <div
+              className="rates-category-state"
+              role="status"
+            >
               <LoaderCircle
                 size={18}
                 className="rates-spin"
@@ -175,7 +200,10 @@ export function RatesPage() {
               className="rates-category-state rates-error"
               role="alert"
             >
-              <AlertCircle size={18} aria-hidden="true" />
+              <AlertCircle
+                size={18}
+                aria-hidden="true"
+              />
               카테고리를 불러오지 못했습니다.
             </div>
           )}
@@ -198,7 +226,9 @@ export function RatesPage() {
                       ? "true"
                       : undefined
                   }
-                  onClick={() => handleCategoryChange()}
+                  onClick={() =>
+                    handleCategoryChange()
+                  }
                 >
                   <span>전체</span>
                 </button>
@@ -237,9 +267,14 @@ export function RatesPage() {
                     className="rates-category-edit"
                     aria-label={`${category.name} 수정`}
                     title="카테고리 수정"
-                    onClick={() => setCategoryModal(category)}
+                    onClick={() =>
+                      setCategoryModal(category)
+                    }
                   >
-                    <Pencil size={14} aria-hidden="true" />
+                    <Pencil
+                      size={14}
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
               ))}
@@ -257,7 +292,9 @@ export function RatesPage() {
             onSubmit={handleSearch}
           >
             <div className="rates-search-field">
-              <label htmlFor="rate-keyword">검색</label>
+              <label htmlFor="rate-keyword">
+                검색
+              </label>
 
               <div className="rates-search-input-wrap">
                 <Search
@@ -277,8 +314,31 @@ export function RatesPage() {
               </div>
             </div>
 
+            <div className="rates-search-field rates-type-field">
+              <label htmlFor="rate-type-filter">
+                유형
+              </label>
+
+              <select
+                id="rate-type-filter"
+                value={rateTypeFilter}
+                onChange={(event) => {
+                  setRateTypeFilter(
+                    event.target.value as RateTypeFilter
+                  );
+                  setPage(0);
+                }}
+              >
+                <option value="ALL">전체</option>
+                <option value="PACKAGE">패키지</option>
+                <option value="FEATURE">개별 기능</option>
+              </select>
+            </div>
+
             <div className="rates-search-field rates-status-field">
-              <label htmlFor="rate-active">상태</label>
+              <label htmlFor="rate-active">
+                상태
+              </label>
 
               <select
                 id="rate-active"
@@ -297,8 +357,14 @@ export function RatesPage() {
             </div>
 
             <div className="rates-search-actions">
-              <Button type="submit" variant="primary">
-                <Search size={16} aria-hidden="true" />
+              <Button
+                type="submit"
+                variant="primary"
+              >
+                <Search
+                  size={16}
+                  aria-hidden="true"
+                />
                 검색
               </Button>
 
@@ -307,7 +373,10 @@ export function RatesPage() {
                 variant="outline"
                 onClick={handleReset}
               >
-                <RotateCcw size={15} aria-hidden="true" />
+                <RotateCcw
+                  size={15}
+                  aria-hidden="true"
+                />
                 초기화
               </Button>
             </div>
@@ -347,13 +416,18 @@ export function RatesPage() {
           </div>
 
           {ratesQuery.isLoading && (
-            <div className="rates-state" role="status">
+            <div
+              className="rates-state"
+              role="status"
+            >
               <LoaderCircle
                 size={27}
                 className="rates-spin"
                 aria-hidden="true"
               />
-              <strong>표준단가 목록을 불러오는 중</strong>
+              <strong>
+                표준단가 목록을 불러오는 중
+              </strong>
             </div>
           )}
 
@@ -362,7 +436,10 @@ export function RatesPage() {
               className="rates-state rates-error"
               role="alert"
             >
-              <AlertCircle size={27} aria-hidden="true" />
+              <AlertCircle
+                size={27}
+                aria-hidden="true"
+              />
 
               <strong>
                 표준단가 목록을 불러오지 못했습니다.
@@ -399,8 +476,9 @@ export function RatesPage() {
                 <table className="rates-table">
                   <thead>
                     <tr>
+                      <th scope="col">유형</th>
                       <th scope="col">카테고리</th>
-                      <th scope="col">기능명</th>
+                      <th scope="col">기능명 / 패키지명</th>
                       <th
                         scope="col"
                         className="rates-money-column"
@@ -432,6 +510,20 @@ export function RatesPage() {
                         }
                       >
                         <td>
+                          <span
+                            className={`rates-type-badge ${
+                              rate.rateType === "PACKAGE"
+                                ? "package"
+                                : "feature"
+                            }`}
+                          >
+                            {rate.rateType === "PACKAGE"
+                              ? "패키지"
+                              : "개별 기능"}
+                          </span>
+                        </td>
+
+                        <td>
                           <span className="rates-category-badge">
                             {rate.categoryName}
                           </span>
@@ -444,10 +536,15 @@ export function RatesPage() {
                         </td>
 
                         <td className="rates-money">
-                          {formatMoney(rate.standardPrice)}원
+                          {formatMoney(
+                            rate.standardPrice
+                          )}
+                          원
                         </td>
 
-                        <td>{rate.defaultUnit}</td>
+                        <td>
+                          {rate.defaultUnit}
+                        </td>
 
                         <td>
                           {rate.defaultHours != null
@@ -497,7 +594,9 @@ export function RatesPage() {
                 </Button>
 
                 <span>
-                  <strong>{rateData.page + 1}</strong>
+                  <strong>
+                    {rateData.page + 1}
+                  </strong>
                   {" / "}
                   {rateData.totalPages}
                 </span>
@@ -508,7 +607,9 @@ export function RatesPage() {
                   size="sm"
                   disabled={rateData.last}
                   onClick={() =>
-                    setPage((current) => current + 1)
+                    setPage((current) =>
+                      current + 1
+                    )
                   }
                 >
                   다음
@@ -526,14 +627,18 @@ export function RatesPage() {
         <StandardRateModal
           rateId={modalRateId}
           categories={categoriesQuery.data ?? []}
-          onClose={() => setModalRateId(undefined)}
+          onClose={() =>
+            setModalRateId(undefined)
+          }
         />
       )}
 
       {categoryModal !== undefined && (
         <RateCategoryModal
           category={categoryModal}
-          onClose={() => setCategoryModal(undefined)}
+          onClose={() =>
+            setCategoryModal(undefined)
+          }
         />
       )}
     </main>

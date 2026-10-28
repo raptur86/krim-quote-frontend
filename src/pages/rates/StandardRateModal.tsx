@@ -17,10 +17,11 @@ import {
   useStandardRate,
   useUpdateStandardRate,
 } from "../../features/rate/hooks/useStandardRates";
-
+import { PackageFeaturesEditor } from "./PackageFeaturesEditor";
 import type {
   RateCategory,
   StandardRateSaveRequest,
+  StandardRateType,
 } from "../../features/rate/types/rate.types";
 
 import { Button } from "../../components/ui/Button";
@@ -47,6 +48,7 @@ export function StandardRateModal({
   const [categoryId, setCategoryId] = useState<number>(
     categories.find((category) => category.active)?.id ?? 0
   );
+  const [rateType, setRateType] = useState<StandardRateType>("FEATURE");
   const [featureName, setFeatureName] = useState("");
   const [description, setDescription] = useState("");
   const [standardPrice, setStandardPrice] = useState("");
@@ -78,6 +80,7 @@ export function StandardRateModal({
     const rate = rateQuery.data;
 
     setCategoryId(rate.category.id);
+    setRateType(rate.rateType);
     setFeatureName(rate.featureName);
     setDescription(rate.description ?? "");
     setStandardPrice(String(rate.standardPrice));
@@ -124,7 +127,11 @@ export function StandardRateModal({
     }
 
     if (!featureName.trim()) {
-      setErrorMessage("기능명을 입력해주세요.");
+      setErrorMessage(
+        rateType === "PACKAGE"
+          ? "패키지명을 입력해주세요."
+          : "기능명을 입력해주세요."
+      );
       return;
     }
 
@@ -151,6 +158,7 @@ export function StandardRateModal({
     }
 
     const request: StandardRateSaveRequest = {
+      rateType,
       categoryId,
       featureName: featureName.trim(),
       description: description.trim() || null,
@@ -304,6 +312,30 @@ export function StandardRateModal({
             )}
 
             <div className="rate-form-field">
+              <label htmlFor="rate-type">
+                표준단가 유형 <em>*</em>
+              </label>
+              <select
+                id="rate-type"
+                value={rateType}
+                onChange={(event) =>
+                  setRateType(
+                    event.target.value as StandardRateType
+                  )
+                }
+                disabled={isSaving || isEdit}
+              >
+                <option value="FEATURE">개별 기능</option>
+                <option value="PACKAGE">패키지</option>
+              </select>
+              <small>
+                {rateType === "PACKAGE"
+                  ? "패키지 전체에 적용할 기준 금액을 등록한다."
+                  : "개별 기능의 기준 금액을 등록한다."}
+              </small>
+            </div>
+
+            <div className="rate-form-field">
               <label htmlFor="rate-category">
                 카테고리 <em>*</em>
               </label>
@@ -329,7 +361,10 @@ export function StandardRateModal({
 
             <div className="rate-form-field">
               <label htmlFor="rate-feature-name">
-                기능명 <em>*</em>
+                {rateType === "PACKAGE"
+                  ? "패키지명"
+                  : "기능명"}{" "}
+                <em>*</em>
               </label>
               <input
                 id="rate-feature-name"
@@ -339,13 +374,19 @@ export function StandardRateModal({
                 onChange={(event) =>
                   setFeatureName(event.target.value)
                 }
-                placeholder="예 : 이메일 회원가입"
+                placeholder={
+                  rateType === "PACKAGE"
+                    ? "예 : 크몽 DELUXE - 기능형 앱 제작"
+                    : "예 : 이메일 회원가입"
+                }
               />
             </div>
 
             <div className="rate-form-field">
               <label htmlFor="rate-description">
-                기능 설명
+                {rateType === "PACKAGE"
+                  ? "패키지 설명"
+                  : "기능 설명"}
               </label>
               <textarea
                 id="rate-description"
@@ -354,7 +395,11 @@ export function StandardRateModal({
                 onChange={(event) =>
                   setDescription(event.target.value)
                 }
-                placeholder="기능의 기본 작업 범위를 입력한다."
+                placeholder={
+                  rateType === "PACKAGE"
+                    ? "패키지의 제공 범위와 기본 구성을 입력한다."
+                    : "기능의 기본 작업 범위를 입력한다."
+                }
               />
             </div>
 
@@ -414,6 +459,23 @@ export function StandardRateModal({
                 </div>
               </div>
             </div>
+
+            {rateType === "PACKAGE" && (
+              <>
+                {!isEdit && (
+                  <div className="rate-package-notice">
+                    <strong>패키지 구성 기능</strong>
+                    <p>
+                      먼저 패키지 기본 정보를 등록한다.
+                      등록 후 표준단가 목록에서 해당 패키지를
+                      다시 열면 포함 기능을 추가할 수 있다.
+                    </p>
+                  </div>
+                )}
+
+              
+              </>
+            )}
 
             <div className="rate-form-field">
               <label htmlFor="rate-internal-memo">
@@ -511,6 +573,13 @@ export function StandardRateModal({
             </footer>
           </form>
         )}
+        {isEdit &&
+          rateId !== null &&
+          rateQuery.data?.rateType === "PACKAGE" && (
+            <div className="rate-form">
+              <PackageFeaturesEditor rateId={rateId} />
+            </div>
+          )}
       </div>
     </div>
   );

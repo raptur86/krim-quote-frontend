@@ -889,3 +889,66 @@
     backdrop-filter: none;
   }
 }
+
+/* =========================================
+   KRIM Quote - 패키지 / 개별 기능 구분
+   ========================================= */
+
+.rates-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rates-type-badge.package {
+  background: #fce7ed;
+  color: #b4234b;
+}
+
+.rates-type-badge.feature {
+  background: #e6f1ff;
+  color: #245da0;
+}
+
+.rates-type-field {
+  flex: 0 0 150px;
+  max-width: 150px;
+}
+
+.rate-package-notice {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border: 1px solid #d6e7db;
+  border-radius: 9px;
+  background: #f3f8f5;
+}
+
+.rate-package-notice strong {
+  display: block;
+  color: #1f4d3a;
+  font-size: 13px;
+}
+
+.rate-package-notice p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .rates-search {
+    flex-wrap: wrap;
+  }
+
+  .rates-type-field,
+  .rates-status-field {
+    flex: 1 1 140px;
+    min-width: 140px;
+    max-width: none;
+  }
+}
